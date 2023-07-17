@@ -8,6 +8,9 @@ import { SignInSignUpScreen } from "./screens/signin";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
 import { tokenCache } from "./utils/cache";
 import Constants from "expo-constants";
+import { Info } from "./screens/info";
+import {NavigationContainer} from '@react-navigation/native';
+import RootNavigator from "./Navigator/RootNavigator";
 
 export const App = () => {
   return (
@@ -15,10 +18,13 @@ export const App = () => {
       publishableKey={Constants.expoConfig?.extra?.CLERK_PUBLISHABLE_KEY}
       tokenCache={tokenCache}
     >
+       
       <SignedIn>
         <TRPCProvider>
           <SafeAreaProvider>
-            <HomeScreen />
+          <NavigationContainer>
+           <RootNavigator/>
+           </NavigationContainer>
             <StatusBar />
           </SafeAreaProvider>
         </TRPCProvider>

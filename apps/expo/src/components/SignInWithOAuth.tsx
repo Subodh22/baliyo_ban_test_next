@@ -6,7 +6,8 @@ import { useWarmUpBrowser } from "../hooks/useWarmUpBrowser";
 const SignInWithOAuth = () => {
   useWarmUpBrowser();
 
-  const { startOAuthFlow } = useOAuth({ strategy: "oauth_discord" });
+  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" 
+                                         });
 
   const handleSignInWithDiscordPress = React.useCallback(async () => {
     try {

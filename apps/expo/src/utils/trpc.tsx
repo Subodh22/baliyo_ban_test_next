@@ -48,7 +48,7 @@ export const TRPCProvider: React.FC<{
               Authorization: authToken ?? undefined,
             };
           },
-          url: `${getBaseUrl()}/api/trpc`,
+          url: `https://baliyoban.com/api/trpc`,
         }),
       ],
     }),
