@@ -23,7 +23,7 @@ export const trpc = createTRPCNext<AppRouter>({
             (opts.direction === "down" && opts.result instanceof Error),
         }),
         httpBatchLink({
-          url: `https://baliyoban.com/api/trpc`,
+          url: `https://www.baliyoban.com/api/trpc`,
         }),
       ],
     };
