@@ -7,7 +7,7 @@ import Link from "next/link";
 
  
 const Home: NextPage = () => {
-   
+  const getData =  trpc.post.all.useQuery();
 
   return (
     <>
@@ -22,7 +22,11 @@ const Home: NextPage = () => {
             Create <span className="text-[hsl(280,100%,70%)]">T3 packages</span> Turbo
           </h1>
           <AuthShowcase />
-
+          {
+      getData["data"]?.map(({id,name })=>(
+          <p key={id} >{name} </p>
+      ))
+    }
           <div className="flex h-[60vh] justify-center overflow-y-scroll px-4 text-2xl">
             
           </div>

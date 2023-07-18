@@ -66,8 +66,7 @@
   "react-native-tab-view": "^3.5.1",
   "react-native-vector-icons": "^9.2.0",
   "react-native-web": "~0.18.12",
-  "react-native-wheel-pick": "^1.2.2",
-  "react-native-wheel-picker": "^1.2.0",
+   
   "react-query": "^3.39.3"
     },
     "devDependencies": {

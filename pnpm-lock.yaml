@@ -22,6 +22,9 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.1.13
         version: 0.1.13(prettier@2.8.8)
+      react-native-countdown-circle-timer:
+        specifier: ^3.2.1
+        version: 3.2.1(react-native-svg@13.9.0)(react-native@0.70.5)(react@18.2.0)
       turbo:
         specifier: ^1.8.8
         version: 1.10.7
@@ -70,7 +73,7 @@ importers:
         version: 5.13.5(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.0.26)(react-dom@18.2.0)(react@18.2.0)
       '@mui/x-date-pickers':
         specifier: ^6.8.0
-        version: 6.8.0(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/base@5.0.0-beta.7)(@mui/material@5.13.5)(@mui/system@5.14.0)(moment@2.29.4)(react-dom@18.2.0)(react@18.2.0)
+        version: 6.8.0(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/base@5.0.0-beta.7)(@mui/material@5.13.5)(@mui/system@5.14.0)(react-dom@18.2.0)(react@18.2.0)
       '@ouroboros/react-native-picker':
         specifier: ^0.3.1
         version: 0.3.1(react-native@0.70.5)(react@18.2.0)
@@ -200,12 +203,6 @@ importers:
       react-native-web:
         specifier: ~0.18.12
         version: 0.18.12(react-dom@18.2.0)(react@18.2.0)
-      react-native-wheel-pick:
-        specifier: ^1.2.2
-        version: 1.2.2(@react-native-community/datetimepicker@7.1.0)(@react-native-picker/picker@2.4.10)(moment@2.29.4)(prop-types@15.8.1)
-      react-native-wheel-picker:
-        specifier: ^1.2.0
-        version: 1.2.0
       react-query:
         specifier: ^3.39.3
         version: 3.39.3(react-dom@18.2.0)(react-native@0.70.5)(react@18.2.0)
@@ -3738,7 +3735,7 @@ packages:
       react-is: 18.2.0
     dev: false
 
-  /@mui/x-date-pickers@6.8.0(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/base@5.0.0-beta.7)(@mui/material@5.13.5)(@mui/system@5.14.0)(moment@2.29.4)(react-dom@18.2.0)(react@18.2.0):
+  /@mui/x-date-pickers@6.8.0(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/base@5.0.0-beta.7)(@mui/material@5.13.5)(@mui/system@5.14.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-QqJ8heAA07pCNYL1e1WIriJE1MTpZieEVvOu4FMkqByq9WB+Dyn+J3OdchS3d3Lw0BxuoZyJ9dsa0VgPIm5MhA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -3785,7 +3782,6 @@ packages:
       '@mui/utils': 5.13.7(react@18.2.0)
       '@types/react-transition-group': 4.4.6
       clsx: 1.2.1
-      moment: 2.29.4
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -12307,7 +12303,9 @@ packages:
 
   /moment@2.29.4:
     resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
+    requiresBuild: true
     dev: false
+    optional: true
 
   /ms@2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
@@ -14386,6 +14384,18 @@ packages:
       - supports-color
     dev: false
 
+  /react-native-countdown-circle-timer@3.2.1(react-native-svg@13.9.0)(react-native@0.70.5)(react@18.2.0):
+    resolution: {integrity: sha512-iHiOgipG0hMprerswqUCUfjGo9hL0UhKNS0BGh4o6yY9Lu7f3VXQ7EJt757Obwn74AiF5MOHURIdqldoGnVrDw==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-native: '>=0.50.0'
+      react-native-svg: '>=6.2.1'
+    dependencies:
+      react: 18.2.0
+      react-native: 0.70.5(@babel/core@7.22.5)(@babel/preset-env@7.22.5)(react@18.2.0)
+      react-native-svg: 13.9.0(react-native@0.70.5)(react@18.2.0)
+    dev: false
+
   /react-native-countdown-component@2.7.1:
     resolution: {integrity: sha512-H7D/YvMjY1hCJf9xFrNh5CsIwkcel/Suno2gYR6ulWwoa2xnUgmltFWoMyEIODsUy7lIK1KCPm+Zn26QajbRaw==}
     dependencies:
@@ -14598,24 +14608,6 @@ packages:
       styleq: 0.1.3
     transitivePeerDependencies:
       - encoding
-    dev: false
-
-  /react-native-wheel-pick@1.2.2(@react-native-community/datetimepicker@7.1.0)(@react-native-picker/picker@2.4.10)(moment@2.29.4)(prop-types@15.8.1):
-    resolution: {integrity: sha512-mO2z1f3vks8q4ISQURuBHKqTpJU0FhKuJypmfn9Kr6wSwfdSelDbkTGo7Or691oj1bYupjAznWXwiRR8duyHbw==}
-    peerDependencies:
-      '@react-native-community/datetimepicker': '>=6.1.3'
-      '@react-native-picker/picker': '>=2.4.1'
-      moment: '>=2.0.0'
-      prop-types: '*'
-    dependencies:
-      '@react-native-community/datetimepicker': 7.1.0
-      '@react-native-picker/picker': 2.4.10(react-native@0.70.5)(react@18.2.0)
-      moment: 2.29.4
-      prop-types: 15.8.1
-    dev: false
-
-  /react-native-wheel-picker@1.2.0:
-    resolution: {integrity: sha512-uWkkVyNfhXEJwjHyRMk1h/EAjJl+PTigm6z3j3dUKbcbTnG5qRgmDA1L9KLEE5dQ+7ptONMO3vL27r5io/b6KQ==}
     dev: false
 
   /react-native@0.70.5(@babel/core@7.22.5)(@babel/preset-env@7.22.5)(react@18.2.0):
