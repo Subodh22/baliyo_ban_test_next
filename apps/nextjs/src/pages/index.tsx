@@ -8,7 +8,7 @@ import Link from "next/link";
  
 const Home: NextPage = () => {
   const getData =  trpc.post.all.useQuery();
-
+  if(!getData) return <div>Loading..</div>
   return (
     <>
       <Head>
@@ -26,7 +26,7 @@ const Home: NextPage = () => {
       getData["data"]?.map(({id,name })=>(
           <p key={id} >{name} </p>
       ))
-    }
+    } 
           <div className="flex h-[60vh] justify-center overflow-y-scroll px-4 text-2xl">
             
           </div>
