@@ -177,7 +177,7 @@ const InsidePage = () => {
       const updatedResponse = response.map((exercise) => {
         const updatedSets = exercise.sets.map((set) => {
           const matchingSet = checkPersonal.find((personalSet) => personalSet.SetId === set.id);
-          console.log(matchingSet)
+         
           if (matchingSet) {
             const updatedSet = {
               ...set,

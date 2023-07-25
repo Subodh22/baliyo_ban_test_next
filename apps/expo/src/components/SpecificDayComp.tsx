@@ -14,7 +14,9 @@ type set = {
   weight:string,
   key:string,
   workoutCelebId:number
+  // eslint-disable-next-line @typescript-eslint/ban-types
   valSender:Function
+  // eslint-disable-next-line @typescript-eslint/ban-types
   valTimeSender:Function
 }
  

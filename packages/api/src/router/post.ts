@@ -9,6 +9,23 @@ export const postRouter = router({
     // const users = await clerkClient.users.getUser();  
     return workouts
   }),
+
+  deleteUserData:protectedProcedure.mutation(async({ctx})=>
+  {
+    const workerId = ctx.auth.userId;
+    const deleteUserExo = await ctx.prisma.userToWork.deleteMany({
+      where:{
+        personId:workerId
+      }
+    })
+    const deletePersonalSets = await ctx.prisma.personalSets.deleteMany({
+      where:{
+        personId:workerId
+      }
+    })
+      deletePersonalSets 
+      deleteUserExo
+  }),
   addWorkoutToUser: protectedProcedure.input(z.object({WorkoutCelebId:z.number().min(1)
       ,workoutName:z.string().min(1)})).mutation(async({ctx,input})=>{
     const workerId = ctx.auth.userId;

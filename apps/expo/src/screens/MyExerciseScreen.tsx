@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, FlatList,RefreshControl} from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Card } from '@rneui/base'
 import { CompositeNavigationProp, useNavigation } from '@react-navigation/native'
@@ -45,44 +45,72 @@ NativeStackNavigationProp<RootStackParamList>>;
  
 
 const MyExerciseScreen = () => {
-  const { data: getPersonal, isLoading: isPosting } = trpc.post.getWorkoutToUser.useQuery();
+  const { data: getPersonal, isLoading: isPosting,refetch } = trpc.post.getWorkoutToUser.useQuery();
   const navigation = useNavigation<MyExerciseNavigationProp>();
-  const [arrayOfWorkoute, setArrayOfWorkoute] = useState<workout[]>([]);
-  const workoutIds = getPersonal?.map((personal) => personal.WorkoutCelebId) || [];
- 
- 
+  // const [arrayOfWorkoute, setArrayOfWorkoute] = useState<workout[]>([]);
+  // const workoutIds = getPersonal?.map((personal) => personal.WorkoutCelebId) || [];
+  const [refreshing,setRefreshing]=useState(false)
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    refetch()
+      .then(() => setRefreshing(false))
+      .catch((error) => {
+        console.error('Error refreshing data:', error);
+        setRefreshing(false);
+      });
+  }, [refetch]);
+
   if (isPosting ) {
     return <Text>Loading...</Text>;
   }
   if(!isPosting){
     console.log(getPersonal)
   }
-
-
+  
   return (
-    <ScrollView>
-        {/* <TouchableOpacity onPress={navigation.goBack} className='absolute right-5 top-5 z-10'>
-            <Icon name='closecircle' type='antdesign'/>
-        </TouchableOpacity> */}
-   
-      {getPersonal?.map((specific) => (
-        <View key={specific?.id}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Specific', { name: specific.WorkoutName,WorkoutCelebId:specific.WorkoutCelebId })}
-            className="px-5 py-4"
-          >
-            <View className="flex-row justify-between">
-              <View className="flex items-center justify-center">
-                <Text>{specific.WorkoutName}</Text>
-              </View>
+    <FlatList 
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+    }
+      data = {getPersonal}
+      keyExtractor={(item)=>`${item.id}`}
+      renderItem={({item})=>(
+        <View >
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Specific', { name: item.WorkoutName,WorkoutCelebId:item.WorkoutCelebId })}
+          className="px-5 py-4"
+        >
+          <View className="flex-row justify-between">
+            <View className="flex items-center justify-center">
+              <Text>{item.WorkoutName}</Text>
             </View>
-          </TouchableOpacity>
-          <Card.Divider />
-        </View>
-      ))}
+          </View>
+        </TouchableOpacity>
+        <Card.Divider />
+      </View>
+      )}
+    
+    
+    />
+       
+    //   {getPersonal?.map((specific) => (
+    //     <View key={specific?.id}>
+    //       <TouchableOpacity
+    //         onPress={() => navigation.navigate('Specific', { name: specific.WorkoutName,WorkoutCelebId:specific.WorkoutCelebId })}
+    //         className="px-5 py-4"
+    //       >
+    //         <View className="flex-row justify-between">
+    //           <View className="flex items-center justify-center">
+    //             <Text>{specific.WorkoutName}</Text>
+    //           </View>
+    //         </View>
+    //       </TouchableOpacity>
+    //       <Card.Divider />
+    //     </View>
+    //   ))}
   
     
-    </ScrollView>
+    // </ScrollView>
   )
 }
 

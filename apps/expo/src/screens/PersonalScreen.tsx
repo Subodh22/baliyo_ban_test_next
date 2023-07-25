@@ -1,10 +1,11 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { trpc } from '../utils/trpc'
-import { useAuth, useUser } from '@clerk/clerk-expo'
+import { Clerk, useAuth, useUser} from '@clerk/clerk-expo'
 import { Image } from 'react-native-elements'
 import { Button } from '@rneui/base'
- 
+import { useMutation } from 'react-query';
+
 const SignOut = () => {
   const { signOut } = useAuth();
   return (
@@ -18,17 +19,53 @@ const SignOut = () => {
     </View>
   );
 };
+// const useDeleteUserData = () => {
+//   const mutation = trpc.post.deleteUserData.useMutation()
+
+//   return mutation;
+// };
+const DeleteButton =()=>{
+  const {user} = useUser();
+  const { signOut } = useAuth();
+  const deleteMutation = trpc.post.deleteUserData.useMutation(); // Get the deleteUserData mutation
+
+  const deleteAcc = async () => {
+  try {
+    if (!user) {
+      console.error('User is not authenticated.');
+      return;
+    }
+
+   
+    await deleteMutation.mutateAsync();
+
+    await user?.delete()
+
+    signOut()
+  } catch (error) {
+    console.error('Error deleting account:', error);
+  }
+}
+  return(
+    <Button onPress={deleteAcc} title="delete Account" />
+  )
+} 
+
 type StaticImport =   any
 const PersonalScreen = () => {
-  const user = useUser();
-  const ll:string| StaticImport=user.user?.profileImageUrl
-  const username= user.user?.fullName
+  const {user} = useUser();
+  
+ 
+  const ll:string| StaticImport=user?.profileImageUrl
+  const username= user?.fullName
   return (
     <View>
-      <Text>{user.user?.id}</Text>
+      <Text>{user?.id}</Text>
       <Text>{username}</Text>
       <Image source={{uri:ll}}  style={{ width: 200, height: 200 }}   />
+      
       <SignOut/>
+     <DeleteButton/>
     </View>
   )
 }

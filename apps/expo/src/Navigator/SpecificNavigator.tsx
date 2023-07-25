@@ -71,12 +71,12 @@ function SpecificNavigator() {
     { keepPreviousData: true })
   
   
-  useEffect(()=>{
+  // useEffect(()=>{
     
    
     
        
-  },[response ])
+  // },[response ])
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: name,

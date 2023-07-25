@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import { Card } from '@rneui/base'
 import SetShowComponent from '../components/SetShowComponent'
@@ -50,10 +50,27 @@ const ModalScreen = () => {
       const navigation = useNavigation<ModalScreenNavigationProp>()
       
       
-     
+      const {mutate,isLoading:isPosting} = trpc.post.addWorkoutToUser.useMutation();
       const {params:{name,workoutId,ratings}} =useRoute<ModalScreenRouteProp>()
       const {data:getWorkouts,isLoading:isGetting} = trpc.post.getWorkoutData.useQuery({workoutId:workoutId});
+      const handlePress =async()=>
+      {
+        try {
+          const answer=mutate({WorkoutCelebId:workoutId,workoutName:name})
+          if(!isPosting){
+            if (typeof answer === 'string') {
+             
+              trpc.post.getWorkoutToUser.useQuery();
+            }
+          }
+           
+        }
+        catch(error){
+          
+          console.error(error);
 
+        }
+      }
       let sortedData
       if(!isGetting&&getWorkouts!==null&&getWorkouts!==undefined){
         console.log(getWorkouts)
@@ -74,7 +91,7 @@ const ModalScreen = () => {
                 
                 </Text></View> 
              <View className='flex-column items-center'> 
-                <TouchableOpacity className='items-center justify-center w-20 h-10   rounded-lg bg-blue-500 el'>
+                <TouchableOpacity onPress={handlePress} className='items-center justify-center w-20 h-10   rounded-lg bg-blue-500 el'>
                     <Text>Add</Text>
                 </TouchableOpacity>
                 <View className='bg-gray-300 w-10 flex items-center m-2 '> 
@@ -83,12 +100,18 @@ const ModalScreen = () => {
             </View> 
       </View>
       <Card.Divider/>
-        <ScrollView>
+        <FlatList 
+          data = {sortedData}
+          keyExtractor={(item)=>`${item.id}`}
+          renderItem={({item})=>(
+            <DayComponent id={item.id} weekRoutine={item.weekRoutine} exercises={item.exercises} order={item.order} />
+          )}
+        />
 
-             {sortedData?.map(({weekRoutine,id,exercises,order})=>(
+             {/* {sortedData?.map(({weekRoutine,id,exercises,order})=>(
                <DayComponent key={id} id={id} weekRoutine={weekRoutine} exercises={exercises} order={order} />
-             ))}
-        </ScrollView>
+             ))} */}
+        
     </View>
   )
 }
