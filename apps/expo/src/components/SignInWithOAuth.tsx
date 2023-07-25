@@ -13,7 +13,7 @@ const useCustomOAuth = (strategy:any) => {
         setActive?.({ session: createdSessionId });
       } else {
         // Modify this code to use signIn or signUp to set the missing requirements you set in your dashboard.
-        throw new Error("There are unmet requirements, modify this else to handle them");
+        throw new Error("There are unmet requirements B, modify this else to handle them");
       }
     } catch (err) {
       console.log(JSON.stringify(err, null, 2));
