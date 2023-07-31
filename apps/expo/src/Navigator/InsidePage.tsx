@@ -71,7 +71,9 @@ const InsidePage = () => {
   const [selectedId, setSelectedId] = useState<number>(0);
   const [selectedExercise, setSelectExerciseId] = useState<number>(0);
   const [istimePickerVisible, setIsTimePickerVisible] = useState<boolean>(false);
-  
+  const [startWorkout,setStartWorkout] =useState<boolean>(false);
+  const [optionsStart,setoptionStart] =useState<boolean>(false);
+  const [finishWorkout,SetFinsihWorkout] = useState<boolean>(false);
   const handleUpdateRestTime = (routineId: number, exerciseId: number, setId: number, restTime: string) => {
     setResponse((prevExercises) => {
       const updatedExercises = prevExercises.map((exercise) => {
@@ -102,36 +104,7 @@ const InsidePage = () => {
        const newDura= (value.hours*60+ value.minutes).toString()
        handleUpdateRestTime(routineId,selectedExercise,selectedId,newDura)
       
-      //  setResponse (prev => {
-      //   if (!prev) {
-      //     const updatedResponse: Exercise = [];
-      //     // Handle the case when prev is null or undefined
-      //     // Perform any necessary operations for the null case
-      //     return updatedResponse;
-      //   } else {
-      //     const updatedResponse: Exercise = prev.map(exercise => {
-      //       if (exercise.id === selectedRoutineId) {
-      //         const updatedExercise = {
-      //           ...exercise,
-      //           sets: exercise.sets.map(set => {
-      //             if (set.id === selectedId) {
-      //               return {
-      //                 ...set,
-      //                 restTime: (value.hours * 60 + value.minutes).toString()
-      //               };
-      //             }
-                  
-      //             return set;
-      //           })
-      //         };
-      //         return { ...exercise, sets: updatedSets };
-      //       }
-      //       return {...exercise};
-      //     });
-          
-      //     return [...updatedResponse];
-      //   }
-      // });
+     
       
        setIsTimePickerVisible(false)
 
@@ -151,7 +124,27 @@ const InsidePage = () => {
    
     )
   }
-
+  const onPressedFinishing=()=>{
+    setoptionStart(false)
+    
+  }
+  const StartWorking = ()=>{
+     
+    return(
+      <View className='flex justify-center h-screen'>
+        <Text>This is where the instructions would go</Text>
+        <Button onPress={()=>{setModal(true)}}  title="Done" />
+      </View>
+    )
+  }
+  const FinishWorking = ()=>{
+    return(
+      <View className='flex justify-center h-screen'>
+       
+        <Button onPress={onPressedFinishing}  title="Done" />
+      </View>
+    )
+  }
   const passTheTimer=(isOpene:boolean,isfunId:number,routineIdx:number)=>
   {
     setIsTimePickerVisible(isOpene)
@@ -162,8 +155,8 @@ const InsidePage = () => {
 
  
   const passTheValue=(isOpene:boolean,duration:number)=>{
-    setModal(isOpene);
-
+    setoptionStart(isOpene);
+    setStartWorkout(isOpene)
     setDuration(duration);
     console.log("isoops"+isOpene)
 
@@ -213,7 +206,14 @@ const InsidePage = () => {
   return (
   
     <View> 
-<Modal visible={isOpen} animationType='slide' > 
+ 
+<Modal visible={istimePickerVisible} animationType='slide'>
+<ExpoCountdown/>
+</Modal>
+
+<Modal visible ={optionsStart}>
+ {startWorkout && <StartWorking/>}
+  <Modal visible={isOpen} animationType='slide' > 
 
 <CountdownCircleTimer
   isPlaying
@@ -224,9 +224,12 @@ const InsidePage = () => {
 >
   {({ remainingTime }) => 
 {  if(remainingTime===0){
-     
+     setStartWorkout(false)
+     setModal(false)
+     SetFinsihWorkout(true)
     return(
       <Text>Times Up</Text>
+
     )
      
   }
@@ -242,13 +245,18 @@ const InsidePage = () => {
   }
   
   </CountdownCircleTimer>
-<Button title="Close" onPress={()=>{setModal(false)}} />
+<Button title="Close" onPress={()=>{SetFinsihWorkout(true)
+  setModal(false);
+  setStartWorkout(false)
+                                   
+                                     }} />
 </Modal>
-<Modal visible={istimePickerVisible} animationType='slide'>
-<ExpoCountdown/>
+  
+ {finishWorkout&& <FinishWorking/>}
+ 
 </Modal>
 
-      <FlatList
+<FlatList
         data={exercises}
         keyExtractor={(item) => `${item.routineId}-${item.id}`}
         renderItem={({ item }) => (

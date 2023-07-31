@@ -6,7 +6,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Baliyo",
   slug: "baliyo",
   scheme: "myapp",
-  version: "1.0.2",
+  version: "1.0.3",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "light", 
@@ -23,7 +23,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.notSubodh.workoutMaker",
-    buildNumber:"3"
+    buildNumber:"4"
   },
   android: {
     adaptiveIcon: {
@@ -38,7 +38,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     },
     CLERK_PUBLISHABLE_KEY,
   },
-  plugins: ["./expo-plugins/with-modify-gradle.js"],
+  plugins: ["./expo-plugins/with-modify-gradle.js","expo-apple-authentication"],
 });
 
 export default defineConfig;

@@ -53,7 +53,7 @@ export const TRPCProvider: React.FC<{
       ],
     }),
   );
-
+// url: `https://www.baliyoban.com/api/trpc`,
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

@@ -122,7 +122,7 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,valS
      
     <Button onPress={()=>{
       handlePress()
-    }} title="Done" />
+    }} title="Start" />
    
  </View>
   )
