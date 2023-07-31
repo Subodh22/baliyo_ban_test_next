@@ -146,6 +146,39 @@ export const postRouter = router({
     })
 
  return "personal Sets Created"
+  }), 
+  userSetHistoryRecorder:protectedProcedure.input(z.object({
+    name:z.string(),
+    personId:z.string(),
+    SetId:z.number(),
+    reps  : z.string(),
+    weight :    z.string(),
+    RestTime:   z.string(),
+    RestType :  z.string(),
+    exerciseId: z.number(),
+    type:     z.string(),
+    workoutCelebId:z.number()
+})).mutation(async({ctx,input})=>{
+    const userIdx = ctx.auth.userId;
+   
+    const createUserSetRecord = await ctx.prisma.userSetHistory.create({
+      data:{
+        name   :    input.name,
+      personId  : userIdx,
+       SetId     : input.SetId,
+       reps      : input.reps,
+      weight    : input.weight,
+      RestTime  : input.RestTime,
+    RestType  : input.RestType,
+        
+
+      exerciseId :input.exerciseId,
+      WorkoutCelebId :input.workoutCelebId,
+      type:input.type,
+      }
+    })
+
+ return "user setCreated"
   }),
   findPersonalSets:protectedProcedure.input(z.object({personId:z.string(),
     workoutCelebId:z.number()

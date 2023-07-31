@@ -6,6 +6,7 @@ generator client {
 datasource db {
   provider = "mysql"
   url = env("DATABASE_URL")
+  
   relationMode = "prisma"
 }
 
@@ -55,6 +56,21 @@ model PersonalSets {
   type           String
 }
 
+model userSetHistory {
+  id             Int      @id @default(autoincrement())
+  name           String
+  personId       String
+  SetId          Int
+  reps           String
+  weight         String
+  RestTime       String
+  RestType       String
+  exerciseId     Int
+  WorkoutCelebId Int
+  type           String
+  createdAt      DateTime @default(now())  // Add createdAt timestamp field
+
+}
 model WorkoutCeleb {
   id       Int       @id @default(autoincrement())
   name     String    @unique
@@ -70,3 +86,4 @@ model UserToWork {
 
   @@index([personId])
 }
+

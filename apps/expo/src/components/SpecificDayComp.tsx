@@ -30,8 +30,9 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,valS
     const [digitRest,setDigitRest]=useState<number>(0)
     const [typeTime,setTypeTime]=useState<string>("");
     const {mutate} =  trpc.post.createPersonalSets.useMutation();
+    const userHistoryRecorder = trpc.post.userSetHistoryRecorder.useMutation();
     const [isModal,setModal]=useState<boolean>(true);
-
+    const [startState,setStartState] = useState("");
     const handlePress=()=>{
       if(newReps||newWeight|| newRestTime||typeTime){
         
@@ -52,7 +53,21 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,valS
       }
       
       valSender(isModal,digitRest)
-
+      userHistoryRecorder.mutate({
+        name:name,
+        personId:"Fill",
+        SetId:id,
+        reps:newReps,
+        type:type,
+        weight:newWeight,
+        RestTime:(digitRest).toString(),
+        RestType:typeTime,
+        exerciseId:exerciseId,
+        workoutCelebId:workoutCelebId
+      })
+      setStartState("Done")
+      console.log(startState+"what the fuck")
+     
     }
   
 
@@ -75,6 +90,8 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,valS
     useEffect(()=>{
       setNewReps(volume)
       setNewWeight(weight)
+      setStartState("Start")
+      console.log("bitch")
       if(restTime)
     {  const splitt=restTime.split(/(\d+)/).filter(Boolean);
        
@@ -92,7 +109,7 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,valS
     
   return (
     
-    <View key={name+id}  className='bg-gray-200 flex-row justify-between align-center space-between '>
+    <View key={name+id}  className={`${startState=="Start"? 'bg-gray-200':'bg-gray-500'} flex-row justify-between align-center space-between `}>
     <Text >{name}</Text>
     <View> 
     <Text className=''>reps</Text>
@@ -122,7 +139,7 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,valS
      
     <Button onPress={()=>{
       handlePress()
-    }} title="Start" />
+    }} title={startState} />
    
  </View>
   )
