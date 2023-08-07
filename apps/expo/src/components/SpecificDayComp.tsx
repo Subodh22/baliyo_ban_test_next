@@ -13,7 +13,9 @@ type set = {
   volume:string,
   weight:string,
   key:string,
-  workoutCelebId:number
+  workoutCelebId:number,
+  videoId:string,
+  machineSettings:string,
   // eslint-disable-next-line @typescript-eslint/ban-types
   valSender:Function
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -23,7 +25,7 @@ type set = {
  
 
 
-const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,valSender,restTime,type,volume,weight,workoutCelebId}:set) => {
+const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,valSender,restTime,type,volume,weight,workoutCelebId,videoId,machineSettings}:set) => {
     const [newReps,setNewReps]=useState("");
     const [newWeight,setNewWeight]=useState("");
     const [newRestTime,setNewRestTime ]=useState("");
@@ -33,6 +35,7 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,valS
     const userHistoryRecorder = trpc.post.userSetHistoryRecorder.useMutation();
     const [isModal,setModal]=useState<boolean>(true);
     const [startState,setStartState] = useState("");
+     
     const handlePress=()=>{
       if(newReps||newWeight|| newRestTime||typeTime){
         
@@ -52,7 +55,7 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,valS
 
       }
       
-      valSender(isModal,digitRest)
+      valSender(isModal,digitRest,videoId,machineSettings)
       userHistoryRecorder.mutate({
         name:name,
         personId:"Fill",
@@ -66,7 +69,7 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,valS
         workoutCelebId:workoutCelebId
       })
       setStartState("Done")
-      console.log(startState+"what the fuck")
+      
      
     }
   

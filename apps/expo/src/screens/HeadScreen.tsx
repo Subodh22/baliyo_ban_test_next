@@ -8,6 +8,7 @@ import { RootStackParamList } from '../Navigator/RootNavigator'
 import {Input,Button} from 'react-native-elements';
 import Workout_celeb from '../components/Workout_celeb'
 import { trpc } from '../utils/trpc'
+import YoutubeEm from '../components/YoutubeEm'
  
 export type HeadScreenNavigationProp=CompositeNavigationProp<
 BottomTabNavigationProp<TabParamList,"Home">,
@@ -36,9 +37,10 @@ const HeadScreen = () => {
   })
   return (
     <ScrollView >
-      
+    
     <Input value={input} placeholder='Search for your workout' onChangeText={setInput} className='bg-white pt-5 pb-0 px 1 '/> 
     <Button   title="Search"  titleStyle={{ color: 'black' }}/>
+     
     {
       getData["data"]?.map(({id,name,ratings})=>(
          

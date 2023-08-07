@@ -5,10 +5,11 @@ import { RootStackParamList } from './RootNavigator';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import SpecificDayComp from '../components/SpecificDayComp';
 import { trpc } from '../utils/trpc';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { Button } from '@rneui/base';
 import { TimePicker, ValueMap } from 'react-native-simple-time-picker';
+import YoutubeEm from '../components/YoutubeEm';
 
 type Set = {
   exerciseId: number;
@@ -28,6 +29,8 @@ type Exercise = {
   setType: string | null;
   order: number;
   routineId: number;
+  videoId:string;
+  machineSettings:string;
   sets: Set[];
 }[];
 
@@ -74,6 +77,8 @@ const InsidePage = () => {
   const [startWorkout,setStartWorkout] =useState<boolean>(false);
   const [optionsStart,setoptionStart] =useState<boolean>(false);
   const [finishWorkout,SetFinsihWorkout] = useState<boolean>(false);
+  const [Msettings,setMsettings]=useState<string>("");
+  const [IdVideo,setIdVideo]=useState<string>("");
   const handleUpdateRestTime = (routineId: number, exerciseId: number, setId: number, restTime: string) => {
     setResponse((prevExercises) => {
       const updatedExercises = prevExercises.map((exercise) => {
@@ -97,13 +102,14 @@ const InsidePage = () => {
         minutes: 0,
         seconds: 0,}
     )
-     
+    const handleChange = (newValue: ValueMap) => {
+      setValue(newValue);
+    };
     const pressed=()=>
     {
         
        const newDura= (value.hours*60+ value.minutes).toString()
        handleUpdateRestTime(routineId,selectedExercise,selectedId,newDura)
-      
      
       
        setIsTimePickerVisible(false)
@@ -114,9 +120,7 @@ const InsidePage = () => {
           <TimePicker
           textColor='blue'
              
-            onChange={(newvalue:ValueMap) => {
-              setValue(newvalue)
-            }}
+          value={value} onChange={handleChange}
           />
           <Button title="ok" onPress={pressed} />
         </View>
@@ -132,7 +136,8 @@ const InsidePage = () => {
      
     return(
       <View className='flex justify-center h-screen'>
-        <Text>This is where the instructions would go</Text>
+        <YoutubeEm videoId={IdVideo}/>
+        <Text> This is your machine setting{Msettings}</Text>
         <Button onPress={()=>{setModal(true)}}  title="Done" />
       </View>
     )
@@ -154,10 +159,12 @@ const InsidePage = () => {
   }
 
  
-  const passTheValue=(isOpene:boolean,duration:number)=>{
+  const passTheValue=(isOpene:boolean,duration:number,IdVideo:string,settingMachine:string)=>{
     setoptionStart(isOpene);
     setStartWorkout(isOpene)
     setDuration(duration);
+    setIdVideo(IdVideo);
+    setMsettings(settingMachine);
     console.log("isoops"+isOpene)
 
   }
@@ -268,6 +275,8 @@ const InsidePage = () => {
             renderItem={({ item: set }) => (
               <SpecificDayComp
                 exerciseId={item.id}
+                videoId={item.videoId}
+                machineSettings={item.machineSettings}
                 id={set.id}
                 name={set.name}
                 order={set.order}
