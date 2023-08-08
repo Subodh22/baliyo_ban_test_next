@@ -9,6 +9,16 @@ datasource db {
    relationMode = "prisma"
 }
 
+model UserDetails{
+  id      Int @id @default(autoincrement())
+  weight  String
+  height  String
+  gender  String
+  experience String
+  personId String
+
+}
+
 model Exercise {
   id              Int     @id @default(autoincrement())
   name            String

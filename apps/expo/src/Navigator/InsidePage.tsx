@@ -132,16 +132,16 @@ const InsidePage = () => {
     setoptionStart(false)
     
   }
-  const StartWorking = ()=>{
-     
+  const StartWorking = React.memo(({IdVideo}:any)=>{
+     console.log("changing")
     return(
       <View className='flex justify-center h-screen'>
         <YoutubeEm videoId={IdVideo}/>
         <Text> This is your machine setting{Msettings}</Text>
-        <Button onPress={()=>{setModal(true)}}  title="Done" />
+        <Button onPress={()=>{setModal(true)}}  title="Go Rest" />
       </View>
     )
-  }
+  },(prevProps,nextProps)=>prevProps.IdVideo===nextProps.IdVideo)
   const FinishWorking = ()=>{
     return(
       <View className='flex justify-center h-screen'>
@@ -219,7 +219,7 @@ const InsidePage = () => {
 </Modal>
 
 <Modal visible ={optionsStart}>
- {startWorkout && <StartWorking/>}
+ {startWorkout && <StartWorking IdVideo={IdVideo}/>}
   <Modal visible={isOpen} animationType='slide' > 
 
 <CountdownCircleTimer

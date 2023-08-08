@@ -55,6 +55,27 @@ export const postRouter = router({
     });
     return "Workout id Added"
   }),
+  addUserData:protectedProcedure.input(z.object({
+    height:z.string().min(2),
+    weight:z.string().min(2),
+    experience : z.string().min(2),
+    gender:z.string().min(2),
+
+  })).mutation(async({ctx,input})=>{
+    const workerId=ctx.auth.userId
+    const addtheUserData = await ctx.prisma.userDetails.create({
+      data:{
+        height:input.height,
+        weight:input.weight,
+        experience:input.experience,
+        gender:input.gender,
+        personId:workerId
+
+      }
+    })
+
+  })
+  ,
   getWorkoutData:protectedProcedure.input(z.object({workoutId:z.number().min(1)})).query(async({ctx,input})=>{
     const getWorkoutData = await ctx.prisma.workoutCeleb.findUnique({
       where: {id:input.workoutId},
@@ -101,6 +122,18 @@ export const postRouter = router({
     return workoutsPersonal
     
   }),
+  getUserData:protectedProcedure.query(async({ctx})=>
+  {
+    const workerId =ctx.auth.userId;
+    const userData = ctx.prisma.userDetails.findMany({
+    where:{
+      personId:workerId
+    },
+    })
+    return userData
+  })
+  
+  ,
   createPersonalSets:protectedProcedure.input(z.object({
     name:z.string(),
     personId:z.string(),

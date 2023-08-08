@@ -24,7 +24,7 @@ const HeadScreen = () => {
    
   const [input,setInput]=useState<string>('');
   const navigation =useNavigation<HeadScreenNavigationProp>()
-  
+   
   const getData =  trpc.post.all.useQuery();
   
   if(!getData) return <div>Loading..</div>
