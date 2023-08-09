@@ -94,7 +94,7 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,valS
       setNewReps(volume)
       setNewWeight(weight)
       setStartState("Start")
-      console.log("bitch")
+       
       if(restTime)
     {  const splitt=restTime.split(/(\d+)/).filter(Boolean);
        

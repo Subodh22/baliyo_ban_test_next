@@ -22,9 +22,32 @@ const FillForm = () => {
             userDataQuery.refetch();
         }
     });
+
 };
+    
     const next = () => {
-      if (step < 4) setStep(step + 1);
+  switch(step) {
+    case 1:
+      if (formData.weight === '') {
+        alert('Please enter your weight.');
+        return;
+      }
+      break;
+    case 2:
+      if (formData.height === '') {
+        alert('Please enter your height.');
+        return;
+      }
+      break;
+    case 3:
+      if (formData.gender === '') {
+        alert('Please select your gender.');
+        return;
+      }
+      break;
+  }
+  if (step < 4) setStep(step + 1);
+ 
     };
   
     const prev = () => {
