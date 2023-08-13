@@ -5,7 +5,7 @@ import TabNavigator from './TabNavigator';
 import ModalScreen from '../screens/ModalScreen';
 import SpecificScreen from '../screens/SpecificScreen';
 import SpecificNavigator from './SpecificNavigator';
-import InsidePage from './InsidePage';
+import InsidePage2 from './InsidePage2';
 type set = {
   exerciseId:number,
   id:number,
@@ -62,7 +62,7 @@ const RootNavigator = () => {
         <RootStack.Screen name='Specific' component={SpecificNavigator}/>
        </RootStack.Group>
        <RootStack.Group>
-        <RootStack.Screen name='Inside' component={InsidePage}/>
+        <RootStack.Screen name='Inside' component={InsidePage2}/>
        </RootStack.Group>
     </RootStack.Navigator>
   )

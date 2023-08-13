@@ -9,13 +9,23 @@ datasource db {
    relationMode = "prisma"
 }
 
+model Sessions{
+  id  Int @id @default(autoincrement())
+  personId String
+  RoutineId String
+  StartedAt DateTime  @default(now())
+  WorkoutCelebId String
+  FinsihedAt DateTime
+  Status  String
+
+}
 model UserDetails{
   id      Int @id @default(autoincrement())
   weight  String
   height  String
   gender  String
   experience String
-  personId String
+  personId String 
 
 }
 

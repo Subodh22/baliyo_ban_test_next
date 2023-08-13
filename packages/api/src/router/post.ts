@@ -9,7 +9,8 @@ export const postRouter = router({
     // const users = await clerkClient.users.getUser();  
     return workouts
   }),
-
+ 
+   
   deleteUserData:protectedProcedure.mutation(async({ctx})=>
   {
     const workerId = ctx.auth.userId;
@@ -97,6 +98,17 @@ export const postRouter = router({
   
    return(getWorkoutData)
   }),
+  getWorkoutExerciseTest:protectedProcedure.input(z.object(
+    {  routineId:z.number()}
+    )).query(async({ctx,input})=>{
+      const getExercises = await ctx.prisma.exercise.findMany({
+        where:{
+          routineId:input.routineId
+        },
+        
+      })
+      return getExercises
+    }),
   getWorkoutExercise:protectedProcedure.input(z.object(
   {  routineId:z.number()}
   )).query(async({ctx,input})=>{
