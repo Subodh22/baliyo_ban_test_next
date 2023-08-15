@@ -1,0 +1,10 @@
+{/* {exercises&&<>
+  <Text>
+  {currentExerciseTag?.name}
+</Text>
+  <Text>
+  {currentExerciseTag?.sets[currentSetIndex]?.name}
+</Text>
+<Text>
+  {currentExerciseTag?.sets[currentSetIndex]?.volume} of {currentExerciseTag?.sets[currentSetIndex]?.weight}
+</Text></>} */}

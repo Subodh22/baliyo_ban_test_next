@@ -184,6 +184,7 @@ const InsidePage = () => {
               volume: matchingSet.reps,
               weight: matchingSet.weight,
               restTime: matchingSet.RestTime+ matchingSet.RestType
+              
             };
             return updatedSet;
           }

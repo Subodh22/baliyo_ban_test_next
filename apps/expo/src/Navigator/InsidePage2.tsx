@@ -5,12 +5,13 @@ import { RootStackParamList } from './RootNavigator';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import SpecificDayComp from '../components/SpecificDayComp';
 import { trpc } from '../utils/trpc';
- 
+
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { Button } from '@rneui/base';
 import { TimePicker, ValueMap } from 'react-native-simple-time-picker';
 import YoutubeEm from '../components/YoutubeEm';
 import Session from '../components/Session';
+import NextExerciseInRest from '../components/NextExerciseInRest';
 
 type Set = {
   exerciseId: number;
@@ -21,6 +22,7 @@ type Set = {
   type: string;
   volume: string;
   weight: string;
+  done:boolean
 };
 
 type Exercise = {
@@ -83,6 +85,12 @@ const InsidePage2 = () => {
   personId:"fill",
   workoutCelebId:workoutCelebId
 }  ) 
+const [newReps,setNewReps]=useState("");
+const [newWeight,setNewWeight]=useState("");
+const [newRestTime,setNewRestTime ]=useState("");
+const userHistoryRecorder = trpc.post.userSetHistoryRecorder.useMutation();
+const {mutate} =  trpc.post.createPersonalSets.useMutation();
+const [doneExercise,setDoneExercise]= useState([])
 const [isOpen,setModal]=useState<boolean>(false);
 const [chosenTime,setChosenTime] =useState<Date>(new Date())
 const [duration,setDuration] = useState<number>(0);
@@ -102,6 +110,24 @@ const handleUpdateRestTime = (routineId: number, exerciseId: number, setId: numb
         const updatedSets = exercise.sets.map((set) => {
           if (set.id === setId) {
             return { ...set, restTime };
+          }
+          return set;
+        });
+        return { ...exercise, sets: updatedSets };
+      }
+      return exercise;
+    });
+    return updatedExercises;
+  });
+  
+};
+const handleDoneExercise = (routineId: number, exerciseId: number, setId: number, done: boolean) => {
+  setResponse((prevExercises) => {
+    const updatedExercises = prevExercises.map((exercise) => {
+      if (exercise.routineId === routineId && exercise.id === exerciseId) {
+        const updatedSets = exercise.sets.map((set) => {
+          if (set.id === setId) {
+            return { ...set, done };
           }
           return set;
         });
@@ -149,11 +175,22 @@ const ExpoCountdown=()=>{
 const StartWorking = React.memo(({IdVideo}:any)=>{
 
   
-   console.log(sessionId)
-   console.log("chaneg")
   return(
     <> 
+    
    {sessionId  ?  <View className='flex justify-center h-screen'>
+   {exercises&&<>
+  <Text>
+  {currentExerciseTag?.name}
+</Text>
+  <Text>
+  {currentExerciseTag?.sets[currentSetIndex]?.name}
+</Text>
+<Text>
+ {newReps !==""?newReps: currentExerciseTag?.sets[currentSetIndex]?.volume} of { newWeight !=="" ? newWeight :  currentExerciseTag?.sets[currentSetIndex]?.weight}
+</Text>
+
+</>}
       <YoutubeEm videoId={IdVideo}/>
       <Text> This is your machine setting{Msettings}</Text>
       <Button onPress={handleNextSet}  title="Go Rest" />
@@ -178,6 +215,7 @@ const passTheValue=(isOpene:boolean,duration:number,IdVideo:string,settingMachin
   setoptionStart(isOpene);
   setStartWorkout(isOpene)
   setDuration(duration);
+  
   setIdVideo(IdVideo);
   setMsettings(settingMachine);
   console.log("isoops"+isOpene)
@@ -186,6 +224,7 @@ const passTheValue=(isOpene:boolean,duration:number,IdVideo:string,settingMachin
 const currentExerciseTag = exercises[currentExerciseIndex]
 const handleNextSet = ()=> {
   setModal(true)
+ 
   if(currentExerciseTag )
   { if(currentSetIndex<currentExerciseTag.sets.length -1)
     {
@@ -200,14 +239,70 @@ const handleNextSet = ()=> {
       }
     }
   }
+  
+
    
  }
 
+const NextExerciseStart =()=>{
+  setStartWorkout(true)
+  setModal(false)
+  const duratione  = parseInt(currentExerciseTag!.sets[currentSetIndex]!.restTime )
+  setDuration(duratione);
+  console.log(currentExerciseTag?.name)
+  const videoId = currentExerciseTag?.videoId
+  setIdVideo(videoId!);
+  const machineSet = currentExerciseTag?.machineSettings
+  setMsettings(machineSet!);
+  userHistoryRecorder.mutate({
+    name:currentExerciseTag!.sets[currentSetIndex]!.name,
+    personId:"Fill",
+    SetId:currentExerciseTag!.sets[currentSetIndex]!.id,
+    reps:newReps,
+    type:currentExerciseTag!.sets[currentSetIndex]!.type,
+    weight:newWeight,
+    RestTime:(currentExerciseTag!.sets[currentSetIndex]!.restTime).toString(),
+    RestType:"s",
+    exerciseId:currentExerciseTag!.id,
+    workoutCelebId:workoutCelebId
+  })
+  if(currentExerciseTag!.sets[currentSetIndex]!.volume !==newReps ||currentExerciseTag!.sets[currentSetIndex]!.weight !==newWeight ){
+    mutate({
+          name:currentExerciseTag!.sets[currentSetIndex]!.name,
+          personId:"Fill",
+          SetId:currentExerciseTag!.sets[currentSetIndex]!.id,
+          reps:newReps,
+          type:currentExerciseTag!.sets[currentSetIndex]!.type,
+          weight:newWeight,
+          RestTime:(currentExerciseTag!.sets[currentSetIndex]!.restTime).toString(),
+          RestType:"s",
+          exerciseId:currentExerciseTag!.id,
+          workoutCelebId:workoutCelebId
+        })
+        console.log("changed MF")
+      }
+  
+  if (currentExerciseIndex === exercises.length - 1){
+    closeSessTab()
+  }
+  handleDoneExercise(routineId,currentExerciseTag!.id,currentExerciseTag!.sets[currentSetIndex]!.id,true)
 
 
+}
+ 
+
+const closeSessTab = ()=>{
+  SetFinsihWorkout(true)
+setModal(false);
+setStartWorkout(false)
+setoptionStart(false)   
+setNewReps("")
+setNewWeight("")   
+}
 useEffect(()=>{
 
   if (checkPersonal&&response) {
+   
     const updatedResponse = response.map((exercise) => {
       const updatedSets = exercise.sets.map((set) => {
         const matchingSet = checkPersonal.find((personalSet) => personalSet.SetId === set.id);
@@ -217,11 +312,21 @@ useEffect(()=>{
             ...set,
             volume: matchingSet.reps,
             weight: matchingSet.weight,
-            restTime: matchingSet.RestTime+ matchingSet.RestType
+            restTime: matchingSet.RestTime+ matchingSet.RestType,
+            done:false
+          }
+          return updatedSet;
+        }  else{
+          const updatedSet = {
+            ...set,
+           
+            done:false
           };
           return updatedSet;
-        }
-        return set;
+          
+        }  
+        
+       
         
       });
 
@@ -253,9 +358,13 @@ return (
 </Modal>
 
 <Modal visible ={optionsStart}>
+ <TouchableOpacity className='absolute top-2.5 right-2.5 p-2.5 z-10 pt-10' onPress={closeSessTab}>
+            <Text >Go back</Text>
+          </TouchableOpacity>
 {startWorkout && <StartWorking IdVideo={IdVideo}/>}
-<Modal visible={isOpen} animationType='slide' > 
-
+ 
+<Modal visible={isOpen}  > 
+<View className='pt-20'> 
 <CountdownCircleTimer
 isPlaying
 duration={duration}
@@ -265,9 +374,9 @@ colorsTime={[7, 5, 2, 0]}
 >
 {({ remainingTime }) => 
 {  if(remainingTime===0){
-   setStartWorkout(false)
-   setModal(false)
-   SetFinsihWorkout(true)
+  NextExerciseStart()
+ 
+  //  SetFinsihWorkout(true)
   return(
     <Text>Times Up</Text>
 
@@ -286,22 +395,15 @@ else{
 }
 
 </CountdownCircleTimer>
-{exercises&&<>
-  <Text>
-  {currentExerciseTag?.name}
-</Text>
-  <Text>
-  {currentExerciseTag?.sets[currentSetIndex]?.name}
-</Text>
-<Text>
-  {currentExerciseTag?.sets[currentSetIndex]?.volume} of {currentExerciseTag?.sets[currentSetIndex]?.weight}
-</Text></>}
+</View>
+<NextExerciseInRest Weight={currentExerciseTag?.sets[currentSetIndex]?.weight} reps={currentExerciseTag?.sets[currentSetIndex]?.volume}
+  name=  {currentExerciseTag?.name}
+  setName =  {currentExerciseTag?.sets[currentSetIndex]?.name}
+  newRepsSet = {setNewReps}
+  newWeight = {setNewWeight}
+/>
+<Button title="Close" onPress={NextExerciseStart }/>
 
-<Button title="Close" onPress={()=>{SetFinsihWorkout(true)
-setModal(false);
-setStartWorkout(false)
-setoptionStart(false)                 
-                                   }} />
 </Modal>
 
 
@@ -333,6 +435,7 @@ setoptionStart(false)
               currentExerciseIndex={setCurrentExerciseIndex}
               type={set.type}
               volume={set.volume}
+              done={set.done}
               weight={set.weight}
               workoutCelebId={workoutCelebId}
               key={`${item.routineId}-${item.id}-${set.id}-s`}

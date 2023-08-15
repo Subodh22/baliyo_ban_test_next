@@ -24,13 +24,14 @@ type set = {
   valSender:Function,
   // eslint-disable-next-line @typescript-eslint/ban-types
   valTimeSender:Function,
-  exoOrder:number
+  exoOrder:number,
+  done:boolean
 }
  
  
 
 
-const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,currentSet,exoOrder,currentExerciseIndex,valSender,restTime,type,volume,weight,workoutCelebId,videoId,machineSettings}:set) => {
+const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,done,currentSet,exoOrder,currentExerciseIndex,valSender,restTime,type,volume,weight,workoutCelebId,videoId,machineSettings}:set) => {
     const [newReps,setNewReps]=useState("");
     const [newWeight,setNewWeight]=useState("");
     const [newRestTime,setNewRestTime ]=useState("");
@@ -39,7 +40,7 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,curr
     const {mutate} =  trpc.post.createPersonalSets.useMutation();
     const userHistoryRecorder = trpc.post.userSetHistoryRecorder.useMutation();
     const [isModal,setModal]=useState<boolean>(true);
-    const [startState,setStartState] = useState("");
+    const [doner,setDoner]=useState(false);
     
     const handlePress=()=>{
       if(newReps||newWeight|| newRestTime||typeTime){
@@ -75,7 +76,7 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,curr
       })
       currentSet(order)
       currentExerciseIndex(exoOrder)
-      setStartState("Done")
+      setDoner(true)
       
      
     }
@@ -96,11 +97,13 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,curr
      setDigitRest(pp)
     },[restTime])
 
-    
+    useEffect(()=>{
+      setDoner(done)
+    },[done])
     useEffect(()=>{
       setNewReps(volume)
       setNewWeight(weight)
-      setStartState("Start")
+      setDoner(done)
        
       if(restTime)
     {  const splitt=restTime.split(/(\d+)/).filter(Boolean);
@@ -119,7 +122,7 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,curr
     
   return (
     
-    <View key={name+id}  className={`${startState=="Start"? 'bg-gray-200':'bg-gray-500'} flex-row justify-between align-center space-between `}>
+    <View key={name+id}  className={`${doner==false? 'bg-gray-200':'bg-gray-500'} flex-row justify-between align-center space-between `}>
     <Text >{name}</Text>
     <View> 
     <Text className=''>reps</Text>
@@ -149,7 +152,9 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,curr
      
     <Button onPress={()=>{
       handlePress()
-    }} title={startState} />
+    }} title={
+      doner? "Done": "Start"
+    } />
    
  </View>
   )
