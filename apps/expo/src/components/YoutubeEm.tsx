@@ -2,7 +2,8 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import YoutubePlayer from "react-native-youtube-iframe";
  
-const YoutubeEm = (props:any) => {
+const YoutubeEm =  React.memo((props:any) => {
+  console.log("Running video again")
   return (
     <View className='pt-40'>
       {/* <WebView
@@ -22,6 +23,6 @@ const YoutubeEm = (props:any) => {
       />
 </View>
   )
-}
+},(prevProps,nextProps)=>prevProps.videoId===nextProps.videoId)
 
 export default YoutubeEm

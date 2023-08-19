@@ -1,5 +1,5 @@
 import { router, publicProcedure, protectedProcedure } from "../trpc";
-import { number, z } from "zod";
+import { date, number, z } from "zod";
  
 export const postRouter = router({
  
@@ -10,7 +10,6 @@ export const postRouter = router({
     return workouts
   }),
  
-   
   deleteUserData:protectedProcedure.mutation(async({ctx})=>
   {
     const workerId = ctx.auth.userId;
@@ -146,6 +145,7 @@ export const postRouter = router({
   })
   
   ,
+
   createPersonalSets:protectedProcedure.input(z.object({
     name:z.string(),
     personId:z.string(),
@@ -156,20 +156,25 @@ export const postRouter = router({
     RestType :  z.string(),
     exerciseId: z.number(),
     type:     z.string(),
-    workoutCelebId:z.number()
+    workoutCelebId:z.number(),
+ 
 })).mutation(async({ctx,input})=>{
     const userIdx = ctx.auth.userId;
     const  CheckifExists = await ctx.prisma.personalSets.findMany({
       where:{
         personId:userIdx,
-        SetId:input.SetId
+        SetId:input.SetId,
+        WorkoutCelebId:input.workoutCelebId,
+        exerciseId:input.exerciseId
       }
     })
     if(CheckifExists){
       await ctx.prisma.personalSets.deleteMany({
         where:{
           personId:userIdx,
-          SetId:input.SetId
+          SetId:input.SetId,
+          WorkoutCelebId:input.workoutCelebId,
+          exerciseId:input.exerciseId
         }
       })
     }
@@ -182,7 +187,7 @@ export const postRouter = router({
       weight    : input.weight,
       RestTime  : input.RestTime,
     RestType  : input.RestType,
-        
+       
 
       exerciseId :input.exerciseId,
       WorkoutCelebId :input.workoutCelebId,
@@ -192,6 +197,24 @@ export const postRouter = router({
 
  return "personal Sets Created"
   }), 
+  createSession:protectedProcedure.input(z.object({
+    routineId:z.string(),
+    workoutCelebId:z.string()
+  })).mutation(async({ctx,input})=>{
+    const workerId = ctx.auth.userId
+    const createSes = ctx.prisma.sessions.create({
+      data:
+      {
+        personId:workerId,
+        WorkoutCelebId:input.workoutCelebId,
+        RoutineId:input.routineId,
+        StartedAt:new Date(),
+        FinsihedAt:new Date(),
+        Status:"started"
+      }
+    })
+  })
+  ,
   userSetHistoryRecorder:protectedProcedure.input(z.object({
     name:z.string(),
     personId:z.string(),
@@ -225,6 +248,25 @@ export const postRouter = router({
 
  return "user setCreated"
   }),
+
+  userSetHistoryRecorderDelete:protectedProcedure.input(z.object({
+    personId:z.string(),
+    SetId:z.number(),
+    exerciseId:z.number(),
+    WorkoutCelebId:z.number()
+  })).mutation(async({ctx,input})=>{
+    const workerId=ctx.auth.userId
+    const delo = await ctx.prisma.userSetHistory.deleteMany({
+      where:{
+        SetId:input.SetId,
+       exerciseId:input.exerciseId,
+       personId:workerId,
+       WorkoutCelebId:input.WorkoutCelebId
+      }
+    })
+
+  }),
+
   findPersonalSets:protectedProcedure.input(z.object({personId:z.string(),
     workoutCelebId:z.number()
    })).query(async({ctx,input})=>{

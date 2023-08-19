@@ -75,6 +75,7 @@ model PersonalSets {
   exerciseId     Int
   WorkoutCelebId Int
   type           String
+ 
 }
 
 model userSetHistory {

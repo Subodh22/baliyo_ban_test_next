@@ -7,6 +7,7 @@ import { RootStackParamList } from './RootNavigator';
 import { trpc } from '../utils/trpc';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Card } from '@rneui/base';
 
 type Set = {
   exerciseId: number;
@@ -86,10 +87,22 @@ function SpecificNavigator() {
   
     return (<View> 
       {response?.routines.map((routine) => (
-        
-       <TouchableOpacity key={routine.id} onPress={()=>{navigation.push('Inside',{routineId:routine.id,nameOfDay:routine.weekRoutine,workoutCelebId:workoutCelebId})}}>
-        <Text>{routine.weekRoutine}</Text>
-       </TouchableOpacity>
+       <View key={routine.id}> 
+<TouchableOpacity
+         className="px-5 py-4" 
+        onPress={()=>{navigation.push('Inside',{routineId:routine.id,nameOfDay:routine.weekRoutine,workoutCelebId:workoutCelebId})}}>
+           
+       
+          <View className="flex-row justify-between">
+            <View className="flex items-center justify-center">
+            <Text>{routine.weekRoutine}</Text>
+            </View>
+            </View>
+            
+            </TouchableOpacity>
+   <Card.Divider />
+   </View> 
+
         ))} 
         
         </View>

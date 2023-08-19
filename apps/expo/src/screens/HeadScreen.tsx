@@ -36,11 +36,11 @@ const HeadScreen = () => {
     })
   })
   return (
-    <ScrollView >
+    <ScrollView className='pt-20' >
     
-    <Input value={input} placeholder='Search for your workout' onChangeText={setInput} className='bg-white pt-5 pb-0 px 1 '/> 
+    {/* <Input value={input} placeholder='Search for your workout' onChangeText={setInput} className='bg-white pt-5 pb-0 px 1 '/> 
     <Button   title="Search"  titleStyle={{ color: 'black' }}/>
-     
+      */}
     {
       getData["data"]?.map(({id,name,ratings})=>(
          

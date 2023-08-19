@@ -1,17 +1,21 @@
 import { View, Text, Touchable, TouchableOpacity, FlatList, Modal, Platform } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { RouteProp, useNavigation, useRoute  } from '@react-navigation/native'
 import { RootStackParamList } from './RootNavigator';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import SpecificDayComp from '../components/SpecificDayComp';
 import { trpc } from '../utils/trpc';
-
+import { BackHandler, Alert } from 'react-native';
+ 
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { Button } from '@rneui/base';
 import { TimePicker, ValueMap } from 'react-native-simple-time-picker';
 import YoutubeEm from '../components/YoutubeEm';
 import Session from '../components/Session';
 import NextExerciseInRest from '../components/NextExerciseInRest';
+import AddSetsComp from '../components/AddSetsComp';
+import BackHandlerbe from '../components/BackHandlerbe';
+ 
 
 type Set = {
   exerciseId: number;
@@ -76,20 +80,31 @@ const InsidePage2 = () => {
   const [sessionId,setSessionId]=useState<boolean>(false);
   const [currentExercise,setCurrentExercise]= useState("");
   const [currentSetIndex,setcurrentSetIndex] = useState(0);
+  const [startSess,setStartSess] = useState(false);
   const [currentExerciseIndex,setCurrentExerciseIndex]= useState(0);
   const {params:{routineId,nameOfDay,workoutCelebId}} = useRoute<CustomScreenRouteProp>();
   const {data:response,isLoading:isPosting} = trpc.post.getWorkoutExercise.useQuery({routineId: routineId },
   )
   const [exercises, setResponse] =useState<Exercise>([]);
-    const {data:checkPersonal,isLoading:isWaiting}=trpc.post.findPersonalSets.useQuery({
+    const {data:checkPersonal,isLoading:isWaiting,refetch}=trpc.post.findPersonalSets.useQuery({
   personId:"fill",
   workoutCelebId:workoutCelebId
 }  ) 
+
+
+const [addsetTab,setAddsetTab] =useState(false);
 const [newReps,setNewReps]=useState("");
 const [newWeight,setNewWeight]=useState("");
 const [newRestTime,setNewRestTime ]=useState("");
-const userHistoryRecorder = trpc.post.userSetHistoryRecorder.useMutation();
-const {mutate} =  trpc.post.createPersonalSets.useMutation();
+ const userHistoryRecorder = trpc.post.userSetHistoryRecorder.useMutation();
+const addNewSets =  trpc.post.createPersonalSets.useMutation(
+  {
+    onSuccess:()=>{
+      refetch();
+     
+    }
+  }
+);
 const [doneExercise,setDoneExercise]= useState([])
 const [isOpen,setModal]=useState<boolean>(false);
 const [chosenTime,setChosenTime] =useState<Date>(new Date())
@@ -102,6 +117,9 @@ const [optionsStart,setoptionStart] =useState<boolean>(false);
 const [finishWorkout,SetFinsihWorkout] = useState<boolean>(false);
 const [Msettings,setMsettings]=useState<string>("");
 const [IdVideo,setIdVideo]=useState<string>("");
+const [unsaved,setUnsaved] = useState("aaa")
+ 
+
 
 const handleUpdateRestTime = (routineId: number, exerciseId: number, setId: number, restTime: string) => {
   setResponse((prevExercises) => {
@@ -137,8 +155,11 @@ const handleDoneExercise = (routineId: number, exerciseId: number, setId: number
     });
     return updatedExercises;
   });
+ 
   
 };
+
+
 const ExpoCountdown=()=>{
   const [value,setValue] = useState<ValueMap>(
     { hours: 1,
@@ -172,7 +193,7 @@ const ExpoCountdown=()=>{
   )
 }
  
-const StartWorking = React.memo(({IdVideo}:any)=>{
+const StartWorking =  ({IdVideo}:any)=>{
 
   
   return(
@@ -200,8 +221,7 @@ const StartWorking = React.memo(({IdVideo}:any)=>{
   }</>
   
   )
-},(prevProps,nextProps)=>prevProps.IdVideo===nextProps.IdVideo)
- 
+} 
 const passTheTimer=(isOpene:boolean,isfunId:number,routineIdx:number)=>
 {
   setIsTimePickerVisible(isOpene)
@@ -210,6 +230,7 @@ const passTheTimer=(isOpene:boolean,isfunId:number,routineIdx:number)=>
 
 }
 
+ 
 
 const passTheValue=(isOpene:boolean,duration:number,IdVideo:string,settingMachine:string)=>{
   setoptionStart(isOpene);
@@ -218,7 +239,7 @@ const passTheValue=(isOpene:boolean,duration:number,IdVideo:string,settingMachin
   
   setIdVideo(IdVideo);
   setMsettings(settingMachine);
-  console.log("isoops"+isOpene)
+
 
 }
 const currentExerciseTag = exercises[currentExerciseIndex]
@@ -244,12 +265,40 @@ const handleNextSet = ()=> {
    
  }
 
+const addNewSetsFunction=(name:string)=>{
+  let setId =currentExerciseTag!.sets[currentSetIndex]!.id
+  if(name=="add"){
+    name=`Set ${currentExerciseTag!.sets.length +1}`
+    setId =currentExerciseTag!.sets[currentSetIndex]!.id+Math.floor(Math.random()*5000)
+     
+  }
+ 
+  addNewSets.mutate({
+    name:name,
+    personId:"Fill",
+    SetId:setId,
+    reps:newReps,
+    type:currentExerciseTag!.sets[currentSetIndex]!.type,
+    weight:newWeight,
+    RestTime:(currentExerciseTag!.sets[currentSetIndex]!.restTime).toString(),
+    RestType:"s",
+    exerciseId:currentExerciseTag!.id,
+    workoutCelebId:workoutCelebId,
+  
+  }) 
+  setAddsetTab(false)
+
+}
+
+
 const NextExerciseStart =()=>{
+  handleDoneExercise(routineId,currentExerciseTag!.id,currentExerciseTag!.sets[currentSetIndex]!.id,true)
+ 
   setStartWorkout(true)
   setModal(false)
   const duratione  = parseInt(currentExerciseTag!.sets[currentSetIndex]!.restTime )
   setDuration(duratione);
-  console.log(currentExerciseTag?.name)
+ 
   const videoId = currentExerciseTag?.videoId
   setIdVideo(videoId!);
   const machineSet = currentExerciseTag?.machineSettings
@@ -266,27 +315,19 @@ const NextExerciseStart =()=>{
     exerciseId:currentExerciseTag!.id,
     workoutCelebId:workoutCelebId
   })
-  if(currentExerciseTag!.sets[currentSetIndex]!.volume !==newReps ||currentExerciseTag!.sets[currentSetIndex]!.weight !==newWeight ){
-    mutate({
-          name:currentExerciseTag!.sets[currentSetIndex]!.name,
-          personId:"Fill",
-          SetId:currentExerciseTag!.sets[currentSetIndex]!.id,
-          reps:newReps,
-          type:currentExerciseTag!.sets[currentSetIndex]!.type,
-          weight:newWeight,
-          RestTime:(currentExerciseTag!.sets[currentSetIndex]!.restTime).toString(),
-          RestType:"s",
-          exerciseId:currentExerciseTag!.id,
-          workoutCelebId:workoutCelebId
-        })
-        console.log("changed MF")
+   
+
+   
+   if(  currentExerciseTag!.sets[currentSetIndex]!.volume !==newReps ||currentExerciseTag!.sets[currentSetIndex]!.weight !==newWeight ){
+    addNewSetsFunction(currentExerciseTag!.sets[currentSetIndex]!.name)
+      
       }
-  
+     
   if (currentExerciseIndex === exercises.length - 1){
     closeSessTab()
   }
-  handleDoneExercise(routineId,currentExerciseTag!.id,currentExerciseTag!.sets[currentSetIndex]!.id,true)
-
+    
+   
 
 }
  
@@ -303,24 +344,33 @@ useEffect(()=>{
 
   if (checkPersonal&&response) {
    
-    const updatedResponse = response.map((exercise) => {
-      const updatedSets = exercise.sets.map((set) => {
+    const updatedResponse = response.map((exercise,exeindex) => {
+      const existingSetIds = exercise.sets.map(set => set.id);
+
+      const updatedSets = exercise.sets.map((set,index) => {
         const matchingSet = checkPersonal.find((personalSet) => personalSet.SetId === set.id);
-       
+         
         if (matchingSet) {
+          console.log( matchingSet?.reps+"hooter"+exercises[exeindex]?.sets[index]?.volume)
+          if(exercises[exeindex]?.sets[index]?.done)
+          {
+            console.log("I EXIST MY LORD")
+          }
           const updatedSet = {
             ...set,
             volume: matchingSet.reps,
             weight: matchingSet.weight,
             restTime: matchingSet.RestTime+ matchingSet.RestType,
-            done:false
+
+            done: exercises[exeindex]?.sets[index]?.done || false
           }
+        
           return updatedSet;
         }  else{
           const updatedSet = {
             ...set,
            
-            done:false
+            done:exercises[exeindex]?.sets[index]?.done || false
           };
           return updatedSet;
           
@@ -330,25 +380,47 @@ useEffect(()=>{
         
       });
 
-      return { ...exercise, sets: updatedSets };
+      const additionalSets = checkPersonal.filter(personalSet => 
+        
+        personalSet.exerciseId === exercise.id &&!existingSetIds.includes(personalSet.SetId)).map(personalSet => ({
+        id: personalSet.SetId,
+        volume: personalSet.reps,
+        weight: personalSet.weight,
+        restTime: personalSet.RestTime + personalSet.RestType,
+        done: false,
+        name:personalSet.name,
+        order: personalSet.id,
+        type:personalSet.type,
+        exerciseId:personalSet.exerciseId
+
+
+
+    }));
+
+    // Merge updatedSets with additionalSets
+    return { ...exercise, sets: [...updatedSets, ...additionalSets] };
+
+
     });
+    
     setResponse(updatedResponse)
      
   }
 
 
 
-  console.log(exercises)
+ 
 
 },[response,checkPersonal])
-
-
+ 
   useLayoutEffect(()=>
   (
     navigation.setOptions({
-    headerTitle:nameOfDay
+    headerTitle:nameOfDay,
+    headerLeft:()=> <BackHandlerbe sessionId={sessionId} />,
+    gestureEnabled: false,
     })
-  ),[])
+  ),[sessionId])
 return (
 
   <View> 
@@ -409,19 +481,39 @@ else{
 
 
 </Modal>
-
+<Modal visible ={addsetTab}>
+  <TouchableOpacity className='absolute top-2.5 right-2.5 p-2.5 z-10 pt-10'
+  onPress={()=>{setAddsetTab(false)
+    setNewReps("")
+    setNewWeight("")
+  }}
+  >
+    <Text>
+      Go back
+    </Text>
+  </TouchableOpacity>
+<AddSetsComp
+addSets={addNewSetsFunction}
+setId = {currentExerciseTag?.sets[currentSetIndex]?.id} 
+Weight={currentExerciseTag?.sets[currentSetIndex]?.weight} 
+reps={currentExerciseTag?.sets[currentSetIndex]?.volume}
+name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  newRepsSet={setNewReps} newWeight={setNewWeight}/>
+ 
+</Modal>
 <FlatList
       data={exercises}
       keyExtractor={(item) => `${item.routineId}-${item.id}`}
       renderItem={({ item }) => (
         <View key={item.id}>
-          <Text>{item.name}</Text>
+          <Text>{item.name}</Text>   
+            
           <FlatList
           data={item.sets}
           keyExtractor={(set) => `${item.routineId}-${item.id}-${set.id}`}
           renderItem={({ item: set }) => (
             <SpecificDayComp
               exerciseId={item.id}
+              startSess={startSess}
               videoId={item.videoId}
               machineSettings={item.machineSettings}
               id={set.id}
@@ -439,10 +531,17 @@ else{
               weight={set.weight}
               workoutCelebId={workoutCelebId}
               key={`${item.routineId}-${item.id}-${set.id}-s`}
+              
             />
           )}
          
         />
+        <Button title="add sets" 
+        onPress={()=>{setAddsetTab(true)
+                      setCurrentExerciseIndex(item.order)}
+      }
+         /> 
+     
         </View>
       )}
       initialNumToRender={2}

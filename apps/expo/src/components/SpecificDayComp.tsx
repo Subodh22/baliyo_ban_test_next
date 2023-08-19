@@ -25,13 +25,14 @@ type set = {
   // eslint-disable-next-line @typescript-eslint/ban-types
   valTimeSender:Function,
   exoOrder:number,
-  done:boolean
+  done:boolean,
+  startSess:boolean
 }
  
  
 
 
-const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,done,currentSet,exoOrder,currentExerciseIndex,valSender,restTime,type,volume,weight,workoutCelebId,videoId,machineSettings}:set) => {
+const SpecificDayComp = React.memo(({id,startSess,exerciseId,valTimeSender,name,order,done,currentSet,exoOrder,currentExerciseIndex,valSender,restTime,type,volume,weight,workoutCelebId,videoId,machineSettings}:set) => {
     const [newReps,setNewReps]=useState("");
     const [newWeight,setNewWeight]=useState("");
     const [newRestTime,setNewRestTime ]=useState("");
@@ -41,10 +42,13 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,done
     const userHistoryRecorder = trpc.post.userSetHistoryRecorder.useMutation();
     const [isModal,setModal]=useState<boolean>(true);
     const [doner,setDoner]=useState(false);
+    const notDoneSets = trpc.post.userSetHistoryRecorderDelete.useMutation();
     
     const handlePress=()=>{
-      if(newReps||newWeight|| newRestTime||typeTime){
-        
+
+  
+      if(newReps||newWeight|| newRestTime){
+         
         mutate({
           name:name,
           personId:"Fill",
@@ -55,9 +59,10 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,done
           RestTime:(digitRest).toString(),
           RestType:typeTime,
           exerciseId:exerciseId,
-          workoutCelebId:workoutCelebId
+          workoutCelebId:workoutCelebId,
+        
         })
-         
+        
 
       }
       
@@ -104,7 +109,7 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,done
       setNewReps(volume)
       setNewWeight(weight)
       setDoner(done)
-       
+    
       if(restTime)
     {  const splitt=restTime.split(/(\d+)/).filter(Boolean);
        
@@ -123,7 +128,7 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,done
   return (
     
     <View key={name+id}  className={`${doner==false? 'bg-gray-200':'bg-gray-500'} flex-row justify-between align-center space-between `}>
-    <Text >{name}</Text>
+    <Text > {name}</Text>
     <View> 
     <Text className=''>reps</Text>
      
@@ -151,10 +156,28 @@ const SpecificDayComp = React.memo(({id,exerciseId,valTimeSender,name,order,done
      </View>
      
     <Button onPress={()=>{
-      handlePress()
-    }} title={
+      if(doner ==false)
+      {
+        handlePress()
+      }
+      else{
+        notDoneSets.mutate({
+          SetId:id,
+          exerciseId:exerciseId,
+          personId:"fill",
+          WorkoutCelebId:workoutCelebId
+
+        })
+        setDoner(false)
+      }
+    }}
+    
+    title={
       doner? "Done": "Start"
     } />
+     <TouchableOpacity className='h-10 w-10 bg-white justify-center '>
+      <Text> - </Text>
+     </TouchableOpacity>
    
  </View>
   )
