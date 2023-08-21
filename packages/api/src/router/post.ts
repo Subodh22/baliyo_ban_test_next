@@ -270,24 +270,21 @@ export const postRouter = router({
 
     return { data: "old user", exercises };
   }),
-  // searchSession:protectedProcedure.input(z.object({
-  
-  //   RoutineId:z.number(),
-  //   WorkoutCelebId:z.number()
-  // })).query(async ({ctx,input})=>{
-  //   const workerId = ctx.auth.userId
-  //   const firstses = await ctx.prisma.sessions.findFirst({
-  //   where:{  personId:workerId,
-  //     RoutineId:input.RoutineId,
-  //     WorkoutCelebId:input.WorkoutCelebId}
-  //   })
-  //   if(!firstses){
-  //     return {data:"new user"}
-      
-  //   }
-  //   return  {data:"old user"}
-      
-  // })
+ removeSets:protectedProcedure.input(z.object({
+  personId :z.string(),
+  id:z.number(),
+  exerciseId:z.number()
+
+ })).mutation(async({ctx,input})=>{
+  const workerId = ctx.auth.userId
+  const removeSetN = await ctx.prisma.personalSets.deleteMany({
+    where:{
+      personId:workerId,
+      SetId:input.id,
+      exerciseId:input.exerciseId
+    }
+  })
+ }),
   
   createSession:protectedProcedure.input(z.object({
     routineId:z.number(),

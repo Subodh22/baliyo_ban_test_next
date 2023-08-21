@@ -106,6 +106,7 @@ const [addsetTab,setAddsetTab] =useState(false);
 const [newReps,setNewReps]=useState("");
 const [newWeight,setNewWeight]=useState("");
 const [newRestTime,setNewRestTime ]=useState("");
+const removeTrpc = trpc.post.removeSets.useMutation();
  const userHistoryRecorder = trpc.post.userSetHistoryRecorder.useMutation();
 const addNewSets =  trpc.post.createPersonalSets.useMutation(
   {
@@ -222,7 +223,7 @@ const StartWorking =  ({IdVideo}:any)=>{
   {currentExerciseTag?.name}
 </Text>
   <Text>
-  {currentExerciseTag?.sets[currentSetIndex]?.name}
+  Set {currentSetIndex+1}
 </Text>
 <Text>
  {newReps !==""?newReps: currentExerciseTag?.sets[currentSetIndex]?.volume} of { newWeight !=="" ? newWeight :  currentExerciseTag?.sets[currentSetIndex]?.weight}
@@ -287,10 +288,32 @@ const addNewSetsFunction=(name:string)=>{
   let setId =currentExerciseTag!.sets[currentSetIndex]!.id
   let orders = currentExerciseTag!.sets[currentSetIndex]!.order
   if(name=="add"){
+
     name=`Set ${currentExerciseTag!.sets.length +1}`
     setId =currentExerciseTag!.sets[currentSetIndex]!.id+Math.floor(Math.random()*5000)
     orders = currentExerciseTag!.sets.length
-    
+    const newSet:Set = {
+      id : setId,
+      name:name,
+      exerciseId:currentExerciseTag!.id,
+      order:orders,
+      restTime: currentExerciseTag!.sets[currentSetIndex]!.restTime,
+      type:currentExerciseTag!.sets[currentSetIndex]!.type,
+      volume:newReps,
+      weight:newWeight,
+      done:false
+    }
+    const updatedExercises = exercises.map((exercise) => {
+      if (exercise.id == currentExerciseTag!.id) {
+        return {
+          ...exercise,
+          sets: [...exercise.sets, newSet] // Append the new set to the sets array
+        };
+      }
+      return exercise;
+    });
+  
+    setExercise(updatedExercises);
  
     }
    else{
@@ -299,6 +322,7 @@ const addNewSetsFunction=(name:string)=>{
        const updatedSets = exercise.sets.map((set)=>{
          if (set.id==currentExerciseTag!.sets[currentSetIndex]!.id)
          {
+          console.log(newWeight,newReps)
            return {
              ...set,
              volume:newReps,
@@ -389,6 +413,51 @@ setNewReps("")
 setNewWeight("")   
 }
 
+ 
+const removeSet = (id: number,exerciseId:number) => {
+  
+    Alert.alert(
+      'Confirm',
+      'Are you sure you want to remove the set ?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'Yes',
+          onPress: () => { if (checkingSession.data?.data == "new user") {
+            const updatedExo = exercises.map((exercise) => {
+              // Filter the sets to exclude the one with the given id
+              const updatedSets = exercise.sets.filter(set => set.id !== id);
+              return { ...exercise, sets: updatedSets };
+            });
+        
+            // Now, update the state with the modified exercises
+            setExercise(updatedExo);
+          }
+          else{
+            removeTrpc.mutate({
+              id:id,
+              personId:"fill",
+              exerciseId:exerciseId
+            })
+            const updatedExo = exercises.map((exercise) => {
+              // Filter the sets to exclude the one with the given id
+              const updatedSets = exercise.sets.filter(set => set.id !== id);
+              return { ...exercise, sets: updatedSets };
+            });
+        
+            // Now, update the state with the modified exercises
+            setExercise(updatedExo);
+        
+          }}
+        }
+      ]
+    );
+ 
+
+}
 
 useEffect(() => {
   if (!checkingSession.isLoading && checkingSession.data) {
@@ -462,7 +531,7 @@ else{
 </View>
 <NextExerciseInRest Weight={currentExerciseTag?.sets[currentSetIndex]?.weight} reps={currentExerciseTag?.sets[currentSetIndex]?.volume}
   name=  {currentExerciseTag?.name}
-  setName =  {currentExerciseTag?.sets[currentSetIndex]?.name}
+  setName =  {"Set "+( currentSetIndex+1)}
   newRepsSet = {setNewReps}
   newWeight = {setNewWeight}
   ChangedValue= {setChangeValue}
@@ -496,6 +565,7 @@ name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  ne
 
 <FlatList
       data={exercises}
+      extraData={exercises}
       keyExtractor={(item) => `${item.routineId}-${item.id}`}
       renderItem={({ item }) => (
         <View key={item.id}>
@@ -504,7 +574,7 @@ name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  ne
           <FlatList
           data={item.sets}
           keyExtractor={(set) => `${item.routineId}-${item.id}-${set.id}`}
-          renderItem={({ item: set }) => (
+          renderItem={({ item: set,index }) => (
             <SpecificDayComp
               exerciseId={item.id}
               startSess={startSess}
@@ -512,7 +582,8 @@ name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  ne
               machineSettings={item.machineSettings}
               id={set.id}
               name={set.name}
-              order={set.order}
+
+              order={index}
               restTime={set.restTime}
               valSender={passTheValue}
               valTimeSender={passTheTimer}
@@ -525,7 +596,7 @@ name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  ne
               weight={set.weight}
               workoutCelebId={workoutCelebId}
               key={`${item.routineId}-${item.id}-${set.id}-s`}
-              
+              removeSet={removeSet}
             />
           )}
          
@@ -539,7 +610,7 @@ name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  ne
         </View>
       )}
       initialNumToRender={2}
-      extraData={exercises}
+      
       windowSize={5}
     />
  

@@ -26,13 +26,16 @@ type set = {
   valTimeSender:Function,
   exoOrder:number,
   done:boolean,
-  startSess:boolean
+  startSess:boolean,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  removeSet:Function
+  
 }
  
  
 
 
-const SpecificDayComp = React.memo(({id,startSess,exerciseId,valTimeSender,name,order,done,currentSet,exoOrder,currentExerciseIndex,valSender,restTime,type,volume,weight,workoutCelebId,videoId,machineSettings}:set) => {
+const SpecificDayComp = React.memo(({id,startSess,exerciseId,removeSet,valTimeSender,name,order,done,currentSet,exoOrder,currentExerciseIndex,valSender,restTime,type,volume,weight,workoutCelebId,videoId,machineSettings}:set) => {
     const [newReps,setNewReps]=useState("");
     const [newWeight,setNewWeight]=useState("");
     const [newRestTime,setNewRestTime ]=useState("");
@@ -129,7 +132,7 @@ const SpecificDayComp = React.memo(({id,startSess,exerciseId,valTimeSender,name,
   return (
     
     <View key={name+id}  className={`${doner==false? 'bg-gray-200':'bg-gray-500'} flex-row justify-between align-center space-between `}>
-    <Text > {name}</Text>
+    <Text > Set {order+1}</Text>
     <View> 
     <Text className=''>reps</Text>
      
@@ -176,7 +179,7 @@ const SpecificDayComp = React.memo(({id,startSess,exerciseId,valTimeSender,name,
     title={
       doner? "Done": "Start"
     } />
-     <TouchableOpacity className='h-10 w-10 bg-white justify-center '>
+     <TouchableOpacity className='h-10 w-10 bg-white justify-center ' onPress={()=>{removeSet(id,exerciseId)}}>
       <Text> - </Text>
      </TouchableOpacity>
    
