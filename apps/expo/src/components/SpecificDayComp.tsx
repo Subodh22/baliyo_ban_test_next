@@ -58,6 +58,7 @@ const SpecificDayComp = React.memo(({id,startSess,exerciseId,valTimeSender,name,
           weight:newWeight,
           RestTime:(digitRest).toString(),
           RestType:typeTime,
+          order:order,
           exerciseId:exerciseId,
           workoutCelebId:workoutCelebId,
         

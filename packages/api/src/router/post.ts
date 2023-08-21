@@ -96,32 +96,32 @@ export const postRouter = router({
     })
   
    return(getWorkoutData)
-  }),
-  getWorkoutExerciseTest:protectedProcedure.input(z.object(
-    {  routineId:z.number()}
-    )).query(async({ctx,input})=>{
-      const getExercises = await ctx.prisma.exercise.findMany({
-        where:{
-          routineId:input.routineId
-        },
-        
-      })
-      return getExercises
-    }),
+  }) ,
   getWorkoutExercise:protectedProcedure.input(z.object(
   {  routineId:z.number()}
   )).query(async({ctx,input})=>{
     const getExercises = await ctx.prisma.exercise.findMany({
       where:{
         routineId:input.routineId
-      },
-      include:{
-        sets:true
       }
+    
 
     })
     return getExercises
   }),
+  getDefaultSetForEx:protectedProcedure.input(z.object(
+    {  routineId:z.number()}
+    )).query(async({ctx,input})=>{
+      const getSets = await ctx.prisma.set.findMany({
+        where:{
+          routineId:input.routineId
+        }
+        
+  
+      })
+      return getSets
+    }),
+
    getWorkoutToUser:publicProcedure.query(async({ctx})=>
   {
     const workerId = ctx.auth.userId;
@@ -157,7 +157,7 @@ export const postRouter = router({
     exerciseId: z.number(),
     type:     z.string(),
     workoutCelebId:z.number(),
- 
+    order:z.number()
 })).mutation(async({ctx,input})=>{
     const userIdx = ctx.auth.userId;
     const  CheckifExists = await ctx.prisma.personalSets.findMany({
@@ -165,7 +165,8 @@ export const postRouter = router({
         personId:userIdx,
         SetId:input.SetId,
         WorkoutCelebId:input.workoutCelebId,
-        exerciseId:input.exerciseId
+        exerciseId:input.exerciseId,
+        
       }
     })
     if(CheckifExists){
@@ -187,7 +188,7 @@ export const postRouter = router({
       weight    : input.weight,
       RestTime  : input.RestTime,
     RestType  : input.RestType,
-       
+       order  :input.order,
 
       exerciseId :input.exerciseId,
       WorkoutCelebId :input.workoutCelebId,
@@ -197,12 +198,103 @@ export const postRouter = router({
 
  return "personal Sets Created"
   }), 
+  searchSession: protectedProcedure.input(z.object({
+    RoutineId: z.number(),
+    WorkoutCelebId: z.number()
+  })).query(async ({ ctx, input }) => {
+    const workerId = ctx.auth.userId
+    const firstses = await ctx.prisma.sessions.findFirst({
+      where: {
+        personId: workerId,
+        RoutineId: input.RoutineId,
+        WorkoutCelebId: input.WorkoutCelebId,
+        Status:"finished"
+      }
+    });
+    
+    if (!firstses) {
+      const defaultSets = await ctx.prisma.set.findMany({
+        where: {
+          routineId: input.RoutineId
+        },  orderBy: {
+          order: 'asc'  
+        }
+      });
+  
+      const exercises= await ctx.prisma.exercise.findMany({
+        where: {
+          routineId: input.RoutineId
+        }
+      }).then(exercises =>
+        exercises.map(exercise => ({
+          ...exercise,
+          sets: defaultSets.filter(set => set.exerciseId === exercise.id) 
+        }))
+      );
+  
+      // ... here you'd process and return the exercises data for new users
+      return { data: "new user", exercises };
+    }
+  
+    const personalSets = await ctx.prisma.personalSets.findMany({
+      where: {
+        personId: workerId,
+        WorkoutCelebId: input.WorkoutCelebId
+      },   orderBy: {
+        order: 'asc' // Assuming your field name is 'order'
+      }
+    });
+  
+    const exercises = await ctx.prisma.exercise.findMany({
+      where: {
+        routineId: input.RoutineId
+      }
+    }).then(exercises =>
+      exercises.map(exercise => ({
+        ...exercise,
+        sets: personalSets.filter(set => set.exerciseId === exercise.id).map((set)=>
+        ({
+          id:set.SetId,
+          name:set.name,
+          type:set.type,
+          volume:set.reps,
+          weight:set.weight,
+          restTime:set.RestTime,
+          exerciseId:set.exerciseId,
+          order:set.order,
+          routineId:input.RoutineId,
+          }))
+      }))
+    );
+  
+
+    return { data: "old user", exercises };
+  }),
+  // searchSession:protectedProcedure.input(z.object({
+  
+  //   RoutineId:z.number(),
+  //   WorkoutCelebId:z.number()
+  // })).query(async ({ctx,input})=>{
+  //   const workerId = ctx.auth.userId
+  //   const firstses = await ctx.prisma.sessions.findFirst({
+  //   where:{  personId:workerId,
+  //     RoutineId:input.RoutineId,
+  //     WorkoutCelebId:input.WorkoutCelebId}
+  //   })
+  //   if(!firstses){
+  //     return {data:"new user"}
+      
+  //   }
+  //   return  {data:"old user"}
+      
+  // })
+  
   createSession:protectedProcedure.input(z.object({
-    routineId:z.string(),
-    workoutCelebId:z.string()
+    routineId:z.number(),
+    workoutCelebId:z.number()
   })).mutation(async({ctx,input})=>{
     const workerId = ctx.auth.userId
-    const createSes = ctx.prisma.sessions.create({
+    const createSes =await ctx.prisma.sessions.create({
       data:
       {
         personId:workerId,
@@ -213,6 +305,7 @@ export const postRouter = router({
         Status:"started"
       }
     })
+    return {id:createSes.id }
   })
   ,
   userSetHistoryRecorder:protectedProcedure.input(z.object({

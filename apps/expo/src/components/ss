@@ -1,10 +1,9 @@
-{/* {exercises&&<>
-  <Text>
-  {currentExerciseTag?.name}
-</Text>
-  <Text>
-  {currentExerciseTag?.sets[currentSetIndex]?.name}
-</Text>
-<Text>
-  {currentExerciseTag?.sets[currentSetIndex]?.volume} of {currentExerciseTag?.sets[currentSetIndex]?.weight}
-</Text></>} */}
+exerciseId: number;
+  id: number;
+  name: string;
+  order: number;
+  restTime: string;
+  type: string;
+  volume: string;
+  weight: string;
+  done:boolean

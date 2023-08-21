@@ -82,16 +82,26 @@ const InsidePage2 = () => {
   const [currentSetIndex,setcurrentSetIndex] = useState(0);
   const [startSess,setStartSess] = useState(false);
   const [currentExerciseIndex,setCurrentExerciseIndex]= useState(0);
+  const startSessFunc = trpc.post.createSession.useMutation();
+  const [ChangedValue,setChangeValue] = useState(false);
+
   const {params:{routineId,nameOfDay,workoutCelebId}} = useRoute<CustomScreenRouteProp>();
-  const {data:response,isLoading:isPosting} = trpc.post.getWorkoutExercise.useQuery({routineId: routineId },
-  )
-  const [exercises, setResponse] =useState<Exercise>([]);
+  // const {data:response,isLoading:isPosting} = trpc.post.getWorkoutExercise.useQuery({routineId: routineId } 
+  // ) 
+  const [exercises, setExercise] =useState<Exercise>([]);
     const {data:checkPersonal,isLoading:isWaiting,refetch}=trpc.post.findPersonalSets.useQuery({
   personId:"fill",
   workoutCelebId:workoutCelebId
-}  ) 
+},{enabled:false}  ) 
+const {data:checkDefault ,refetch:recheckDefault}=trpc.post.getDefaultSetForEx.useQuery({
+routineId:routineId
+},{enabled:false}  ) 
 
-
+const checkingSession = trpc.post.searchSession.useQuery({
+  WorkoutCelebId:workoutCelebId,
+  RoutineId:routineId,
+ 
+})
 const [addsetTab,setAddsetTab] =useState(false);
 const [newReps,setNewReps]=useState("");
 const [newWeight,setNewWeight]=useState("");
@@ -118,11 +128,17 @@ const [finishWorkout,SetFinsihWorkout] = useState<boolean>(false);
 const [Msettings,setMsettings]=useState<string>("");
 const [IdVideo,setIdVideo]=useState<string>("");
 const [unsaved,setUnsaved] = useState("aaa")
- 
 
 
+const addSess = ()=>
+{
+  startSessFunc.mutate({
+    routineId:routineId,
+    workoutCelebId:workoutCelebId
+  })
+}
 const handleUpdateRestTime = (routineId: number, exerciseId: number, setId: number, restTime: string) => {
-  setResponse((prevExercises) => {
+  setExercise((prevExercises) => {
     const updatedExercises = prevExercises.map((exercise) => {
       if (exercise.routineId === routineId && exercise.id === exerciseId) {
         const updatedSets = exercise.sets.map((set) => {
@@ -140,7 +156,7 @@ const handleUpdateRestTime = (routineId: number, exerciseId: number, setId: numb
   
 };
 const handleDoneExercise = (routineId: number, exerciseId: number, setId: number, done: boolean) => {
-  setResponse((prevExercises) => {
+  setExercise((prevExercises) => {
     const updatedExercises = prevExercises.map((exercise) => {
       if (exercise.routineId === routineId && exercise.id === exerciseId) {
         const updatedSets = exercise.sets.map((set) => {
@@ -158,6 +174,7 @@ const handleDoneExercise = (routineId: number, exerciseId: number, setId: number
  
   
 };
+
 
 
 const ExpoCountdown=()=>{
@@ -194,7 +211,7 @@ const ExpoCountdown=()=>{
 }
  
 const StartWorking =  ({IdVideo}:any)=>{
-
+  
   
   return(
     <> 
@@ -216,7 +233,7 @@ const StartWorking =  ({IdVideo}:any)=>{
       <Text> This is your machine setting{Msettings}</Text>
       <Button onPress={handleNextSet}  title="Go Rest" />
     </View>:
-<Session  changeSession={setSessionId} ExerciseName={currentExercise}  />
+<Session addSess={addSess}  changeSession={setSessionId} ExerciseName={currentExercise}  />
 
   }</>
   
@@ -265,13 +282,42 @@ const handleNextSet = ()=> {
    
  }
 
+
 const addNewSetsFunction=(name:string)=>{
   let setId =currentExerciseTag!.sets[currentSetIndex]!.id
+  let orders = currentExerciseTag!.sets[currentSetIndex]!.order
   if(name=="add"){
     name=`Set ${currentExerciseTag!.sets.length +1}`
     setId =currentExerciseTag!.sets[currentSetIndex]!.id+Math.floor(Math.random()*5000)
-     
-  }
+    orders = currentExerciseTag!.sets.length
+    
+ 
+    }
+   else{
+    const updatedExercises = exercises.map((exercise) => {
+      if (exercise.id==currentExerciseTag!.id ){
+       const updatedSets = exercise.sets.map((set)=>{
+         if (set.id==currentExerciseTag!.sets[currentSetIndex]!.id)
+         {
+           return {
+             ...set,
+             volume:newReps,
+             weight:newWeight,
+             done:true
+
+           }
+         }
+         return set;
+       });
+       return {...exercise,sets:updatedSets};
+      }
+     return exercise;
+     });
+     setExercise(updatedExercises);
+   }
+    
+    
+  
  
   addNewSets.mutate({
     name:name,
@@ -282,10 +328,13 @@ const addNewSetsFunction=(name:string)=>{
     weight:newWeight,
     RestTime:(currentExerciseTag!.sets[currentSetIndex]!.restTime).toString(),
     RestType:"s",
+    order:orders,
     exerciseId:currentExerciseTag!.id,
     workoutCelebId:workoutCelebId,
   
   }) 
+
+
   setAddsetTab(false)
 
 }
@@ -315,13 +364,12 @@ const NextExerciseStart =()=>{
     exerciseId:currentExerciseTag!.id,
     workoutCelebId:workoutCelebId
   })
-   
+  if(ChangedValue==true || checkingSession.data?.data=="new user"){
+     addNewSetsFunction(currentExerciseTag!.sets[currentSetIndex]!.name)
+     setChangeValue(false)
+  }
 
-   
-   if(  currentExerciseTag!.sets[currentSetIndex]!.volume !==newReps ||currentExerciseTag!.sets[currentSetIndex]!.weight !==newWeight ){
-    addNewSetsFunction(currentExerciseTag!.sets[currentSetIndex]!.name)
-      
-      }
+ 
      
   if (currentExerciseIndex === exercises.length - 1){
     closeSessTab()
@@ -340,78 +388,22 @@ setoptionStart(false)
 setNewReps("")
 setNewWeight("")   
 }
-useEffect(()=>{
-
-  if (checkPersonal&&response) {
-   
-    const updatedResponse = response.map((exercise,exeindex) => {
-      const existingSetIds = exercise.sets.map(set => set.id);
-
-      const updatedSets = exercise.sets.map((set,index) => {
-        const matchingSet = checkPersonal.find((personalSet) => personalSet.SetId === set.id);
-         
-        if (matchingSet) {
-          console.log( matchingSet?.reps+"hooter"+exercises[exeindex]?.sets[index]?.volume)
-          if(exercises[exeindex]?.sets[index]?.done)
-          {
-            console.log("I EXIST MY LORD")
-          }
-          const updatedSet = {
-            ...set,
-            volume: matchingSet.reps,
-            weight: matchingSet.weight,
-            restTime: matchingSet.RestTime+ matchingSet.RestType,
-
-            done: exercises[exeindex]?.sets[index]?.done || false
-          }
-        
-          return updatedSet;
-        }  else{
-          const updatedSet = {
-            ...set,
-           
-            done:exercises[exeindex]?.sets[index]?.done || false
-          };
-          return updatedSet;
-          
-        }  
-        
-       
-        
-      });
-
-      const additionalSets = checkPersonal.filter(personalSet => 
-        
-        personalSet.exerciseId === exercise.id &&!existingSetIds.includes(personalSet.SetId)).map(personalSet => ({
-        id: personalSet.SetId,
-        volume: personalSet.reps,
-        weight: personalSet.weight,
-        restTime: personalSet.RestTime + personalSet.RestType,
-        done: false,
-        name:personalSet.name,
-        order: personalSet.id,
-        type:personalSet.type,
-        exerciseId:personalSet.exerciseId
 
 
-
+useEffect(() => {
+  if (!checkingSession.isLoading && checkingSession.data) {
+    const updatedExercises = checkingSession.data.exercises.map((exercise: any) => ({
+      ...exercise,
+      sets: exercise.sets.map((set: any) => ({
+        ...set,
+        done: false
+      }))
     }));
-
-    // Merge updatedSets with additionalSets
-    return { ...exercise, sets: [...updatedSets, ...additionalSets] };
-
-
-    });
-    
-    setResponse(updatedResponse)
-     
+    setExercise(updatedExercises);
   }
+}, [checkingSession.isLoading, checkingSession.data]);
 
-
-
- 
-
-},[response,checkPersonal])
+  
  
   useLayoutEffect(()=>
   (
@@ -473,8 +465,9 @@ else{
   setName =  {currentExerciseTag?.sets[currentSetIndex]?.name}
   newRepsSet = {setNewReps}
   newWeight = {setNewWeight}
+  ChangedValue= {setChangeValue}
 />
-<Button title="Close" onPress={NextExerciseStart }/>
+<Button title="Close"  onPress={NextExerciseStart }/>
 
 </Modal>
 
@@ -500,6 +493,7 @@ reps={currentExerciseTag?.sets[currentSetIndex]?.volume}
 name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  newRepsSet={setNewReps} newWeight={setNewWeight}/>
  
 </Modal>
+
 <FlatList
       data={exercises}
       keyExtractor={(item) => `${item.routineId}-${item.id}`}

@@ -12,9 +12,9 @@ datasource db {
 model Sessions{
   id  Int @id @default(autoincrement())
   personId String
-  RoutineId String
+  RoutineId Int
   StartedAt DateTime  @default(now())
-  WorkoutCelebId String
+  WorkoutCelebId Int
   FinsihedAt DateTime
   Status  String
 
@@ -60,6 +60,7 @@ model Set {
   restTime   String
   exerciseId Int
   order      Int
+  routineId  Int
   exercise   Exercise @relation(fields: [exerciseId], references: [id])
 }
 
@@ -70,6 +71,7 @@ model PersonalSets {
   SetId          Int
   reps           String
   weight         String
+  order          Int
   RestTime       String
   RestType       String
   exerciseId     Int

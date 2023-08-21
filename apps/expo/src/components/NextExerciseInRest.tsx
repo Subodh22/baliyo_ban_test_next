@@ -36,7 +36,7 @@ const NextExerciseInRest = (props:any) => {
         onValueChange={(itemValue, itemIndex) =>{
              setSelectedValue(itemValue)
              props.newRepsSet(itemValue)
-            
+             props.ChangedValue(true)
             }
     }
       >
@@ -53,7 +53,8 @@ const NextExerciseInRest = (props:any) => {
         onValueChange={(itemValue) => {
             setSelectedWeight(itemValue.toString())
             props.newWeight(itemValue.toString())
-        }}
+            props.ChangedValue(true)
+          }}
       >
          <Picker.Item label="Bodyweight" value="BodyWeight" />
         {generateOptions()}
