@@ -11,7 +11,7 @@ const BackHandlerbe = (props:any) => {
     if(props.sessionId==true)
     {Alert.alert(
       'Confirm',
-      'Do you really want to go back?',
+      'All your progress will be lost if you go back?',
       [
         {
           text: 'Cancel',

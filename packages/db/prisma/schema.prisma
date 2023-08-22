@@ -9,6 +9,15 @@ datasource db {
    relationMode = "prisma"
 }
 
+model PersonalExercise{
+   id    Int @id @default(autoincrement())
+  name    String
+  routineId Int
+  personId  String
+  WorkoutCelebId  Int
+   
+
+}
 model Sessions{
   id  Int @id @default(autoincrement())
   personId String
@@ -77,6 +86,7 @@ model PersonalSets {
   exerciseId     Int
   WorkoutCelebId Int
   type           String
+   
  
 }
 

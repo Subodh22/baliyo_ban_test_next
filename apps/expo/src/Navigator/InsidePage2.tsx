@@ -15,6 +15,7 @@ import Session from '../components/Session';
 import NextExerciseInRest from '../components/NextExerciseInRest';
 import AddSetsComp from '../components/AddSetsComp';
 import BackHandlerbe from '../components/BackHandlerbe';
+import AddExerciseTab from '../components/AddExerciseTab';
  
 
 type Set = {
@@ -102,6 +103,7 @@ const checkingSession = trpc.post.searchSession.useQuery({
   RoutineId:routineId,
  
 })
+const [addExo,setAddExo] = useState(false) 
 const [addsetTab,setAddsetTab] =useState(false);
 const [newReps,setNewReps]=useState("");
 const [newWeight,setNewWeight]=useState("");
@@ -539,7 +541,7 @@ else{
 <Button title="Close"  onPress={NextExerciseStart }/>
 
 </Modal>
-
+ 
 
 
 </Modal>
@@ -562,7 +564,10 @@ reps={currentExerciseTag?.sets[currentSetIndex]?.volume}
 name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  newRepsSet={setNewReps} newWeight={setNewWeight}/>
  
 </Modal>
-
+<Modal visible={addExo}>
+<AddExerciseTab goBack={setAddExo}/>
+</Modal>
+<Button title="add Exercise" onPress={()=>{setAddExo(true)}} />
 <FlatList
       data={exercises}
       extraData={exercises}
