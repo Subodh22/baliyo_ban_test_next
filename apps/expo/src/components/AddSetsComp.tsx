@@ -5,7 +5,7 @@ import { Button } from '@rneui/base';
 const AddSetsComp = (props:any) => {
     const [selectedValue,setSelectedValue] = useState("1");
     const [selectedWeight,setSelectedWeight] = useState("1");
-    const generateSetId = props.setId+Math.floor(Math.random()*5000)
+    const generateSetId = Math.floor(Math.random()*5000)
     
     const generateOptions = () => {
         const options = [];

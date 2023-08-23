@@ -357,7 +357,7 @@ const addNewSetsFunction=(name:string)=>{
     order:orders,
     exerciseId:currentExerciseTag!.id,
     workoutCelebId:workoutCelebId,
-  
+    routineId:routineId
   }) 
 
 
@@ -565,7 +565,8 @@ name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  ne
  
 </Modal>
 <Modal visible={addExo}>
-<AddExerciseTab goBack={setAddExo}/>
+<AddExerciseTab goBack={setAddExo} routineId={routineId} workoutcelebId={workoutCelebId} 
+size={exercises.length}/>
 </Modal>
 <Button title="add Exercise" onPress={()=>{setAddExo(true)}} />
 <FlatList
@@ -587,7 +588,7 @@ name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  ne
               machineSettings={item.machineSettings}
               id={set.id}
               name={set.name}
-
+              routineId={routineId}
               order={index}
               restTime={set.restTime}
               valSender={passTheValue}

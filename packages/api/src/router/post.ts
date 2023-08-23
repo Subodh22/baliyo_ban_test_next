@@ -157,7 +157,8 @@ export const postRouter = router({
     exerciseId: z.number(),
     type:     z.string(),
     workoutCelebId:z.number(),
-    order:z.number()
+    order:z.number(),
+    routineId:z.number()
 })).mutation(async({ctx,input})=>{
     const userIdx = ctx.auth.userId;
     const  CheckifExists = await ctx.prisma.personalSets.findMany({
@@ -166,7 +167,7 @@ export const postRouter = router({
         SetId:input.SetId,
         WorkoutCelebId:input.workoutCelebId,
         exerciseId:input.exerciseId,
-        
+        routineId:input.routineId
       }
     })
     if(CheckifExists){
@@ -175,7 +176,8 @@ export const postRouter = router({
           personId:userIdx,
           SetId:input.SetId,
           WorkoutCelebId:input.workoutCelebId,
-          exerciseId:input.exerciseId
+          exerciseId:input.exerciseId,
+          routineId:input.routineId
         }
       })
     }
@@ -189,7 +191,7 @@ export const postRouter = router({
       RestTime  : input.RestTime,
     RestType  : input.RestType,
        order  :input.order,
-
+        routineId:input.routineId,
       exerciseId :input.exerciseId,
       WorkoutCelebId :input.workoutCelebId,
       type:input.type,
@@ -198,6 +200,53 @@ export const postRouter = router({
 
  return "personal Sets Created"
   }), 
+  addPersonalExercise:protectedProcedure.input(z.object({
+    exerciseName:z.string(),
+    machineSettings:z.string(),
+    type:z.string(),
+    setType:z.string(),
+    routineId:z.number(),
+    videoId:z.string(),
+    workoutCelebId:z.number(),
+    order:z.number()
+
+  })).mutation(async({ctx,input})=>
+  {
+    const workerId = ctx.auth.userId
+    const add =await ctx.prisma.personalExercise.create({
+      data:{
+        name:input.exerciseName,
+      machineSettings:input.machineSettings,
+      type:input.type,
+      setType:input.setType,
+      routineId:input.routineId,
+      videoId:input.videoId,
+      workoutCelebId:input.workoutCelebId,
+    order:input.order,
+    personId:workerId
+  }
+    })
+
+    return add.id
+  })
+  
+  ,
+  searchExerciseByName:protectedProcedure.input(z.object({
+    exerciseName: z.string()
+  })).query(async({ctx,input})=>
+  {
+    const GetExercise = await ctx.prisma.exercise.findMany({
+      where:{
+       name:{
+        contains:input.exerciseName,
+        
+       }
+      },
+      take:10
+    })
+      return GetExercise
+  })
+  ,
   searchSession: protectedProcedure.input(z.object({
     RoutineId: z.number(),
     WorkoutCelebId: z.number()

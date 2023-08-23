@@ -1,9 +1,11 @@
-import { View, Text, TextInput, FlatList, TouchableOpacity, Modal } from 'react-native'
+import { View, Text, TextInput, FlatList, TouchableOpacity, Modal, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { Button, Input } from '@rneui/base'
+import { Button, Card, Input } from '@rneui/base'
 import AddSetsFromEx from './AddSetsFromExercise'
 import AddSetsComp from './AddSetsComp';
 import SetsPicker from './SetsPicker';
+import { trpc } from '../utils/trpc';
+import Workout_celeb from './Workout_celeb';
 
 type set = {
     id:number,
@@ -11,9 +13,19 @@ type set = {
     weight:string,
     reps:string,
     restTime:string
-
-
+   
 }[];
+type PersonalExercise = {
+  id :number,
+  name:string    
+  type:string
+  setType:string
+  order:number          
+  routineId:number       
+  videoId:string          
+  machineSettings:string 
+  workoutCelebId:number  
+}
 
 const AddExerciseTab = (props:any) => {
    const [changeValue,setChangeValue] = useState<boolean>(false) 
@@ -21,18 +33,41 @@ const AddExerciseTab = (props:any) => {
     const [reps,setReps] = useState("1")
     const [weight,setWeight] = useState("1")
     const [activeId,setActiveId]=useState(0)
+    const [exerciseName,setExerciseName] = useState("")
+    const [actualex,setActualex] = useState<PersonalExercise>()
+   const addExerciseToDb=trpc.post.addPersonalExercise.useMutation()
+    const [shouldFetch, setShouldFetch] = useState(false);
+    const addPersonalSets = trpc.post.createPersonalSets.useMutation()
+    useEffect(() => {
+      if (exerciseName.length > 3) {
+        setShouldFetch(true);
+      } else {
+        setShouldFetch(false);
+      }
+    }, [exerciseName]);
+  
+    const response = trpc.post.searchExerciseByName.useQuery(
+      { exerciseName: exerciseName },
+      { enabled: shouldFetch }  // This conditionally fires the query
+    );
+  
+    const { data: exercises } = response || { data: null };
     useEffect(()=>{
         setSets((prev)=>[
             ...prev, {id:0,
                 name:"Set 1",
                 weight:"20",
                 reps:"30",
-                restTime:"2.00"
+                restTime:"2.00",
+                // exerciseId:0,
+                // personId:"fill",
+                // workoutCelebId:0,
+                // order:0,
+
             }
         ])
     },[])
-    const [exerciseName,setExerciseName] = useState("")
-    const addSets=()=>{
+      const addSets=()=>{
         console.log("Hello"+sets.length)
         setSets((prev)=>
             [...prev,
@@ -40,20 +75,63 @@ const AddExerciseTab = (props:any) => {
                 name: "Set "+ (sets.length+1) ,
                 weight:"20",
                 reps:"30",
-                restTime:"2.00"
+                restTime:"2.00",
+                // exerciseId:exercises[0]?.id,
+                // workoutCelebId:exercises[0]?.routineId
             }]
         )
+    }
+    const addExerciseToTables=()=>
+    {if(exerciseName!==""){
+     const id =addExerciseToDb.mutate({
+      exerciseName:(actualex && actualex.name!=="")? actualex!.name : exerciseName,
+      machineSettings:(actualex && actualex.name!=="")? actualex!.machineSettings : "#",
+      type:(actualex && actualex.name!=="")? actualex!.type : "reps",
+      setType: " ",
+      routineId:props.routineId,
+      videoId:(actualex && actualex.name!=="")? actualex!.videoId : "#",
+      workoutCelebId:props.workoutcelebId,
+      order:props.size
+     },{onSuccess:(data)=>
+     { const generateSetId = 69+ Math.floor(Math.random()*1000000)
+      sets.forEach((set)=>
+      {
+        
+        addPersonalSets.mutate({
+          name:set.name,
+          personId:"fill",
+          SetId:generateSetId,
+          exerciseId:data,
+          order:props.size,
+          RestTime:"120",
+          type:(actualex && actualex.name!=="")? actualex!.type : "reps",
+          reps:set.reps,
+          weight:set.weight,
+          workoutCelebId:props.workoutcelebId,
+          RestType:"s",
+          routineId:props.routineId
+        })
+      })}
+    }
+    
+    ) 
+
+
+     console.log(id)
+}else {
+  Alert.alert("Type the exercise name")
+}
     }
     const changeSetDetails=(id:number)=>
     {
         const newSetDets = sets.map((set)=>{
-            console.log(reps)
-            console.log(weight)
+            
             if (set.id === id) {
                 return {
                     ...set,
                     reps: reps,
-                    weight: weight
+                    weight: weight,
+
                 };
             }
             return set; 
@@ -91,10 +169,57 @@ const AddExerciseTab = (props:any) => {
       
        onChangeText={(text)=>{
         setExerciseName(text)
+        setActualex(
+          {id:0,
+            name:"",
+            machineSettings:"0",
+            type:"",
+            setType:"",
+            routineId:0,
+            videoId:"",
+            workoutCelebId:0,
+            order:0
+
+          }
+        )
+        
        }}
        placeholder="Enter Exercise name"/>
 
-<Text>{exerciseName?"Name : " + exerciseName:"Enter your exercise name"}</Text>
+<Text>{actualex ?"Name : " + actualex.name:"Name : " +exerciseName}</Text>
+
+{exercises&&actualex?.name=="" && (
+        <FlatList
+          data={exercises.slice(0,5)}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({ item }) => (
+          
+          <View> 
+            <TouchableOpacity onPress={()=>{setActualex(
+                    {id:0,
+                      name:item.name,
+                      machineSettings:item.machineSettings,
+                      type:item.type,
+                      setType:"",
+                      routineId:props.routineId,
+                      videoId:item.videoId,
+                      workoutCelebId:props.workoutCelebId,
+                      order:props.size
+
+                    })
+                }}
+                 className=' h-10 bg-slate-400'>
+                 <Text >{item.name}</Text>
+                 
+            </TouchableOpacity>
+             <Card.Divider/>
+             </View>
+            
+          )}
+        />
+      )}
+
+            
          <FlatList
          data={sets}
          keyExtractor={(item)=>`${item.id}`}
@@ -111,7 +236,7 @@ const AddExerciseTab = (props:any) => {
          )}
          />
           <Button  title="addsets" onPress={addSets}/>
-         <Button  title="addExercises"/>
+         <Button  title="addExercises" onPress={addExerciseToTables}/>
    
     </View>
     </>

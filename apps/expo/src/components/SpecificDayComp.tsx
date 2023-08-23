@@ -28,14 +28,15 @@ type set = {
   done:boolean,
   startSess:boolean,
   // eslint-disable-next-line @typescript-eslint/ban-types
-  removeSet:Function
+  removeSet:Function,
+  routineId:number
   
 }
  
  
 
 
-const SpecificDayComp = React.memo(({id,startSess,exerciseId,removeSet,valTimeSender,name,order,done,currentSet,exoOrder,currentExerciseIndex,valSender,restTime,type,volume,weight,workoutCelebId,videoId,machineSettings}:set) => {
+const SpecificDayComp = React.memo(({id,startSess,routineId,exerciseId,removeSet,valTimeSender,name,order,done,currentSet,exoOrder,currentExerciseIndex,valSender,restTime,type,volume,weight,workoutCelebId,videoId,machineSettings}:set) => {
     const [newReps,setNewReps]=useState("");
     const [newWeight,setNewWeight]=useState("");
     const [newRestTime,setNewRestTime ]=useState("");
@@ -64,6 +65,7 @@ const SpecificDayComp = React.memo(({id,startSess,exerciseId,removeSet,valTimeSe
           order:order,
           exerciseId:exerciseId,
           workoutCelebId:workoutCelebId,
+          routineId:routineId
         
         })
         
