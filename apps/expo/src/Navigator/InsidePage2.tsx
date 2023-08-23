@@ -132,6 +132,10 @@ const [Msettings,setMsettings]=useState<string>("");
 const [IdVideo,setIdVideo]=useState<string>("");
 const [unsaved,setUnsaved] = useState("aaa")
 
+useEffect(()=>{
+  console.log("JOE ROGAN")
+  console.log(exercises)
+},[exercises])
 
 const addSess = ()=>
 {
@@ -265,12 +269,12 @@ const passTheValue=(isOpene:boolean,duration:number,IdVideo:string,settingMachin
 const currentExerciseTag = exercises[currentExerciseIndex]
 const handleNextSet = ()=> {
   setModal(true)
- 
+  console.log("HITTTINTINT"+currentExerciseTag!.sets[currentSetIndex]!.id)
   if(currentExerciseTag )
   { if(currentSetIndex<currentExerciseTag.sets.length -1)
     {
       setcurrentSetIndex(prevSetindex=> prevSetindex+1);
-
+  
     }else{
       if (currentExerciseIndex < exercises.length - 1) {
         setCurrentExerciseIndex(prevExerciseIndex => prevExerciseIndex + 1);
@@ -565,7 +569,7 @@ name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  ne
  
 </Modal>
 <Modal visible={addExo}>
-<AddExerciseTab goBack={setAddExo} routineId={routineId} workoutcelebId={workoutCelebId} 
+<AddExerciseTab setExercise={setExercise} goBack={setAddExo} routineId={routineId} workoutcelebId={workoutCelebId} 
 size={exercises.length}/>
 </Modal>
 <Button title="add Exercise" onPress={()=>{setAddExo(true)}} />
@@ -579,7 +583,7 @@ size={exercises.length}/>
             
           <FlatList
           data={item.sets}
-          keyExtractor={(set) => `${item.routineId}-${item.id}-${set.id}`}
+          keyExtractor={(set) => `${item.routineId}-${item.id}-${set.name}-s`}
           renderItem={({ item: set,index }) => (
             <SpecificDayComp
               exerciseId={item.id}
@@ -601,7 +605,7 @@ size={exercises.length}/>
               done={set.done}
               weight={set.weight}
               workoutCelebId={workoutCelebId}
-              key={`${item.routineId}-${item.id}-${set.id}-s`}
+              key={`${item.routineId}-${item.id}-${set.id}-${set.name}s`}
               removeSet={removeSet}
             />
           )}

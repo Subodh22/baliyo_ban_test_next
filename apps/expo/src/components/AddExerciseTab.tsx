@@ -83,6 +83,8 @@ const AddExerciseTab = (props:any) => {
     }
     const addExerciseToTables=()=>
     {if(exerciseName!==""){
+      const generateSetId =  69+ Math.floor(Math.random()*1000000)
+    
      const id =addExerciseToDb.mutate({
       exerciseName:(actualex && actualex.name!=="")? actualex!.name : exerciseName,
       machineSettings:(actualex && actualex.name!=="")? actualex!.machineSettings : "#",
@@ -93,16 +95,16 @@ const AddExerciseTab = (props:any) => {
       workoutCelebId:props.workoutcelebId,
       order:props.size
      },{onSuccess:(data)=>
-     { const generateSetId = 69+ Math.floor(Math.random()*1000000)
-      sets.forEach((set)=>
-      {
+     {  
+      sets.forEach((set,index)=>
+      {   
         
         addPersonalSets.mutate({
           name:set.name,
           personId:"fill",
-          SetId:generateSetId,
+          SetId:generateSetId+index,
           exerciseId:data,
-          order:props.size,
+          order:index,
           RestTime:"120",
           type:(actualex && actualex.name!=="")? actualex!.type : "reps",
           reps:set.reps,
@@ -111,14 +113,54 @@ const AddExerciseTab = (props:any) => {
           RestType:"s",
           routineId:props.routineId
         })
-      })}
+      })
+      // props.goBack(false)
+      props.setExercise((prev:any) => {
+
+        // Extract new sets
+        const newSets = sets.map((set, index) => ({
+          done: false,
+          exerciseId: data, // Assuming data is the current exercise id
+          id: generateSetId+index, // Assuming generateSetId is a function that provides a unique ID
+          name: `Set ${index + 1}`,
+          order: index,
+          restTime: "120",
+          routineId: props.routineId,
+          type: (actualex && actualex.name !== "") ? actualex.type : "reps",
+          volume: set.reps, // This assumes that 'reps' in your 'sets' is equivalent to 'volume'
+          weight: set.weight
+        }));
+    
+        // Construct the new exercise
+        const newExerciseObject = {
+          id: data,
+          name: (actualex && actualex.name !== "") ? actualex.name : exerciseName,
+          machineSettings: (actualex && actualex.name !== "") ? actualex.machineSettings : "#",
+          type: (actualex && actualex.name !== "") ? actualex.type : "reps",
+          setType: " ",
+          routineId: props.routineId,
+          videoId: (actualex && actualex.name !== "") ? actualex.videoId : "#",
+        
+          order: props.size,
+          sets: newSets
+        };
+        console.log(newExerciseObject)
+        return [...prev, newExerciseObject];
+        // return {
+        //   ...prev,
+        //   [props.size]: newExerciseObject
+        // };
+      });
+
+    }
     }
     
-    ) 
-
-
-     console.log(id)
-}else {
+    )
+    
+   
+ 
+  
+    }else {
   Alert.alert("Type the exercise name")
 }
     }
