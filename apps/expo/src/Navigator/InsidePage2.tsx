@@ -16,6 +16,7 @@ import NextExerciseInRest from '../components/NextExerciseInRest';
 import AddSetsComp from '../components/AddSetsComp';
 import BackHandlerbe from '../components/BackHandlerbe';
 import AddExerciseTab from '../components/AddExerciseTab';
+import FinishedExerciseTab from '../components/FinishedExerciseTab';
  
 
 type Set = {
@@ -78,6 +79,7 @@ type InsidenProp = NativeStackNavigationProp<RootStackParamList, 'Custom'>;
 
 const InsidePage2 = () => {
   const navigation = useNavigation<InsidenProp>();
+  const [finishedWorkout,setFinished]=useState(false);
   const [sessionId,setSessionId]=useState<boolean>(false);
   const [currentExercise,setCurrentExercise]= useState("");
   const [currentSetIndex,setcurrentSetIndex] = useState(0);
@@ -127,15 +129,11 @@ const [selectedExercise, setSelectExerciseId] = useState<number>(0);
 const [istimePickerVisible, setIsTimePickerVisible] = useState<boolean>(false);
 const [startWorkout,setStartWorkout] =useState<boolean>(false);
 const [optionsStart,setoptionStart] =useState<boolean>(false);
-const [finishWorkout,SetFinsihWorkout] = useState<boolean>(false);
+
 const [Msettings,setMsettings]=useState<string>("");
 const [IdVideo,setIdVideo]=useState<string>("");
-const [unsaved,setUnsaved] = useState("aaa")
 
-useEffect(()=>{
-  console.log("JOE ROGAN")
-  console.log(exercises)
-},[exercises])
+
 
 const addSess = ()=>
 {
@@ -269,7 +267,8 @@ const passTheValue=(isOpene:boolean,duration:number,IdVideo:string,settingMachin
 const currentExerciseTag = exercises[currentExerciseIndex]
 const handleNextSet = ()=> {
   setModal(true)
-  console.log("HITTTINTINT"+currentExerciseTag!.sets[currentSetIndex]!.id)
+  console.log("thisi")
+  console.log(currentExerciseTag!.sets[currentSetIndex]!.id)
   if(currentExerciseTag )
   { if(currentSetIndex<currentExerciseTag.sets.length -1)
     {
@@ -277,10 +276,12 @@ const handleNextSet = ()=> {
   
     }else{
       if (currentExerciseIndex < exercises.length - 1) {
+        
         setCurrentExerciseIndex(prevExerciseIndex => prevExerciseIndex + 1);
         setcurrentSetIndex(0);
       } else {
-        console.log('All exercises and sets are completed!');
+        setFinished(true)
+        closeSessTab()
       }
     }
   }
@@ -328,7 +329,7 @@ const addNewSetsFunction=(name:string)=>{
        const updatedSets = exercise.sets.map((set)=>{
          if (set.id==currentExerciseTag!.sets[currentSetIndex]!.id)
          {
-          console.log(newWeight,newReps)
+          
            return {
              ...set,
              volume:newReps,
@@ -371,6 +372,11 @@ const addNewSetsFunction=(name:string)=>{
 
 
 const NextExerciseStart =()=>{
+  
+ if (currentExerciseIndex === exercises.length - 1 && currentSetIndex ===currentExerciseTag!.sets.length){
+    console.log (currentSetIndex,currentExerciseTag!.sets.length)
+    closeSessTab()
+  }
   handleDoneExercise(routineId,currentExerciseTag!.id,currentExerciseTag!.sets[currentSetIndex]!.id,true)
  
   setStartWorkout(true)
@@ -398,12 +404,7 @@ const NextExerciseStart =()=>{
      addNewSetsFunction(currentExerciseTag!.sets[currentSetIndex]!.name)
      setChangeValue(false)
   }
-
  
-     
-  if (currentExerciseIndex === exercises.length - 1){
-    closeSessTab()
-  }
     
    
 
@@ -411,12 +412,14 @@ const NextExerciseStart =()=>{
  
 
 const closeSessTab = ()=>{
-  SetFinsihWorkout(true)
+   
+
 setModal(false);
 setStartWorkout(false)
 setoptionStart(false)   
 setNewReps("")
-setNewWeight("")   
+setNewWeight("") 
+  
 }
 
  
@@ -571,6 +574,9 @@ name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  ne
 <Modal visible={addExo}>
 <AddExerciseTab setExercise={setExercise} goBack={setAddExo} routineId={routineId} workoutcelebId={workoutCelebId} 
 size={exercises.length}/>
+</Modal>
+<Modal visible = {finishedWorkout} animationType='slide'>
+  <FinishedExerciseTab setClosed={setFinished}/>
 </Modal>
 <Button title="add Exercise" onPress={()=>{setAddExo(true)}} />
 <FlatList
