@@ -1,12 +1,12 @@
 import { ExpoConfig, ConfigContext } from "@expo/config";
 
-// const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsuYmFsaXlvYmFuLmNvbSQ";
-const CLERK_PUBLISHABLE_KEY = "pk_test_YWNlLWxpb24tMTIuY2xlcmsuYWNjb3VudHMuZGV2JA";
+const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsuYmFsaXlvYmFuLmNvbSQ";
+// const CLERK_PUBLISHABLE_KEY = "pk_test_YWNlLWxpb24tMTIuY2xlcmsuYWNjb3VudHMuZGV2JA";
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Baliyo",
   slug: "baliyo",
   scheme: "myapp",
-  version: "1.1.5",
+  version: "1.1.6",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "light", 
@@ -23,7 +23,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.notSubodh.workoutMaker",
-    buildNumber:"16"
+    buildNumber:"17"
   },
   android: {
     adaptiveIcon: {

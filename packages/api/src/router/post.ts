@@ -355,6 +355,24 @@ export const postRouter = router({
       }
     })
     return {id:createSes.id }
+  }),
+  finishSession:protectedProcedure.input(z.object({
+    sessiodId:z.number()
+
+  })).mutation(async({ctx,input})=>
+  {
+    const finishSign = await ctx.prisma.sessions.update({
+      where:{
+        id:input.sessiodId
+      },
+      data:{
+        FinsihedAt: new Date(),
+        Status: "finished"
+
+
+      }
+    })
+
   })
   ,
   userSetHistoryRecorder:protectedProcedure.input(z.object({

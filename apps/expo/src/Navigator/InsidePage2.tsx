@@ -130,7 +130,7 @@ const [selectedExercise, setSelectExerciseId] = useState<number>(0);
 const [istimePickerVisible, setIsTimePickerVisible] = useState<boolean>(false);
 const [startWorkout,setStartWorkout] =useState<boolean>(false);
 const [optionsStart,setoptionStart] =useState<boolean>(false);
-
+const [sessionNumber,setSessionNumber] = useState<number>();
 const [Msettings,setMsettings]=useState<string>("");
 const [IdVideo,setIdVideo]=useState<string>("");
 
@@ -138,10 +138,14 @@ const [IdVideo,setIdVideo]=useState<string>("");
 
 const addSess = ()=>
 {
-  startSessFunc.mutate({
+    startSessFunc.mutate({
     routineId:routineId,
     workoutCelebId:workoutCelebId
-  })
+  },{onSuccess:(data)=>
+    {
+      setSessionNumber(data.id)
+      console.log("WHAT UP LOSERS"+data.id)
+    }})
 }
 const handleUpdateRestTime = (routineId: number, exerciseId: number, setId: number, restTime: string) => {
   setExercise((prevExercises) => {
@@ -594,7 +598,7 @@ name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  ne
 size={exercises.length}/>
 </Modal>
 <Modal visible = {finishedWorkout} animationType='slide'>
-  <FinishedExerciseTab setClosed={setFinished}/>
+  <FinishedExerciseTab setClosed={setFinished} sessionId={sessionNumber}/>
 </Modal>
 <Button title="add Exercise" onPress={()=>{setAddExo(true)}} />
 <FlatList
