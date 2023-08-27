@@ -83,13 +83,15 @@ const AddExerciseTab = (props:any) => {
     }
     const addExerciseToTables=()=>
     {if(exerciseName!==""){
-      const generateSetId =  69+ Math.floor(Math.random()*1000000)
+       
+      const generateSetId =  Date.now() + Math.floor(Math.random() * 1000000);
     
      const id =addExerciseToDb.mutate({
       exerciseName:(actualex && actualex.name!=="")? actualex!.name : exerciseName,
       machineSettings:(actualex && actualex.name!=="")? actualex!.machineSettings : "#",
       type:(actualex && actualex.name!=="")? actualex!.type : "reps",
       setType: " ",
+      exerciseToSet:generateSetId,
       routineId:props.routineId,
       videoId:(actualex && actualex.name!=="")? actualex!.videoId : "#",
       workoutCelebId:props.workoutcelebId,
@@ -114,7 +116,7 @@ const AddExerciseTab = (props:any) => {
           routineId:props.routineId
         })
       })
-      // props.goBack(false)
+       
       props.setExercise((prev:any) => {
 
         // Extract new sets
@@ -151,6 +153,7 @@ const AddExerciseTab = (props:any) => {
         //   [props.size]: newExerciseObject
         // };
       });
+      props.goBack(false)
 
     }
     }
@@ -159,7 +162,7 @@ const AddExerciseTab = (props:any) => {
     
    
  
-  
+ 
     }else {
   Alert.alert("Type the exercise name")
 }

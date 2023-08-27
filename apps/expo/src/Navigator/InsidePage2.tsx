@@ -91,6 +91,7 @@ const InsidePage2 = () => {
   const {params:{routineId,nameOfDay,workoutCelebId}} = useRoute<CustomScreenRouteProp>();
   // const {data:response,isLoading:isPosting} = trpc.post.getWorkoutExercise.useQuery({routineId: routineId } 
   // ) 
+  const addPersonalExercise = trpc.post.addPersonalExercise.useMutation();
   const [exercises, setExercise] =useState<Exercise>([]);
     const {data:checkPersonal,isLoading:isWaiting,refetch}=trpc.post.findPersonalSets.useQuery({
   personId:"fill",
@@ -265,21 +266,38 @@ const passTheValue=(isOpene:boolean,duration:number,IdVideo:string,settingMachin
 
 }
 const currentExerciseTag = exercises[currentExerciseIndex]
+const addPerExercise = ()=>{
+  addPersonalExercise.mutate({
+    exerciseName:currentExerciseTag!.name,
+    machineSettings:currentExerciseTag!.machineSettings,
+    type:currentExerciseTag!.type,
+    setType: currentExerciseTag!.setType != null ? currentExerciseTag!.setType : "reps",
+    exerciseToSet:currentExerciseTag!.id,
+    routineId:currentExerciseTag!.routineId,
+    videoId:currentExerciseTag!.videoId,
+    workoutCelebId:workoutCelebId,
+    order:currentExerciseIndex
+
+  })
+}
 const handleNextSet = ()=> {
   setModal(true)
   console.log("thisi")
   console.log(currentExerciseTag!.sets[currentSetIndex]!.id)
+   
   if(currentExerciseTag )
   { if(currentSetIndex<currentExerciseTag.sets.length -1)
     {
       setcurrentSetIndex(prevSetindex=> prevSetindex+1);
-  
+      
     }else{
       if (currentExerciseIndex < exercises.length - 1) {
-        
+
         setCurrentExerciseIndex(prevExerciseIndex => prevExerciseIndex + 1);
+        addPerExercise()
         setcurrentSetIndex(0);
       } else {
+        addPerExercise()
         setFinished(true)
         closeSessTab()
       }

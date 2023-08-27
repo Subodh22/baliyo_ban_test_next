@@ -208,7 +208,9 @@ export const postRouter = router({
     routineId:z.number(),
     videoId:z.string(),
     workoutCelebId:z.number(),
-    order:z.number()
+    order:z.number(),
+    exerciseToSet:z.number()
+  
 
   })).mutation(async({ctx,input})=>
   {
@@ -223,7 +225,8 @@ export const postRouter = router({
       videoId:input.videoId,
       workoutCelebId:input.workoutCelebId,
     order:input.order,
-    personId:workerId
+    personId:workerId,
+    exerciseToSet:input.exerciseToSet
   }
     })
 
@@ -294,14 +297,14 @@ export const postRouter = router({
       }
     });
   
-    const exercises = await ctx.prisma.exercise.findMany({
+    const exercises = await ctx.prisma.personalExercise.findMany({
       where: {
         routineId: input.RoutineId
       }
     }).then(exercises =>
       exercises.map(exercise => ({
         ...exercise,
-        sets: personalSets.filter(set => set.exerciseId === exercise.id).map((set)=>
+        sets: personalSets.filter(set => set.exerciseId === exercise.exerciseToSet).map((set)=>
         ({
           id:set.SetId,
           name:set.name,

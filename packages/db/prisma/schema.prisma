@@ -20,6 +20,7 @@ model PersonalExercise{
   machineSettings String
   workoutCelebId  Int
   personId        String
+  exerciseToSet    Int
 
 }
 model Sessions{
