@@ -132,60 +132,54 @@ const SpecificDayComp = React.memo(({id,startSess,routineId,exerciseId,removeSet
     },[])
     
   return (
+    <View key={name + id} className={`${doner == false ? 'bg-gray-200' : 'bg-gray-500'}  mb-2 h-[90px] w-full  rounded-[20px] shadow justify-between items-center  flex-row`}>
+    <Text className='w-[42px] ml-1 text-black text-base font-light tracking-tight text-center'>Set {order + 1}</Text>
     
-    <View key={name+id}  className={`${doner==false? 'bg-gray-200':'bg-gray-500'} flex-row justify-between align-center space-between `}>
-    <Text > Set {order+1}</Text>
-    <View> 
-    <Text className=''>reps</Text>
-     
-    <Input onChangeText={(text)=>setNewReps(text)}  value={newReps}containerStyle={{ width: 50 }} maxLength={3} inputContainerStyle={{ borderBottomWidth: 0 }}  keyboardType="numeric" placeholder={volume}/>
+    <View className='flex-col rounded-lg  h-full  justify-center items-center mt-7  '>
+        <Text className='w-full text-black text-xs font-light tracking-tight text-center'>Reps</Text>
+        <Input className='bg-gray-300 text-center  justify-center items-center ' onChangeText={(text) => setNewReps(text)} value={newReps} containerStyle={{ width: 50 }} maxLength={3} inputContainerStyle={{ borderBottomWidth: 0 }} keyboardType="numeric" placeholder={volume} />
     </View>
-    <View> 
-    <Text>Weight</Text> 
-    <View className='flex-row justify-center items-center  '> 
-      <Input  onChangeText={(text)=>setNewWeight(text)}  value={newWeight} containerStyle={{ width: 50,height:30}} maxLength={3} inputContainerStyle={{ borderBottomWidth: 0 }}  keyboardType="numeric" placeholder={weight}/>
-    <Text >kg</Text>
-    </View>
-  </View>
-    <View> 
-    <Text>rest</Text>
-    <View className="flex-row "> 
-    {/* <Input  onChangeText={(text)=>setNewRestTime(text)}  value={newRestTime} containerStyle={{ width: 50 }} inputContainerStyle={{ borderBottomWidth: 0 }} maxLength={3}  keyboardType="numeric" placeholder={restTime}/> */}
    
-   <TouchableOpacity onPress={handleTimeChange} className="w-20 h-10 bg-blue-300">
-    <Text>
-      {newRestTime}
-    </Text>
-   </TouchableOpacity>
-    </View>
-     
-     </View>
-     
-    <Button onPress={()=>{
-      if(doner ==false)
-      {
-        handlePress()
-      }
-      else{
-        notDoneSets.mutate({
-          SetId:id,
-          exerciseId:exerciseId,
-          personId:"fill",
-          WorkoutCelebId:workoutCelebId
 
-        })
-        setDoner(false)
-      }
-    }}
     
-    title={
-      doner? "Done": "Start"
-    } />
-     <TouchableOpacity className='h-10 w-10 bg-white justify-center ' onPress={()=>{removeSet(id,exerciseId)}}>
-      <Text> - </Text>
-     </TouchableOpacity>
-   
- </View>
+    <View className='flex-col justify-center items-center gap-1.5'>
+        <Text className='w-full text-black text-xs font-light tracking-tight text-center'>Weight</Text>
+        <View className='flex-row justify-center items-center'>
+            <Input className='bg-gray-300 text-center  justify-center items-center '  onChangeText={(text) => setNewWeight(text)} value={newWeight} containerStyle={{ width: 50, height: 30 }} maxLength={3} inputContainerStyle={{ borderBottomWidth: 0 }} keyboardType="numeric" placeholder={weight} />
+            <Text className='text-center'>kg</Text>
+        </View>
+    </View>
+    
+    <View className='flex-col justify-center items-center gap-1.5 mt-1'>
+        <Text className='w-[27px] text-black text-xs font-light tracking-tight text-center'>Rest</Text>
+        <TouchableOpacity onPress={handleTimeChange} className="w-20 h-10   justify-center items-center">
+            <Text className='bg-gray-300 h-10 w-[40px] text-center ' >{newRestTime}</Text>
+        </TouchableOpacity>
+    </View>
+    
+    <TouchableOpacity onPress={() => {
+        if (doner == false) {
+            handlePress();
+        } else {
+            notDoneSets.mutate({
+                SetId: id,
+                exerciseId: exerciseId,
+                personId: "fill",
+                WorkoutCelebId: workoutCelebId
+            });
+            setDoner(false);
+        }
+    }} className='w-[51.72px] h-[30px] px-3.5 py-1.5 bg-yellow-300 flex-col justify-center items-center'>
+        <Text className='w-[25px] h-3 text-black text-opacity-50 text-[8px] font-medium tracking-tight text-center'>{doner ? "Done" : "Start"}</Text>
+    </TouchableOpacity>
+    
+    <TouchableOpacity className='flex h-8 w-8 mr-1 bg-gray-300   justify-center items-center' onPress={() => { removeSet(id, exerciseId) }}>
+        <Text > - </Text>
+    </TouchableOpacity>
+</View>
+
+
+
   )
 })
 

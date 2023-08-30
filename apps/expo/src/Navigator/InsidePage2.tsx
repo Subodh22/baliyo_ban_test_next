@@ -522,8 +522,8 @@ return (
 </Modal>
 
 <Modal visible ={optionsStart}>
- <TouchableOpacity className='absolute top-2.5 right-2.5 p-2.5 z-10 pt-10' onPress={closeSessTab}>
-            <Text >Go back</Text>
+ <TouchableOpacity className=' w-[80px] h-[40px] mt-10 mx-3  bg-yellow-300 flex-col justify-center items-center flex' onPress={closeSessTab}>
+            <Text  >Go back</Text>
           </TouchableOpacity>
 {startWorkout && <StartWorking IdVideo={IdVideo}/>}
  
@@ -575,39 +575,39 @@ else{
 
 </Modal>
 <Modal visible ={addsetTab}>
-  <TouchableOpacity className='absolute top-2.5 right-2.5 p-2.5 z-10 pt-10'
-  onPress={()=>{setAddsetTab(false)
-    setNewReps("")
-    setNewWeight("")
-  }}
-  >
-    <Text>
-      Go back
-    </Text>
-  </TouchableOpacity>
+   
 <AddSetsComp
 addSets={addNewSetsFunction}
 setId = {currentExerciseTag?.sets[currentSetIndex]?.id} 
 Weight={currentExerciseTag?.sets[currentSetIndex]?.weight} 
 reps={currentExerciseTag?.sets[currentSetIndex]?.volume}
-name={currentExerciseTag?.name}  setName = {currentExerciseTag?.sets.length}  newRepsSet={setNewReps} newWeight={setNewWeight}/>
- 
+name={currentExerciseTag?.name}
+setAddsetTab={setAddsetTab}
+setNewReps={setNewReps}
+setNewWeight={setNewWeight}
+setName = {currentExerciseTag?.sets.length}  newRepsSet={setNewReps} newWeight={setNewWeight}/>
+
 </Modal>
 <Modal visible={addExo}>
-<AddExerciseTab setExercise={setExercise} goBack={setAddExo} routineId={routineId} workoutcelebId={workoutCelebId} 
+<AddExerciseTab   setExercise={setExercise} goBack={setAddExo} routineId={routineId} workoutcelebId={workoutCelebId} 
 size={exercises.length}/>
 </Modal>
 <Modal visible = {finishedWorkout} animationType='slide'>
   <FinishedExerciseTab setClosed={setFinished} sessionId={sessionNumber}/>
 </Modal>
-<Button title="add Exercise" onPress={()=>{setAddExo(true)}} />
+<TouchableOpacity  onPress={()=>{setAddExo(true)}} className="w-[150px] h-12 m-2 p-2.5 bg-yellow-300 flex-col justify-center items-center  inline-flex">
+  
+    
+    <Text className="text-black text-[15px] font-light tracking-tight">add Exercise</Text>
+    </TouchableOpacity>
+
 <FlatList
       data={exercises}
       extraData={exercises}
       keyExtractor={(item) => `${item.routineId}-${item.id}`}
       renderItem={({ item }) => (
-        <View key={item.id}>
-          <Text>{item.name}</Text>   
+        <View key={item.id} className='px-[15px] py-[15px] bg-gray-200 rounded-[20px] flex-col justify-start items-start gap-2.5 inline-flex"'>
+          <Text className="text-black text-[15px] font-light tracking-tight">{item.name}</Text>   
             
           <FlatList
           data={item.sets}
@@ -639,11 +639,13 @@ size={exercises.length}/>
           )}
          
         />
-        <Button title="add sets" 
+        <TouchableOpacity className="w-full h-[51px] px-[120px] py-[11px] bg-yellow-300 justify-center flex items-center"
         onPress={()=>{setAddsetTab(true)
                       setCurrentExerciseIndex(item.order)}
       }
-         /> 
+         >
+          <Text className=" text-black text-center text-[15px] font-light tracking-tight">add sets</Text></TouchableOpacity> 
+
      
         </View>
       )}

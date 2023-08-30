@@ -71,7 +71,7 @@ const AddExerciseTab = (props:any) => {
         console.log("Hello"+sets.length)
         setSets((prev)=>
             [...prev,
-            {id:sets.length+1,
+            {id:sets.length+ Math.floor(Math.random() * 100),
                 name: "Set "+ (sets.length+1) ,
                 weight:"20",
                 reps:"30",
@@ -84,8 +84,8 @@ const AddExerciseTab = (props:any) => {
     const addExerciseToTables=()=>
     {if(exerciseName!==""){
        
-      const generateSetId =  Date.now() + Math.floor(Math.random() * 1000000);
-    
+      const generateSetId =   Math.floor(Math.random() * 100000);
+      console.log(Date.now())
      const id =addExerciseToDb.mutate({
       exerciseName:(actualex && actualex.name!=="")? actualex!.name : exerciseName,
       machineSettings:(actualex && actualex.name!=="")? actualex!.machineSettings : "#",
@@ -202,15 +202,16 @@ const AddExerciseTab = (props:any) => {
     />
     </Modal>
 
-    <View className='pt-10'>
-   <TouchableOpacity  className='h-10 w-20 bg-slate-400 justify-between content-center'
+    <View className='flex pt-16 '>
+   <TouchableOpacity  className=" w-[100px] h-[40px] mx-2 p-2.5 bg-yellow-300 flex-col justify-center items-center inline-flex"
    onPress={()=>{props.goBack(false)}} >
-    <Text>Go back</Text>
+    <Text className='text-black text-center text-[15px] font-light tracking-tight'>Go back</Text>
    </TouchableOpacity>
-      <Text>add Exercise</Text>
-      
+     
+      <View className='pt-5 mx-3'>
+
       <TextInput 
-       className='h-10  text-xl bg-gray-500'
+       className='w-full h-[47px] px-3 bg-gray-100  font-light tracking-tight'
       
        onChangeText={(text)=>{
         setExerciseName(text)
@@ -231,16 +232,20 @@ const AddExerciseTab = (props:any) => {
        }}
        placeholder="Enter Exercise name"/>
 
-<Text>{actualex ?"Name : " + actualex.name:"Name : " +exerciseName}</Text>
+      </View>
+       
+<View className='p-4'><Text className="text-black text-[15px] font-light tracking-tight">{actualex ?"Name : " + actualex.name:"Name : " +exerciseName}</Text>
+</View>
 
 {exercises&&actualex?.name=="" && (
+        <View className='m-3'> 
         <FlatList
           data={exercises.slice(0,5)}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
           
-          <View> 
-            <TouchableOpacity onPress={()=>{setActualex(
+          // <View className='h-[40px]    w-full bg-stone-200 flex-col justify-start items-start flex'> 
+            <TouchableOpacity className='h-[40px]    w-full bg-stone-200 flex-col justify-start items-start flex' onPress={()=>{setActualex(
                     {id:0,
                       name:item.name,
                       machineSettings:item.machineSettings,
@@ -253,19 +258,20 @@ const AddExerciseTab = (props:any) => {
 
                     })
                 }}
-                 className=' h-10 bg-slate-400'>
-                 <Text >{item.name}</Text>
-                 
+                 >
+                 <Text className=' ml-1 p-2 text-black text-base font-light tracking-tight text-center' >{item.name}</Text>
+                
             </TouchableOpacity>
-             <Card.Divider/>
-             </View>
-            
+              
+            //  </View>
+             
+              
           )}
-        />
+        /></View>
       )}
 
-            
-         <FlatList
+            <View className='m-3 bg-gray-200  flex-col justify-start items-start  inline-flex'>
+            <FlatList
          data={sets}
          keyExtractor={(item)=>`${item.id}`}
          renderItem={({item,index})=>(
@@ -280,8 +286,16 @@ const AddExerciseTab = (props:any) => {
             />
          )}
          />
-          <Button  title="addsets" onPress={addSets}/>
-         <Button  title="addExercises" onPress={addExerciseToTables}/>
+         <TouchableOpacity onPress={addSets} className=" w-full h-[40px]  bg-yellow-300 flex-col justify-center items-center inline-flex">
+          <Text className='"text-black text-center text-[15px] font-light tracking-tight'>Add Sets</Text>
+         </TouchableOpacity>
+          
+            </View>
+    
+           <TouchableOpacity onPress={addExerciseToTables} className=" w-full h-[50px]   bg-yellow-300 flex-col justify-center items-center flex">
+            <Text className='"text-black text-center text-[15px] font-light tracking-tight'>Add Exercises</Text>
+           </TouchableOpacity>
+        
    
     </View>
     </>
