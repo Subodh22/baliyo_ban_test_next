@@ -111,6 +111,7 @@ const [addsetTab,setAddsetTab] =useState(false);
 const [newReps,setNewReps]=useState("");
 const [newWeight,setNewWeight]=useState("");
 const [newRestTime,setNewRestTime ]=useState("");
+const [editNextSet,setEditNextSet]=useState(false)
 const removeTrpc = trpc.post.removeSets.useMutation();
  const userHistoryRecorder = trpc.post.userSetHistoryRecorder.useMutation();
 const addNewSets =  trpc.post.createPersonalSets.useMutation(
@@ -226,23 +227,37 @@ const StartWorking =  ({IdVideo}:any)=>{
   return(
     <> 
     
-   {sessionId  ?  <View className='flex justify-center h-screen'>
-   {exercises&&<>
-  <Text>
+   {sessionId  ?  <View className='flex  h-screen mt-2 '>
+   {exercises&&<View className='m-2'>
+   <View className='h-10 mb-3 w-auto justify-center items-center bg-yellow-300  flex-row '> 
+  <Text className='text-black pl-2 text-[20px] font-light tracking-tight'> 
   {currentExerciseTag?.name}
-</Text>
-  <Text>
+</Text></View>
+  <Text className='text-black text-[15px] font-light tracking-tight'>
   Set {currentSetIndex+1}
+</Text> 
+<View className=' w-auto flex-row '> 
+<Text className='text-black text-[15px] font-light tracking-tight'>
+ {newReps !==""?newReps: currentExerciseTag?.sets[currentSetIndex]?.volume} reps of  
 </Text>
-<Text>
- {newReps !==""?newReps: currentExerciseTag?.sets[currentSetIndex]?.volume} of { newWeight !=="" ? newWeight :  currentExerciseTag?.sets[currentSetIndex]?.weight}
+<Text className=' bg-yellow-300 ml-1 text-black text-[15px] font-light tracking-tight'>
+ { newWeight !=="" ? newWeight :  currentExerciseTag?.sets[currentSetIndex]?.weight} kg
 </Text>
 
-</>}
-      <YoutubeEm videoId={IdVideo}/>
-      <Text> This is your machine setting{Msettings}</Text>
-      <Button onPress={handleNextSet}  title="Go Rest" />
-    </View>:
+</View><View className='mt-1 w-auto flex-row '> 
+<Text className=' bg-yellow-300 ml-1 text-black text-[15px] font-light tracking-tight'>
+  How to :
+</Text></View>
+</View>} 
+      <YoutubeEm className='bg-yellow-300' videoId={IdVideo}/>
+      {/* <Text> This is your machine setting{Msettings}</Text> */}
+      
+      <TouchableOpacity className='h-12 w-auto  justify-center items-center bg-yellow-300 flex ' onPress={handleNextSet} >
+        <Text className=' text-black text-[20px] font-light tracking-tight'>Go Rest</Text>
+      </TouchableOpacity>
+      
+      </View>
+     :
 <Session addSess={addSess}  changeSession={setSessionId} ExerciseName={currentExercise}  />
 
   }</>
@@ -426,8 +441,8 @@ const NextExerciseStart =()=>{
      addNewSetsFunction(currentExerciseTag!.sets[currentSetIndex]!.name)
      setChangeValue(false)
   }
- 
-    
+  
+
    
 
 }
@@ -520,20 +535,46 @@ return (
 <Modal visible={istimePickerVisible} animationType='slide'>
 <ExpoCountdown/>
 </Modal>
-
+ 
 <Modal visible ={optionsStart}>
  <TouchableOpacity className=' w-[80px] h-[40px] mt-10 mx-3  bg-yellow-300 flex-col justify-center items-center flex' onPress={closeSessTab}>
             <Text  >Go back</Text>
           </TouchableOpacity>
 {startWorkout && <StartWorking IdVideo={IdVideo}/>}
  
-<Modal visible={isOpen}  > 
+<Modal visible={isOpen}   > 
+<View className='m-2'> 
+<Modal visible={editNextSet}>
+  <NextExerciseInRest Weight={currentExerciseTag?.sets[currentSetIndex]?.weight} reps={currentExerciseTag?.sets[currentSetIndex]?.volume}
+  name=  {currentExerciseTag?.name}
+  setName =  {"Set "+( currentSetIndex+1)}
+  newRepsSet = {setNewReps}
+  newWeight = {setNewWeight}
+  ChangedValue= {setChangeValue}
+  changedEdit= {setEditNextSet}
+
+/>
+</Modal>
 <View className='pt-20'> 
+<YoutubeEm videoId={currentExerciseTag?.videoId}/>
+<View className='flex-row justify-between  '> 
+
+<View >
+<NextExerciseInRest Weight={currentExerciseTag?.sets[currentSetIndex]?.weight} reps={currentExerciseTag?.sets[currentSetIndex]?.volume}
+  name=  {currentExerciseTag?.name}
+  setName =  {"Set "+( currentSetIndex+1)}
+  newRepsSet = {setNewReps}
+  newWeight = {setNewWeight}
+  ChangedValue= {setChangeValue}
+  changedEdit= {setEditNextSet}
+
+/>
+
+</View>
 <CountdownCircleTimer
 isPlaying
 duration={duration}
-colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-colorsTime={[7, 5, 2, 0]}
+colors='#FFF300'
 
 >
 {({ remainingTime }) => 
@@ -552,23 +593,23 @@ else{
   const seconds = remainingTime%60
   return(
     <> 
-    <Text>{minutes}minutes</Text>
-    <Text>{seconds}seconds</Text></>
+    <Text className='text-black text-[15px]  font-light tracking-tight'>{minutes} minutes</Text>
+    <Text className='text-black text-[15px]  font-light tracking-tight'>{seconds} seconds</Text></>
   )
 }}
 }
 
 </CountdownCircleTimer>
-</View>
-<NextExerciseInRest Weight={currentExerciseTag?.sets[currentSetIndex]?.weight} reps={currentExerciseTag?.sets[currentSetIndex]?.volume}
-  name=  {currentExerciseTag?.name}
-  setName =  {"Set "+( currentSetIndex+1)}
-  newRepsSet = {setNewReps}
-  newWeight = {setNewWeight}
-  ChangedValue= {setChangeValue}
-/>
-<Button title="Close"  onPress={NextExerciseStart }/>
 
+</View>
+</View>
+<TouchableOpacity className='h-[60px] mt-2 bg-yellow-300  justify-center items-center flex'  onPress={()=>{
+NextExerciseStart()
+} }>
+  <Text className='text-black text-[15px]  font-light tracking-tight'>Next</Text>
+</TouchableOpacity>
+ 
+</View>
 </Modal>
  
 

@@ -1,21 +1,14 @@
-import { View, Text } from 'react-native'
+import { View, Text, Modal, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {Picker} from '@react-native-picker/picker';
 import { Button } from 'react-native-elements';
+import PickerChangerForRest from './PickerChangerForRest';
 
 const NextExerciseInRest = (props:any) => {
     const [selectedValue,setSelectedValue] = useState("1");
     const [selectedWeight,setSelectedWeight] = useState("1");
-    
-  const generateOptions = () => {
-    const options = [];
-    for (let i = 0.25; i <= 200; i += 0.25) {
-      options.push(
-        <Picker.Item key={i} label={i.toString()} value={i.toString()} />
-      );
-    }
-    return options;
-  };
+    const [awakeEdit,setAwakeEdit] = useState(false)
+  
     useEffect(()=>{
         setSelectedValue(props.reps)
         setSelectedWeight(props.Weight)
@@ -25,41 +18,36 @@ const NextExerciseInRest = (props:any) => {
   return (
    
     <View className='flex  flex-col'>
-        <Text>Exercise : {props.name}</Text>
-        <Text>Set : {props.setName}</Text>
-        <Text>Do : {selectedValue } of {selectedWeight}kg</Text>
-        <View> 
-            <Text>Reps : </Text>
-        <Picker className='w-20'
-        selectedValue={selectedValue}
+       <Modal visible={awakeEdit}>
+          <PickerChangerForRest selectedValue={selectedValue}
+          setSelectedValue={setSelectedValue}
+          newRepsSet={props.newRepsSet}
+          ChangedValue={props.ChangedValue}
+          setSelectedWeight={setSelectedWeight}
+          selectedWeight={selectedWeight}
+          changedEdit={props.changedEdit}
+          newWeight={props.newWeight}
+          setAwakeEdit={setAwakeEdit}
+
+          />
+        </Modal>
+       
+        <View className=' h-[40px]   bg-yellow-300  justify-center items-center flex'> 
+        <Text className='text-black text-[15px]  font-light tracking-tight'> {props.name}</Text>
+        </View>
+        <Text className='text-black text-[15px] mt-1 font-light tracking-tight'>Set : {props.setName}</Text>
+         
+        <View  className='flex-row'>
+  <Text className='text-black text-[15px]  font-light tracking-tight'>
+   Do : {selectedValue } reps of </Text>
+  <Text className='text-black text-[15px]  font-light tracking-tight'>
+  {selectedWeight} kg</Text>
+</View>
+<TouchableOpacity className='h-[40px] w-[70px] mt-2 bg-yellow-300  justify-center items-center flex' onPress={()=>{setAwakeEdit(true)}}>
+  <Text className='text-black text-[15px]  font-light tracking-tight' >edit</Text>
+</TouchableOpacity>
+   
         
-        onValueChange={(itemValue, itemIndex) =>{
-             setSelectedValue(itemValue)
-             props.newRepsSet(itemValue)
-             props.ChangedValue(true)
-            }
-    }
-      >
-        <Picker.Item label="to failure" value="Failure" />
-        {[...Array(40)].map((_, i) => (
-          <Picker.Item key={i} label={`${i + 1}`} value={`${i + 1}`} />
-        ))}
-          
-      </Picker>
-      <Text>Weight : (kg)</Text>
-      <Picker className='w-100'
-        selectedValue={selectedWeight}
-  
-        onValueChange={(itemValue) => {
-            setSelectedWeight(itemValue.toString())
-            props.newWeight(itemValue.toString())
-            props.ChangedValue(true)
-          }}
-      >
-         <Picker.Item label="Bodyweight" value="BodyWeight" />
-        {generateOptions()}
-      </Picker>
-      </View>
     </View>
   )
 }

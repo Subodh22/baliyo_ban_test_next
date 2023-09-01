@@ -1,11 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import YoutubePlayer from "react-native-youtube-iframe";
- 
+import { Dimensions } from 'react-native';
 const YoutubeEm =  React.memo((props:any) => {
   console.log("Running video again")
+  const screenWidth = Dimensions.get('window').width;
   return (
-    <View className='pt-40'>
+    <View className='pt-5  w-full'>
       {/* <WebView
       source={{uri:""}}
        /> */}
@@ -15,8 +16,7 @@ const YoutubeEm =  React.memo((props:any) => {
             return true;  
       },
   }}
-        height={500}
-        width={400}
+        height={250}
         play={false}
         videoId={props.videoId}
         

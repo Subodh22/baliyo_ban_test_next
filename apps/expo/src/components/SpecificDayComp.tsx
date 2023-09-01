@@ -170,7 +170,7 @@ const SpecificDayComp = React.memo(({id,startSess,routineId,exerciseId,removeSet
             setDoner(false);
         }
     }} className='w-[51.72px] h-[30px] px-3.5 py-1.5 bg-yellow-300 flex-col justify-center items-center'>
-        <Text className='w-[25px] h-3 text-black text-opacity-50 text-[8px] font-medium tracking-tight text-center'>{doner ? "Done" : "Start"}</Text>
+        <Text className='w-[25px] h-3 text-black text-opacity-50 text-[10px] font-light tracking-tight text-center'>{doner ? "Done" : "Start"}</Text>
     </TouchableOpacity>
     
     <TouchableOpacity className='flex h-8 w-8 mr-1 bg-gray-300   justify-center items-center' onPress={() => { removeSet(id, exerciseId) }}>
