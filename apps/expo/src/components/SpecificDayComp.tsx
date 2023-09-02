@@ -132,29 +132,38 @@ const SpecificDayComp = React.memo(({id,startSess,routineId,exerciseId,removeSet
     },[])
     
   return (
-    <View key={name + id} className={`${doner == false ? 'bg-gray-200' : 'bg-gray-500'}  mb-2 h-[90px] w-full  rounded-[20px] shadow justify-between items-center  flex-row`}>
-    <Text className='w-[42px] ml-1 text-black text-base font-light tracking-tight text-center'>Set {order + 1}</Text>
+    <View key={name + id} className={`${doner == false ? 'bg-gray-100' : 'bg-gray-300'} mb-2 pr-2 pl-2 h-[90px] w-full   shadow justify-between items-center  flex-row`}>
+    <Text className='text-black text-center text-[15px] font-light tracking-tight'>Set {order + 1}</Text>
     
-    <View className='flex-col rounded-lg  h-full  justify-center items-center mt-7  '>
-        <Text className='w-full text-black text-xs font-light tracking-tight text-center'>Reps</Text>
-        <Input className='bg-gray-300 text-center  justify-center items-center ' onChangeText={(text) => setNewReps(text)} value={newReps} containerStyle={{ width: 50 }} maxLength={3} inputContainerStyle={{ borderBottomWidth: 0 }} keyboardType="numeric" placeholder={volume} />
+ 
+    <View className='flex h-auto justify-center item-center'> 
+    <Text  className='text-black text-center text-[15px] font-light tracking-tight'>Reps</Text>
+    
+    <Input className=' h-[15px] text-black text-center text-[15px] font-light tracking-tight' onChangeText={(text) => setNewReps(text)} value={newReps} maxLength={3} containerStyle={{ width: 50, height:30,margin:0,padding:0  }} inputContainerStyle={{ borderBottomWidth: 0,margin:0,padding:0 }} keyboardType="numeric" placeholder={volume} /> 
+    
     </View>
    
 
     
-    <View className='flex-col justify-center items-center gap-1.5'>
-        <Text className='w-full text-black text-xs font-light tracking-tight text-center'>Weight</Text>
+    <View className=''>
+        <Text className='text-black text-center text-[15px] font-light tracking-tight'>Weight(kg)</Text>
         <View className='flex-row justify-center items-center'>
-            <Input className='bg-gray-300 text-center  justify-center items-center '  onChangeText={(text) => setNewWeight(text)} value={newWeight} containerStyle={{ width: 50, height: 30 }} maxLength={3} inputContainerStyle={{ borderBottomWidth: 0 }} keyboardType="numeric" placeholder={weight} />
-            <Text className='text-center'>kg</Text>
+            <Input className='h-[15px] text-black text-center text-[15px] font-light tracking-tight'  onChangeText={(text) => setNewWeight(text)} value={newWeight} containerStyle={{ width: 50, height:30 }} maxLength={3} inputContainerStyle={{ borderBottomWidth: 0 }} keyboardType="numeric" placeholder={weight} />
+            {/* <Text className='text-black text-center text-[15px] font-light tracking-tight  ' >kg</Text> */}
         </View>
     </View>
     
-    <View className='flex-col justify-center items-center gap-1.5 mt-1'>
-        <Text className='w-[27px] text-black text-xs font-light tracking-tight text-center'>Rest</Text>
-        <TouchableOpacity onPress={handleTimeChange} className="w-20 h-10   justify-center items-center">
-            <Text className='bg-gray-300 h-10 w-[40px] text-center ' >{newRestTime}</Text>
-        </TouchableOpacity>
+    <View className='flex gap-2'>
+        <Text className='text-black text-center text-[15px] font-light tracking-tight'>Rest</Text>
+      
+         <View className="flex-row "> 
+   
+   <TouchableOpacity onPress={handleTimeChange} className=" ">
+    <Text className='text-black text-center text-[15px] font-light tracking-tight'>
+    {newRestTime} min
+    </Text>
+   </TouchableOpacity>
+    </View>
     </View>
     
     <TouchableOpacity onPress={() => {
@@ -173,7 +182,7 @@ const SpecificDayComp = React.memo(({id,startSess,routineId,exerciseId,removeSet
         <Text className='w-[25px] h-3 text-black text-opacity-50 text-[10px] font-light tracking-tight text-center'>{doner ? "Done" : "Start"}</Text>
     </TouchableOpacity>
     
-    <TouchableOpacity className='flex h-8 w-8 mr-1 bg-gray-300   justify-center items-center' onPress={() => { removeSet(id, exerciseId) }}>
+    <TouchableOpacity className='flex h-8 w-8 mr-1 bg-gray-200   justify-center items-center' onPress={() => { removeSet(id, exerciseId) }}>
         <Text > - </Text>
     </TouchableOpacity>
 </View>

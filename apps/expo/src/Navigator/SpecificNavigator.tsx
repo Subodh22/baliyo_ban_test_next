@@ -95,7 +95,7 @@ function SpecificNavigator() {
        
           <View className="flex-row justify-between">
             <View className="flex items-center justify-center">
-            <Text>{routine.weekRoutine}</Text>
+            <Text className='text-black text-[18px]  font-light tracking-tight'>{routine.weekRoutine}</Text>
             </View>
             </View>
             

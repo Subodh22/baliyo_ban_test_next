@@ -60,7 +60,7 @@ const ModalScreen = () => {
           if(!isPosting){
             if (typeof answer === 'string') {
              
-              trpc.post.getWorkoutToUser.useQuery();
+              trpc.post.getWorkoutToUser.useQuery({workerI:"fill"});
             }
           }
            
@@ -84,18 +84,18 @@ const ModalScreen = () => {
         <TouchableOpacity onPress={navigation.goBack} className='absolute right-5 top-5 z-10'>
             <Icon name='closecircle' type='antdesign'/>
         </TouchableOpacity>
-    <View className='px-5 py-4 ' > 
+    <View className='px-5 pt-10 m-2 ' > 
             <View className='flex-row justify-between'> 
              <View className='flex items-center justify-center'>
-                <Text >{workoutId}
+                <Text className='text-black text-[20px]  font-light tracking-tight'>{name}
                 
                 </Text></View> 
              <View className='flex-column items-center'> 
-                <TouchableOpacity onPress={handlePress} className='items-center justify-center w-20 h-10   rounded-lg bg-blue-500 el'>
+                <TouchableOpacity onPress={handlePress} className='h-[40px] w-[80px] mt-2 bg-yellow-300  justify-center items-center flex'>
                     <Text>Add</Text>
                 </TouchableOpacity>
                 <View className='bg-gray-300 w-10 flex items-center m-2 '> 
-                <Text>{ratings}</Text></View>
+                <Text className='p-1 text-black text-[12px]  font-light tracking-tight'>{ratings}*</Text></View>
                 </View>
             </View> 
       </View>

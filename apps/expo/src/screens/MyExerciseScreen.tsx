@@ -7,6 +7,7 @@ import { TabParamList } from '../Navigator/TabNavigator'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../Navigator/RootNavigator'
 import { trpc } from '../utils/trpc'
+import LoadingHead from './LoadingHead'
 
 type set = {
   exerciseId:number,
@@ -45,12 +46,13 @@ NativeStackNavigationProp<RootStackParamList>>;
  
 
 const MyExerciseScreen = () => {
-  const { data: getPersonal, isLoading: isPosting,refetch } = trpc.post.getWorkoutToUser.useQuery();
+  const { data: getPersonal, isLoading: isPosting,refetch } = trpc.post.getWorkoutToUser.useQuery({workerI:"fill"});
   const navigation = useNavigation<MyExerciseNavigationProp>();
   // const [arrayOfWorkoute, setArrayOfWorkoute] = useState<workout[]>([]);
   // const workoutIds = getPersonal?.map((personal) => personal.WorkoutCelebId) || [];
   const [refreshing,setRefreshing]=useState(false)
-  const onRefresh = useCallback(() => {
+ 
+   const onRefresh = useCallback(() => {
     setRefreshing(true);
     refetch()
       .then(() => setRefreshing(false))
@@ -61,56 +63,53 @@ const MyExerciseScreen = () => {
   }, [refetch]);
 
   if (isPosting ) {
-    return <Text>Loading...</Text>;
+ 
+    return <LoadingHead/>
   }
   if(!isPosting){
-    console.log(getPersonal)
+   
+   console.log(getPersonal)
   }
   
   return (
+    
     <FlatList 
-    refreshControl={
+     refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
     }
       data = {getPersonal}
       keyExtractor={(item)=>`${item.id}`}
-      renderItem={({item})=>(
-        <View >
+      ListEmptyComponent={() => (
+        <View className='flex h-full w-full '>
+          <View className='flex-row'> 
+            <Text className='text-black text-[20px]  font-light tracking-tight'>Add your workout from </Text>
+            <Text className='text-black text-[20px]  bg-yellow-300  font-light tracking-tight'>
+              Home
+            </Text>
+          </View>
+        </View>
+      )}
+      renderItem={({item})=>(<> 
+         <View >
         <TouchableOpacity
           onPress={() => navigation.navigate('Specific', { name: item.WorkoutName,WorkoutCelebId:item.WorkoutCelebId })}
           className="px-5 py-4"
         >
           <View className="flex-row justify-between">
             <View className="flex items-center justify-center">
-              <Text>{item.WorkoutName}</Text>
+              <Text className='text-black text-[18px]  font-light tracking-tight'>{item.WorkoutName}</Text>
             </View>
           </View>
         </TouchableOpacity>
         <Card.Divider />
-      </View>
+      </View> 
+      </>
       )}
     
     
     />
        
-    //   {getPersonal?.map((specific) => (
-    //     <View key={specific?.id}>
-    //       <TouchableOpacity
-    //         onPress={() => navigation.navigate('Specific', { name: specific.WorkoutName,WorkoutCelebId:specific.WorkoutCelebId })}
-    //         className="px-5 py-4"
-    //       >
-    //         <View className="flex-row justify-between">
-    //           <View className="flex items-center justify-center">
-    //             <Text>{specific.WorkoutName}</Text>
-    //           </View>
-    //         </View>
-    //       </TouchableOpacity>
-    //       <Card.Divider />
-    //     </View>
-    //   ))}
   
-    
-    // </ScrollView>
   )
 }
 

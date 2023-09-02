@@ -8,6 +8,7 @@ import HeadScreen from '../screens/HeadScreen';
 import {Icon } from '@rneui/themed';
 import { trpc } from '../utils/trpc';
 import FillForm from '../components/FillForm';
+import LoadingHead from '../screens/LoadingHead';
 
 export type TabParamList={
     Home: undefined;
@@ -18,7 +19,7 @@ const Tab = createBottomTabNavigator<TabParamList>();
 
 const TabNavigator = () => {
 const navigation = useNavigation();
-const getUserData  = trpc.post.getUserData.useQuery();
+const {data:getUserData,isLoading:isPosting}  = trpc.post.getUserData.useQuery();
  
 useLayoutEffect(()=>
 {
@@ -27,7 +28,10 @@ useLayoutEffect(()=>
     })
 },[])
  
-if (getUserData.data && getUserData.data.length > 0) {
+if(isPosting){
+    return <LoadingHead/>
+}
+if (getUserData && getUserData.length > 0) {
   return (
       <Tab.Navigator
           screenOptions={({ route }) => ({

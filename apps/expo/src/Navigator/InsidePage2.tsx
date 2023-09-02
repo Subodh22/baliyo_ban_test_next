@@ -17,6 +17,7 @@ import AddSetsComp from '../components/AddSetsComp';
 import BackHandlerbe from '../components/BackHandlerbe';
 import AddExerciseTab from '../components/AddExerciseTab';
 import FinishedExerciseTab from '../components/FinishedExerciseTab';
+import { SafeAreaView } from 'react-native-safe-area-context';
  
 
 type Set = {
@@ -530,14 +531,14 @@ useEffect(() => {
   ),[sessionId])
 return (
 
-  <View> 
+  <View className='flex-1'  > 
 
 <Modal visible={istimePickerVisible} animationType='slide'>
 <ExpoCountdown/>
 </Modal>
  
 <Modal visible ={optionsStart}>
- <TouchableOpacity className=' w-[80px] h-[40px] mt-10 mx-3  bg-yellow-300 flex-col justify-center items-center flex' onPress={closeSessTab}>
+ <TouchableOpacity className=' w-[80px]  h-[40px] mt-10 mx-3  bg-yellow-300 flex-col justify-center items-center flex' onPress={closeSessTab}>
             <Text  >Go back</Text>
           </TouchableOpacity>
 {startWorkout && <StartWorking IdVideo={IdVideo}/>}
@@ -636,18 +637,22 @@ size={exercises.length}/>
 <Modal visible = {finishedWorkout} animationType='slide'>
   <FinishedExerciseTab setClosed={setFinished} sessionId={sessionNumber}/>
 </Modal>
-<TouchableOpacity  onPress={()=>{setAddExo(true)}} className="w-[150px] h-12 m-2 p-2.5 bg-yellow-300 flex-col justify-center items-center  inline-flex">
-  
-    
-    <Text className="text-black text-[15px] font-light tracking-tight">add Exercise</Text>
-    </TouchableOpacity>
+
+  {/* <SafeAreaView style={{ backgroundColor: 'transparent' }}> */}
+      <TouchableOpacity 
+        onPress={() => { setAddExo(true) }} 
+        className=" top-0 w-[150px] h-12 m-2 p-2.5 bg-yellow-300 flex justify-center items-center"
+      >
+        <Text className="text-black text-[15px] font-light tracking-tight">add Exercise</Text>
+      </TouchableOpacity>
+    {/* </SafeAreaView> */}
 
 <FlatList
       data={exercises}
       extraData={exercises}
       keyExtractor={(item) => `${item.routineId}-${item.id}`}
       renderItem={({ item }) => (
-        <View key={item.id} className='px-[15px] py-[15px] bg-gray-200 rounded-[20px] flex-col justify-start items-start gap-2.5 inline-flex"'>
+        <View key={item.id} className='px-[10px] py-[15px] bg-gray-200  flex-col justify-start  gap-2.5 inline-flex"'>
           <Text className="text-black text-[15px] font-light tracking-tight">{item.name}</Text>   
             
           <FlatList
@@ -680,7 +685,7 @@ size={exercises.length}/>
           )}
          
         />
-        <TouchableOpacity className="w-full h-[51px] px-[120px] py-[11px] bg-yellow-300 justify-center flex items-center"
+        <TouchableOpacity className="w-fit h-[51px] px-[120px] py-[11px] bg-yellow-300 justify-center flex items-center"
         onPress={()=>{setAddsetTab(true)
                       setCurrentExerciseIndex(item.order)}
       }

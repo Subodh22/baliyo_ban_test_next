@@ -59,6 +59,7 @@
         "react-native-draglist": "^3.5.1",
         "react-native-elements": "^3.4.3",
         "react-native-gesture-handler": "^2.12.1",
+        "react-native-loading-spinner-overlay": "^3.0.1",
         "react-native-modal-datetime-picker": "^15.0.1",
         "react-native-pager-view": "^6.2.0",
         "react-native-picker-select": "^8.0.4",
@@ -73,7 +74,6 @@
         "react-native-webview": "11.26.0",
         "react-native-youtube-iframe": "^2.3.0",
         "react-query": "^3.39.3"
-        
     },
     "devDependencies": {
         "@babel/core": "^7.19.3",
@@ -81,7 +81,6 @@
         "@babel/runtime": "^7.19.0",
         "@types/react": "^18.0.25",
         "@types/react-native": "~0.70.6",
-         
         "eslint": "^8.28.0",
         "postcss": "^8.4.19",
         "tailwindcss": "3.3.2",

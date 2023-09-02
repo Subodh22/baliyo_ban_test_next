@@ -38,7 +38,7 @@ const DayComponent = ({id,weekRoutine,exercises,order}:props) => {
   
     const route = useRoute();
     const cRoute = route.name;
-    console.log("HOMOMOOMO" +cRoute)
+    
 
     const uniqueArray: exercises[] = exercises.filter((obj, index, self) =>
     index === self.findIndex((item) => item.name === obj.name)
@@ -51,11 +51,11 @@ const DayComponent = ({id,weekRoutine,exercises,order}:props) => {
     };
   return (
     <View>
-    <View className='px-2 bg-neutral-400 m-2   flex justify-center item-center' >
+    <View className='px-2  m-2 bg-gray-200  flex justify-center item-center' >
          <TouchableOpacity onPress={toggleAccordion} className='flex-row justify-between h-10 items-center '> 
         <View className='flex-row  '> 
-        <Text >{weekdays[order]} : </Text> 
-        <Text>{weekRoutine}</Text>
+        <Text  className='text-black text-[15px]  font-light tracking-tight'>{weekdays[order]} : </Text> 
+        <Text  className='text-black text-[15px]  font-light tracking-tight'>{weekRoutine}</Text>
         </View>
         <View >
            <Text>+</Text>
@@ -71,7 +71,7 @@ const DayComponent = ({id,weekRoutine,exercises,order}:props) => {
           
           {exercises.map(({id,name,sets,order,setType})=>(
             <View> 
-              <Text>{name}</Text>
+              <Text >{name}</Text>
             <SetShowComponent key={id}  id={id}name={name} sets={sets} order={order} setType={setType} />
             </View>
           ))}

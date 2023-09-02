@@ -27,9 +27,9 @@ const ExerciseComponent = ({id,name,sets,setType}:exercises) => {
 
   return ( 
     <View>
-        <View className='flex-row justify-between bg-gray-300 m-0.5'> 
+        <View className='flex-row justify-between   m-0.5'> 
         
-        <Text>{name}</Text> 
+        <Text  className='text-black text-[15px]  font-light tracking-tight'>{name}</Text> 
         {setType==="supersets"&& 
         <View  className='bg-red-200'>
            <Text>{setType}</Text>

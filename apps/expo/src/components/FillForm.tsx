@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { trpc } from '../utils/trpc';
 const FillForm = () => {
@@ -60,31 +60,54 @@ const FillForm = () => {
       <View style={styles.container}>
         {step === 1 && (
           <>
-            <Text style={styles.question}>How much do you weigh? (kg)</Text>
+          <View className='flex-row mb-5'> 
+            <Text className='text-black text-[20px]  font-light tracking-tight'>How much do you </Text>
+            <Text className='text-black text-[20px] bg-yellow-300  font-light tracking-tight'>weigh</Text>
+            <Text className='text-black text-[20px]  font-light tracking-tight'> ?(kg)</Text>
+            </View>
             <TextInput
           value={formData.weight}
           keyboardType="numeric" 
+          style={{fontSize:15  }}
           onChangeText={(text) => setFormData({ ...formData, weight: text })}
           placeholder="Enter Weight"
         />
-            <Button title="Next" onPress={() => next()} />
+      <TouchableOpacity className='h-[50px] mt-12 bg-yellow-300  justify-center items-center flex' onPress={() => next()} >
+        <Text className='text-black text-[17px]  font-light tracking-tight'>Next</Text>
+      </TouchableOpacity>
+         
           </>
         )}
         {step === 2 && (
           <>
-            <Text style={styles.question}>How tall are you?(cm)</Text>
+            <View className='flex-row mb-5'> 
+            <Text className='text-black text-[20px]  font-light tracking-tight'>What is your </Text>
+            <Text className='text-black text-[20px] bg-yellow-300  font-light tracking-tight'>height</Text>
+            <Text className='text-black text-[20px]  font-light tracking-tight'> ?(cm)</Text>
+            </View>
+          
             <TextInput
             keyboardType='numeric'
           value={formData.height}
+          style={{fontSize:15  }}
           onChangeText={(text) => setFormData({ ...formData, height: text })}
           placeholder="Enter Height"
         />
-            <Button title="Next" onPress={() => next()} />
+            
+            <TouchableOpacity className='h-[50px] mt-12 bg-yellow-300  justify-center items-center flex' onPress={() => next()} >
+        <Text className='text-black text-[17px]  font-light tracking-tight'>Next</Text>
+      </TouchableOpacity>
           </>
         )}
         {step === 3 && (
           <>
-            <Text style={styles.question}>What is your gender?</Text>
+            
+            <View className='flex-row mb-5'> 
+            <Text className='text-black text-[20px]  font-light tracking-tight'>What is your </Text>
+            <Text className='text-black text-[20px] bg-yellow-300  font-light tracking-tight'>gender</Text>
+            <Text className='text-black text-[20px]  font-light tracking-tight'> ?</Text>
+            </View>
+           
            <Picker
            selectedValue={formData.gender}
            onValueChange={(itemValue)=>setFormData({...formData,gender:itemValue})}
@@ -92,12 +115,19 @@ const FillForm = () => {
             <Picker.Item label='male' value="male" />
             <Picker.Item label='female' value="female" />
            </Picker>
-            <Button title='Next' onPress={()=>next()}/>
+           <TouchableOpacity className='h-[50px] mt-12 bg-yellow-300  justify-center items-center flex' onPress={() => next()} >
+        <Text className='text-black text-[17px]  font-light tracking-tight'>Next</Text>
+      </TouchableOpacity>
           </>
         )}
         {step === 4 && (
           <>
-            <Text style={styles.question}>What's your experience level?</Text>
+            <View className='flex-row mb-5'> 
+            <Text className='text-black text-[20px]  font-light tracking-tight'>What is your </Text>
+            <Text className='text-black text-[20px] bg-yellow-300  font-light tracking-tight'>experience</Text>
+            <Text className='text-black text-[20px]  font-light tracking-tight'> level?</Text>
+            </View>
+            
             <Picker
             selectedValue={formData.experience}
             onValueChange = {(itemValue)=>setFormData({...formData,experience:itemValue})}
@@ -107,12 +137,19 @@ const FillForm = () => {
                 <Picker.Item label='Advanced (+4 years)' value="Advanced"/>
 
             </Picker>
-             <Button title='Get Started' onPress={sendUserData}/>
+            <TouchableOpacity className='h-[50px] mt-12 bg-yellow-300  justify-center items-center flex' onPress={sendUserData} >
+        <Text className='text-black text-[17px]  font-light tracking-tight'>Next</Text>
+      </TouchableOpacity>
+           
           </>
         )}
   
-        <View style={styles.buttons}>
-          {step > 1 && <Button title="Previous" onPress={prev} />}
+        <View >
+          {step > 1 &&
+            <TouchableOpacity className='h-[50px] mt-6 w-auto p-2 bg-yellow-300  justify-center items-center flex'onPress={prev} >
+            <Text className='text-black text-[17px]  font-light tracking-tight'>Previous</Text>
+          </TouchableOpacity>
+          }
         </View>
       </View>
     );
@@ -123,17 +160,13 @@ const FillForm = () => {
       flex: 1,
       justifyContent: 'center',
       paddingHorizontal: 20,
-      paddingTop: 50, // added for spacing
+       // added for spacing
     },
     question: {
       fontSize: 18,
       marginBottom: 20,
     },
-    buttons: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginTop: 20,
-    },
+ 
   });
 
 export default FillForm;

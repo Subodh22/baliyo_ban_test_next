@@ -122,7 +122,9 @@ export const postRouter = router({
       return getSets
     }),
 
-   getWorkoutToUser:publicProcedure.query(async({ctx})=>
+   getWorkoutToUser:protectedProcedure.input(z.object(
+   { workerI:z.string()}
+   )).query(async({ctx})=>
   {
     const workerId = ctx.auth.userId;
     const workoutsPersonal=ctx.prisma.userToWork.findMany({

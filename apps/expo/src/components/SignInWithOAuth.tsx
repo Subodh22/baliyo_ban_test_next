@@ -1,7 +1,8 @@
 import { useOAuth } from "@clerk/clerk-expo";
 import React from "react";
-import { Button, View } from "react-native";
+import { Button, TouchableOpacity, View } from "react-native";
 import { useWarmUpBrowser } from "../hooks/useWarmUpBrowser";
+import { Text } from "react-native-elements";
 
 const useCustomOAuth = (strategy:any) => {
   const { startOAuthFlow } = useOAuth({ strategy });
@@ -33,15 +34,18 @@ const SignInWithOAuth = () => {
 
   return (
     <View  >
-      <Button
-        title="Sign in with Google"
-        onPress={handleSignInWithGoogle}
-      />
-  
-      <Button 
-        title="Sign in with Apple"
-        onPress={handleSignInWithApple}
-      />
+      <TouchableOpacity  className='h-[60px] mt-2 bg-yellow-300  justify-center items-center flex' onPress={handleSignInWithGoogle}>
+        <Text className="text-black text-[18px]  font-light tracking-tight">
+        Sign in with Google
+        </Text>
+      </TouchableOpacity>
+       
+      <TouchableOpacity  className='h-[60px] mt-2 bg-yellow-300  justify-center items-center flex'  onPress={handleSignInWithApple}>
+        <Text className="text-black text-[18px]  font-light tracking-tight">
+        Sign in with Apple
+        </Text>
+      </TouchableOpacity>
+     
     </View>
   );
 };
