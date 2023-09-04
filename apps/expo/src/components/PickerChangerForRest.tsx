@@ -52,6 +52,7 @@ const PickerChangerForRest = (props:any) => {
       </View>
       <TouchableOpacity  className='h-[40px]  my-4 bg-yellow-300  justify-center items-center flex' onPress={()=>{props.changedEdit(false)
         props.setAwakeEdit(false)
+        props.updatedExe()
     }}>
         <Text  className='text-black text-[20px]  font-light tracking-tight'>Save</Text>
       </TouchableOpacity>

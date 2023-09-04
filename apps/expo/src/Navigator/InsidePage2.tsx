@@ -135,7 +135,38 @@ const [optionsStart,setoptionStart] =useState<boolean>(false);
 const [sessionNumber,setSessionNumber] = useState<number>();
 const [Msettings,setMsettings]=useState<string>("");
 const [IdVideo,setIdVideo]=useState<string>("");
+const MemoizedYoutubeEm = React.memo(YoutubeEm);
+useEffect(() => {
+  console.log("exercises state updated:", exercises[currentExerciseIndex]?.sets[currentSetIndex]?.weight);
+}, [exercises]);
+const updateExe=()=>
+{
+  console.log("updateExe is being called");
+  const updatedExercises = exercises.map((exercise) => {
+    if (exercise.id==currentExerciseTag!.id ){
+     const updatedSets = exercise.sets.map((set)=>{
+       if (set.id==currentExerciseTag!.sets[currentSetIndex]!.id)
+       {
+        console.log(newReps+"mental")
+         return {
+           ...set,
+           volume:newReps,
+           weight:newWeight,
+          
 
+         }
+        
+       }
+       return set;
+     });
+     return {...exercise,sets:updatedSets};
+    }
+   return exercise;
+   });
+   setExercise(updatedExercises);
+   console.log(exercises[currentExerciseIndex]?.sets[currentSetIndex]?.weight)
+
+ }
 
 
 const addSess = ()=>
@@ -208,14 +239,18 @@ const ExpoCountdown=()=>{
      setIsTimePickerVisible(false)
 
   }
-  return(< View className='pt-20'> 
-  
+  return(< View className='pt-20 m-2'> 
+         <Text className='text-black text-[20px]  font-light tracking-tight'>Rest Time :</Text>
         <TimePicker
-        textColor='blue'
-           
+        textColor='black'
+        zeroPadding
         value={value} onChange={handleChange}
         />
-        <Button title="ok" onPress={pressed} />
+        <TouchableOpacity className='h-[50px] mt-2 bg-yellow-300  justify-center items-center flex'  onPress={pressed }>
+  <Text className='text-black text-[15px]  font-light tracking-tight'>Ok</Text>
+</TouchableOpacity>
+ 
+         
       </View>
 
  
@@ -250,7 +285,7 @@ const StartWorking =  ({IdVideo}:any)=>{
   How to :
 </Text></View>
 </View>} 
-      <YoutubeEm className='bg-yellow-300' videoId={IdVideo}/>
+      <MemoizedYoutubeEm className='bg-yellow-300' videoId={IdVideo}/>
       {/* <Text> This is your machine setting{Msettings}</Text> */}
       
       <TouchableOpacity className='h-12 w-auto  justify-center items-center bg-yellow-300 flex ' onPress={handleNextSet} >
@@ -545,20 +580,10 @@ return (
  
 <Modal visible={isOpen}   > 
 <View className='m-2'> 
-<Modal visible={editNextSet}>
-  <NextExerciseInRest Weight={currentExerciseTag?.sets[currentSetIndex]?.weight} reps={currentExerciseTag?.sets[currentSetIndex]?.volume}
-  name=  {currentExerciseTag?.name}
-  setName =  {"Set "+( currentSetIndex+1)}
-  newRepsSet = {setNewReps}
-  newWeight = {setNewWeight}
-  ChangedValue= {setChangeValue}
-  changedEdit= {setEditNextSet}
 
-/>
-</Modal>
 <View className='pt-20'> 
-<YoutubeEm videoId={currentExerciseTag?.videoId}/>
-<View className='flex-row justify-between  '> 
+<MemoizedYoutubeEm videoId={currentExerciseTag?.videoId}/>
+<View className='flex-row justify-between w-auto '> 
 
 <View >
 <NextExerciseInRest Weight={currentExerciseTag?.sets[currentSetIndex]?.weight} reps={currentExerciseTag?.sets[currentSetIndex]?.volume}
@@ -568,14 +593,15 @@ return (
   newWeight = {setNewWeight}
   ChangedValue= {setChangeValue}
   changedEdit= {setEditNextSet}
-
+  setDuration={setDuration}
+  updatedExe={updateExe}
 />
 
 </View>
 <CountdownCircleTimer
 isPlaying
 duration={duration}
-colors='#FFF300'
+colors='#FFF178'
 
 >
 {({ remainingTime }) => 
@@ -657,7 +683,7 @@ size={exercises.length}/>
             
           <FlatList
           data={item.sets}
-          keyExtractor={(set) => `${item.routineId}-${item.id}-${set.name}-s`}
+          keyExtractor={(set) => `${item.routineId}-${item.id}-${set.volume}-${set.name}-${set.weight}-s`}
           renderItem={({ item: set,index }) => (
             <SpecificDayComp
               exerciseId={item.id}

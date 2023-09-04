@@ -17,7 +17,7 @@ const NextExerciseInRest = (props:any) => {
     },[])
   return (
    
-    <View className='flex  flex-col'>
+    <View className='flex  flex-col '>
        <Modal visible={awakeEdit}>
           <PickerChangerForRest selectedValue={selectedValue}
           setSelectedValue={setSelectedValue}
@@ -28,7 +28,7 @@ const NextExerciseInRest = (props:any) => {
           changedEdit={props.changedEdit}
           newWeight={props.newWeight}
           setAwakeEdit={setAwakeEdit}
-
+          updatedExe={props.updatedExe}
           />
         </Modal>
        
@@ -43,10 +43,21 @@ const NextExerciseInRest = (props:any) => {
   <Text className='text-black text-[15px]  font-light tracking-tight'>
   {selectedWeight} kg</Text>
 </View>
-<TouchableOpacity className='h-[40px] w-[70px] mt-2 bg-yellow-300  justify-center items-center flex' onPress={()=>{setAwakeEdit(true)}}>
+<View className='flex-row gap-2 mt-1'> 
+<TouchableOpacity className='h-[40px] w-[70px] mt-2 bg-yellow-300  justify-center items-center flex' onPress={()=>{
+   
+  setAwakeEdit(true)}}>
   <Text className='text-black text-[15px]  font-light tracking-tight' >edit</Text>
 </TouchableOpacity>
+<TouchableOpacity className='h-[40px] w-[70px] mt-2 bg-yellow-300  justify-center items-center flex' onPress={()=>{
+  props.setDuration(
+    ((prev: number) => prev+30)
+  )
+}}>
+  <Text className='text-black text-[15px]  font-light tracking-tight' >+ 30sec</Text>
+</TouchableOpacity>
    
+</View>
         
     </View>
   )

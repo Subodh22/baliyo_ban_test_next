@@ -132,15 +132,15 @@ const SpecificDayComp = React.memo(({id,startSess,routineId,exerciseId,removeSet
     },[])
     
   return (
-    <View key={name + id} className={`${doner == false ? 'bg-gray-100' : 'bg-gray-300'} mb-2 pr-2 pl-2 h-[90px] w-full   shadow justify-between items-center  flex-row`}>
+    <View key={name + id} className={`${doner == false ? 'bg-gray-100' : 'bg-gray-300'} mb-2 pr-2 pl-2.5 h-[90px] w-full   shadow justify-between items-center  flex-row`}>
     <Text className='text-black text-center text-[15px] font-light tracking-tight'>Set {order + 1}</Text>
     
  
     <View className='flex h-auto justify-center item-center'> 
     <Text  className='text-black text-center text-[15px] font-light tracking-tight'>Reps</Text>
     
-    <Input className=' h-[15px] text-black text-center text-[15px] font-light tracking-tight' onChangeText={(text) => setNewReps(text)} value={newReps} maxLength={3} containerStyle={{ width: 50, height:30,margin:0,padding:0  }} inputContainerStyle={{ borderBottomWidth: 0,margin:0,padding:0 }} keyboardType="numeric" placeholder={volume} /> 
-    
+    <Input className=' h-[15px] text-black text-center text-[15px] font-light tracking-tight' onChangeText={(text) => setNewReps(text)} value={newReps} maxLength={3} containerStyle={{ width: 65, height:30,margin:0,padding:0  }} inputContainerStyle={{ borderBottomWidth: 0,margin:0,padding:0 }} keyboardType="numeric" placeholder={volume} /> 
+ 
     </View>
    
 
@@ -148,7 +148,7 @@ const SpecificDayComp = React.memo(({id,startSess,routineId,exerciseId,removeSet
     <View className=''>
         <Text className='text-black text-center text-[15px] font-light tracking-tight'>Weight(kg)</Text>
         <View className='flex-row justify-center items-center'>
-            <Input className='h-[15px] text-black text-center text-[15px] font-light tracking-tight'  onChangeText={(text) => setNewWeight(text)} value={newWeight} containerStyle={{ width: 50, height:30 }} maxLength={3} inputContainerStyle={{ borderBottomWidth: 0 }} keyboardType="numeric" placeholder={weight} />
+            <Input className='h-[15px] text-black text-center text-[15px] font-light tracking-tight'  onChangeText={(text) => setNewWeight(text)} value={newWeight} containerStyle={{ width: 65, height:30 }} maxLength={3} inputContainerStyle={{ borderBottomWidth: 0 }} keyboardType="numeric" placeholder={weight} />
             {/* <Text className='text-black text-center text-[15px] font-light tracking-tight  ' >kg</Text> */}
         </View>
     </View>

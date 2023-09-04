@@ -80,7 +80,7 @@ const PersonalScreen = () => {
   const ll:string| StaticImport=user?.profileImageUrl
   const username= user?.fullName
   return (
-    <View className='flex-col h-full gap-10' >
+    <View className='flex-col h-full justify-between m-2' >
       <View className='flex-row m-2 justify-between items-center'> 
     <View >  
       <Text className=' bg-yellow-300 ml-1 text-black text-[20px] font-light tracking-tight'>{username}</Text></View>
@@ -92,9 +92,14 @@ const PersonalScreen = () => {
       </View>
 
       <View> 
-      <SignOut/>
-     <DeleteButton/>
+     
      </View>
+     <View>
+     <SignOut/>
+     <DeleteButton/>
+
+     </View>
+     
     </View>
   )
 }

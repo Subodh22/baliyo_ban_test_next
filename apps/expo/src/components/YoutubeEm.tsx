@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import YoutubePlayer from "react-native-youtube-iframe";
 import { Dimensions } from 'react-native';
-const YoutubeEm =  React.memo((props:any) => {
+const YoutubeEm = (props:any) => {
   console.log("Running video again")
   const screenWidth = Dimensions.get('window').width;
   return (
@@ -23,6 +23,6 @@ const YoutubeEm =  React.memo((props:any) => {
       />
 </View>
   )
-},(prevProps,nextProps)=>prevProps.videoId===nextProps.videoId)
+}
 
 export default YoutubeEm

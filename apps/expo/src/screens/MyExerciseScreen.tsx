@@ -80,7 +80,7 @@ const MyExerciseScreen = () => {
       data = {getPersonal}
       keyExtractor={(item)=>`${item.id}`}
       ListEmptyComponent={() => (
-        <View className='flex h-full w-full '>
+        <View className='flex h-full w-full m-2 '>
           <View className='flex-row'> 
             <Text className='text-black text-[20px]  font-light tracking-tight'>Add your workout from </Text>
             <Text className='text-black text-[20px]  bg-yellow-300  font-light tracking-tight'>
