@@ -6,7 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import SpecificDayComp from '../components/SpecificDayComp';
 import { trpc } from '../utils/trpc';
 import { BackHandler, Alert } from 'react-native';
- 
+
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { Button } from '@rneui/base';
 import { TimePicker, ValueMap } from 'react-native-simple-time-picker';
@@ -18,8 +18,16 @@ import BackHandlerbe from '../components/BackHandlerbe';
 import AddExerciseTab from '../components/AddExerciseTab';
 import FinishedExerciseTab from '../components/FinishedExerciseTab';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import secleft from '../../assets/audio/30secleft.mp3'
+import addtime from '../../assets/audio/addtime.wav'
+import next from '../../assets/audio/next.wav'
+import nextExercise from '../../assets/audio/nextExercise.wav'
+import unmuteBtn from '../../assets/Icons/unmute.png'
+import muteBtn from '../../assets/Icons/mute.png'
+import  {Audio  } from 'expo-av'; 
  
-
+import { Sound } from 'expo-av/build/Audio/Sound';
+import { Image } from 'react-native-elements';
 type Set = {
   exerciseId: number;
   id: number;
@@ -79,6 +87,12 @@ type InsidenProp = NativeStackNavigationProp<RootStackParamList, 'Custom'>;
 
 
 const InsidePage2 = () => {
+ 
+   
+  
+ 
+
+  const [mute,setMute]=useState(false);
   const navigation = useNavigation<InsidenProp>();
   const [finishedWorkout,setFinished]=useState(false);
   const [sessionId,setSessionId]=useState<boolean>(false);
@@ -88,7 +102,7 @@ const InsidePage2 = () => {
   const [currentExerciseIndex,setCurrentExerciseIndex]= useState(0);
   const startSessFunc = trpc.post.createSession.useMutation();
   const [ChangedValue,setChangeValue] = useState(false);
-
+  const [lastPlayedTime, setLastPlayedTime] = useState(0);
   const {params:{routineId,nameOfDay,workoutCelebId}} = useRoute<CustomScreenRouteProp>();
   // const {data:response,isLoading:isPosting} = trpc.post.getWorkoutExercise.useQuery({routineId: routineId } 
   // ) 
@@ -127,6 +141,7 @@ const [doneExercise,setDoneExercise]= useState([])
 const [isOpen,setModal]=useState<boolean>(false);
 const [chosenTime,setChosenTime] =useState<Date>(new Date())
 const [duration,setDuration] = useState<number>(0);
+
 const [selectedId, setSelectedId] = useState<number>(0);
 const [selectedExercise, setSelectExerciseId] = useState<number>(0);
 const [istimePickerVisible, setIsTimePickerVisible] = useState<boolean>(false);
@@ -135,9 +150,30 @@ const [optionsStart,setoptionStart] =useState<boolean>(false);
 const [sessionNumber,setSessionNumber] = useState<number>();
 const [Msettings,setMsettings]=useState<string>("");
 const [IdVideo,setIdVideo]=useState<string>("");
+const [sound, setSound] = useState<Sound>();
 const MemoizedYoutubeEm = React.memo(YoutubeEm);
+ 
+async function initializeAudio() {
+  try {
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: true,
+      staysActiveInBackground: true,
+      interruptionModeIOS: 2,
+      shouldDuckAndroid: true,
+      interruptionModeAndroid: 1,
+      playThroughEarpieceAndroid: false,
+   
+    });
+  } catch (error) {
+    console.error("Error initializing audio:", error);
+  }
+}
+
+ 
 useEffect(() => {
-  console.log("exercises state updated:", exercises[currentExerciseIndex]?.sets[currentSetIndex]?.weight);
+  initializeAudio();
+  // console.log("exercises state updated:", exercises[currentExerciseIndex]?.sets[currentSetIndex]?.weight);
 }, [exercises]);
 const updateExe=()=>
 {
@@ -167,7 +203,31 @@ const updateExe=()=>
    console.log(exercises[currentExerciseIndex]?.sets[currentSetIndex]?.weight)
 
  }
+ async function stopSound() {
+  if (sound) {
+    await sound.stopAsync();
+  }
+}
+async function playSound(song:any) {
 
+  if(mute==false)
+  {await Audio.setAudioModeAsync({
+    
+    playsInSilentModeIOS: true,
+   
+  });
+  const sound = new Audio.Sound();
+  console.log("waht")
+  try {
+    await sound.loadAsync(song);
+    await sound.playAsync();
+    
+    setSound(sound)
+     
+  } catch (error) {
+    console.error("Couldn't load the sound", error);
+  }}
+}
 
 const addSess = ()=>
 {
@@ -257,6 +317,7 @@ const ExpoCountdown=()=>{
   )
 }
  
+ 
 const StartWorking =  ({IdVideo}:any)=>{
   
   
@@ -280,10 +341,23 @@ const StartWorking =  ({IdVideo}:any)=>{
  { newWeight !=="" ? newWeight :  currentExerciseTag?.sets[currentSetIndex]?.weight} kg
 </Text>
 
-</View><View className='mt-1 w-auto flex-row '> 
+</View>
+<View className='mt-1 w-auto flex-row justify-between '> 
 <Text className=' bg-yellow-300 ml-1 text-black text-[15px] font-light tracking-tight'>
   How to :
-</Text></View>
+</Text>
+<TouchableOpacity className=' ' onPress={()=>{
+  setMute((prev)=>!prev)
+}}>
+ <Image 
+    source={mute ? muteBtn : unmuteBtn} 
+    style={{ width: 30, height: 30 }} 
+    resizeMode="contain"
+  />
+</TouchableOpacity>
+
+
+</View>
 </View>} 
       <MemoizedYoutubeEm className='bg-yellow-300' videoId={IdVideo}/>
       {/* <Text> This is your machine setting{Msettings}</Text> */}
@@ -446,6 +520,8 @@ const addNewSetsFunction=(name:string)=>{
 
 const NextExerciseStart =()=>{
   
+  stopSound()
+  playSound(nextExercise)
  if (currentExerciseIndex === exercises.length - 1 && currentSetIndex ===currentExerciseTag!.sets.length){
     console.log (currentSetIndex,currentExerciseTag!.sets.length)
     closeSessTab()
@@ -479,7 +555,7 @@ const NextExerciseStart =()=>{
   }
   
 
-   
+  
 
 }
  
@@ -494,6 +570,7 @@ setNewReps("")
 setNewWeight("") 
   
 }
+
 
  
 const removeSet = (id: number,exerciseId:number) => {
@@ -605,9 +682,40 @@ colors='#FFF178'
 
 >
 {({ remainingTime }) => 
-{  if(remainingTime===0){
-  NextExerciseStart()
+{
+   const checkpoint = [60,30,6]
+  if (checkpoint.includes(remainingTime) && remainingTime !==lastPlayedTime) {
+    console.log("trying to play");
+    
+    if(remainingTime==60)
+
+    { 
+      //  playSound(addtime)
+      const randomInt = Math.floor(Math.random() * 5) ;
+      if(randomInt==3){
+        playSound(addtime)
+      }
+    
+    }
+    if(remainingTime==30)
+    {playSound(secleft)
+    
+    }
+    if(remainingTime==6)
+    {
+      playSound(next)
+    }
+   setLastPlayedTime(remainingTime)
+    
+  }
+  
  
+  
+  
+  
+  if(remainingTime===0){
+  NextExerciseStart()
+   
   //  SetFinsihWorkout(true)
   return(
     <Text>Times Up</Text>
@@ -632,6 +740,7 @@ else{
 </View>
 <TouchableOpacity className='h-[60px] mt-2 bg-yellow-300  justify-center items-center flex'  onPress={()=>{
 NextExerciseStart()
+ 
 } }>
   <Text className='text-black text-[15px]  font-light tracking-tight'>Next</Text>
 </TouchableOpacity>

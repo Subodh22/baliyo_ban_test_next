@@ -134,6 +134,12 @@ importers:
       expo-auth-session:
         specifier: ^4.0.3
         version: 4.0.3(expo@48.0.6)
+      expo-av:
+        specifier: ~13.2.1
+        version: 13.2.1(expo@48.0.6)
+      expo-modules-core:
+        specifier: ~1.2.7
+        version: 1.2.7
       expo-random:
         specifier: ^13.0.0
         version: 13.0.0(expo@48.0.6)
@@ -8841,6 +8847,14 @@ packages:
       - supports-color
     dev: false
 
+  /expo-av@13.2.1(expo@48.0.6):
+    resolution: {integrity: sha512-mC0mYSzaOaZgXjzhW2l4Ag325JjH6q5IbptfwD7gkMOFYy7VPOMxEMUnetadbs3DDzmgE6vUWrTjUIUbwq59qg==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 48.0.6(@babel/core@7.22.5)
+    dev: false
+
   /expo-constants@14.2.1(expo@48.0.6):
     resolution: {integrity: sha512-DD5u4QmBds2U7uYo409apV7nX+XjudARcgqe7S9aRFJ/6kyftmuxvk1DpaU4X42Av8z/tfKwEpuxl+vl7HHx/Q==}
     peerDependencies:
@@ -8935,6 +8949,13 @@ packages:
 
   /expo-modules-core@1.2.4:
     resolution: {integrity: sha512-AV0NCTy9O8xQqpKgX6gvsDzV1ogpCzYpGxqM85Vw1xHsOF51s7Avu7NdNjBPUZOVuDderUXAvd97dWrtefSKcA==}
+    dependencies:
+      compare-versions: 3.6.0
+      invariant: 2.2.4
+    dev: false
+
+  /expo-modules-core@1.2.7:
+    resolution: {integrity: sha512-sulqn2M8+tIdxi6QFkKppDEzbePAscgE2LEHocYoQOgHxJpeT7axE0Hkzc+81EeviQilZzGeFZMtNMGh3c9yJg==}
     dependencies:
       compare-versions: 3.6.0
       invariant: 2.2.4

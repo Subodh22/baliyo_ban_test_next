@@ -6,7 +6,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Baliyo",
   slug: "baliyo",
   scheme: "myapp",
-  version: "1.1.9",
+  version: "1.2.1",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "light", 
@@ -23,7 +23,12 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.notSubodh.workoutMaker",
-    buildNumber:"20"
+    buildNumber:"21",
+    infoPlist:{
+      "UIBackgroundModes": [
+        "audio"
+      ]
+    }
   },
   android: {
     adaptiveIcon: {
@@ -38,7 +43,12 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     },
     CLERK_PUBLISHABLE_KEY,
   },
-  plugins: ["./expo-plugins/with-modify-gradle.js","expo-apple-authentication"],
+  plugins: ["./expo-plugins/with-modify-gradle.js","expo-apple-authentication",
+  ["expo-av",  {
+    "microphonePermission": "Allow Baliyo to access your play sound."
+  }
+  ]
+],
 });
 
 export default defineConfig;
