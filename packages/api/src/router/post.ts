@@ -9,7 +9,24 @@ export const postRouter = router({
     // const users = await clerkClient.users.getUser();  
     return workouts
   }),
- 
+ getTheFinishedSession:publicProcedure.input(z.object({
+  userId:z.string(),
+ })).query(async({ctx})=>
+ {
+const workerId = ctx.auth.userId
+if(workerId!=null)
+{
+  const getSession = await ctx.prisma.sessions.findMany({
+  where:{
+    personId:workerId,
+    Status:"Finished"
+  }
+})
+return getSession
+
+}
+
+ }),
   deleteUserData:protectedProcedure.mutation(async({ctx})=>
   {
     const workerId = ctx.auth.userId;
@@ -342,7 +359,8 @@ export const postRouter = router({
   
   createSession:protectedProcedure.input(z.object({
     routineId:z.number(),
-    workoutCelebId:z.number()
+    workoutCelebId:z.number(),
+    routineName:z.string()
   })).mutation(async({ctx,input})=>{
     const workerId = ctx.auth.userId
     const createSes =await ctx.prisma.sessions.create({
@@ -353,7 +371,8 @@ export const postRouter = router({
         RoutineId:input.routineId,
         StartedAt:new Date(),
         FinsihedAt:new Date(),
-        Status:"started"
+        Status:"started",
+       RoutineName:input.routineName
       }
     })
     return {id:createSes.id }

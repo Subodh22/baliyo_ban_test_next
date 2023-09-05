@@ -10,10 +10,14 @@ import { trpc } from '../utils/trpc';
 import FillForm from '../components/FillForm';
 import LoadingHead from '../screens/LoadingHead';
 
+import MyCalendar from '../screens/MyCalendar';
+
 export type TabParamList={
     Home: undefined;
     MyExercise:undefined;
     Personal:undefined;
+    Calendar:undefined;
+    Challenges:undefined;
 }
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -62,13 +66,24 @@ if (getUserData && getUserData.length > 0) {
                               color={focused ? 'black' : 'gray'}
                           />
                       );
-                  }
+                  } else if (route.name === 'Calendar') {
+                    return (
+                        <Icon  name="event"  type="AntDesign"   color={focused ? 'black' : 'gray'} />
+                    );
+                }
+                // else if (route.name === 'Challenges') {
+                //     return (
+                //         <Icon  name="dumbbell"  type="fontawesome5"   color={focused ? 'black' : 'gray'} />
+                //     );
+                // }
               }
           })}
       >
           <Tab.Screen name="Home" component={HeadScreen} />
           <Tab.Screen name="MyExercise" component={MyExerciseScreen} />
+          <Tab.Screen name="Calendar" component={MyCalendar} />
           <Tab.Screen name="Personal" component={PersonalScreen} />
+          {/* <Tab.Screen name="Challenges" component={PersonalScreen} /> */}
       </Tab.Navigator>
   );
 } else {

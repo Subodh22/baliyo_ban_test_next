@@ -231,12 +231,15 @@ async function playSound(song:any) {
 
 const addSess = ()=>
 {
+  console.log(nameOfDay)
     startSessFunc.mutate({
     routineId:routineId,
-    workoutCelebId:workoutCelebId
+    workoutCelebId:workoutCelebId,
+    routineName:nameOfDay
   },{onSuccess:(data)=>
     {
       setSessionNumber(data.id)
+     
       console.log("WHAT UP LOSERS"+data.id)
     }})
 }
@@ -342,7 +345,7 @@ const StartWorking =  ({IdVideo}:any)=>{
 </Text>
 
 </View>
-<View className='mt-1 w-auto flex-row justify-between '> 
+<View className='mt-1 w-auto flex-row justify-between items-center '> 
 <Text className=' bg-yellow-300 ml-1 text-black text-[15px] font-light tracking-tight'>
   How to :
 </Text>
@@ -659,6 +662,8 @@ return (
 <View className='m-2'> 
 
 <View className='pt-20'> 
+<View className='  h-[35px] w-[120px] px-2 flex item-center justify-center bg-yellow-300 '> 
+<Text  className='text-black text-[15px]  font-light tracking-tight'>Next Exercise :</Text></View>
 <MemoizedYoutubeEm videoId={currentExerciseTag?.videoId}/>
 <View className='flex-row justify-between w-auto '> 
 
