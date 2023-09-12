@@ -6,6 +6,7 @@ import ModalScreen from '../screens/ModalScreen';
 import SpecificScreen from '../screens/SpecificScreen';
 import SpecificNavigator from './SpecificNavigator';
 import InsidePage2 from './InsidePage2';
+import PlanScreen from '../screens/PlanScreen';
 type set = {
   exerciseId:number,
   id:number,
@@ -35,9 +36,10 @@ type jue={
 
 export type RootStackParamList={
     Main:undefined;
-    MyModal:{workoutId:number; name:string,ratings:string};
+    MyModal:{workoutId:number; name:string,ratings:string,planType:string};
     Specific:{WorkoutCelebId:number,name:string|undefined};
     Custom:{exercises:exercises[]};
+    PlanScreenT:{WorkoutCelebId:number,name:string|undefined};
     Inside:{routineId:number,nameOfDay:string,workoutCelebId:number};
 } 
 const RootStack = createNativeStackNavigator();
@@ -57,7 +59,9 @@ const RootNavigator = () => {
        }}>
         <RootStack.Screen options={{headerShown:false}} name="MyModal" component={ModalScreen}/>
        </RootStack.Group>
-       
+       <RootStack.Group>
+        <RootStack.Screen name='PlanScreenT' component={PlanScreen}/>
+       </RootStack.Group>
        <RootStack.Group>
         <RootStack.Screen name='Specific' component={SpecificNavigator}/>
        </RootStack.Group>

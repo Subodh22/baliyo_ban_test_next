@@ -91,8 +91,12 @@ const MyExerciseScreen = () => {
       )}
       renderItem={({item})=>(<> 
          <View >
+           
         <TouchableOpacity
-          onPress={() => navigation.navigate('Specific', { name: item.WorkoutName,WorkoutCelebId:item.WorkoutCelebId })}
+          onPress={() => 
+             {item.planType==""? navigation.navigate('Specific', { name: item.WorkoutName,WorkoutCelebId:item.WorkoutCelebId }):
+             navigation.navigate('PlanScreenT',  { name: item.WorkoutName,WorkoutCelebId:item.WorkoutCelebId })
+            }}
           className="px-5 py-4"
         >
           <View className="flex-row justify-between">

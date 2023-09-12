@@ -9,39 +9,40 @@ datasource db {
    relationMode = "prisma"
 }
 
-model PersonalExercise{
-   id    Int @id @default(autoincrement())
-    name            String
-  type            String
-  setType         String?
-  order           Int
-  routineId       Int
-  videoId         String
-  machineSettings String
-  workoutCelebId  Int
-  personId        String
-  exerciseToSet    Int
 
+model WorkoutCeleb {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  ratings  String
+  planType String?
+  routines Routine[]
 }
-model Sessions{
-  id  Int @id @default(autoincrement())
-  personId String
-  RoutineId Int
-  StartedAt DateTime  @default(now())
-  WorkoutCelebId Int
-  FinsihedAt DateTime
-  Status  String
-  RoutineName String
 
+model Plan {
+  id            Int    @id @default(autoincrement())
+  planName      String
+  currentStatus String
+  workoutId     Int
+  currentWeek   String
+  order       Int
 }
-model UserDetails{
-  id      Int @id @default(autoincrement())
-  weight  String
-  height  String
-  gender  String
-  experience String
-  personId String 
 
+model personalPlan {
+  id            Int    @id @default(autoincrement())
+  personId      String
+  currentStatus String
+  workoutId     Int
+  currentWeek   String
+}
+
+model Routine {
+  id             Int          @id @default(autoincrement())
+  workoutCelebId Int
+  weekRoutine    String
+  order          Int
+  planId         Int?
+  exercises      Exercise[]
+  workoutCeleb   WorkoutCeleb @relation(fields: [workoutCelebId], references: [id])
 }
 
 model Exercise {
@@ -55,15 +56,6 @@ model Exercise {
   machineSettings String
   routine         Routine @relation(fields: [routineId], references: [id])
   sets            Set[]
-}
-
-model Routine {
-  id             Int          @id @default(autoincrement())
-  workoutCelebId Int
-  weekRoutine    String
-  order          Int
-  exercises      Exercise[]
-  workoutCeleb   WorkoutCeleb @relation(fields: [workoutCelebId], references: [id])
 }
 
 model Set {
@@ -83,18 +75,25 @@ model PersonalSets {
   id             Int    @id @default(autoincrement())
   name           String
   personId       String
-  SetId           Int
   reps           String
   weight         String
-  order          Int
   RestTime       String
   RestType       String
   exerciseId     Int
   WorkoutCelebId Int
   type           String
-  routineId       Int
-   
- 
+  order          Int
+  SetId          Int
+  routineId      Int
+}
+
+model UserToWork {
+  id             Int    @id @default(autoincrement())
+  personId       String
+  WorkoutCelebId Int
+  WorkoutName    String
+  planType String?
+  @@index([personId])
 }
 
 model userSetHistory {
@@ -112,18 +111,36 @@ model userSetHistory {
   createdAt      DateTime @default(now())
 }
 
-model WorkoutCeleb {
-  id       Int       @id @default(autoincrement())
-  name     String    @unique
-  ratings  String
-  routines Routine[]
+model Sessions {
+  id             Int      @id @default(autoincrement())
+  personId       String
+  RoutineId      Int
+  StartedAt      DateTime @default(now())
+  WorkoutCelebId Int
+  FinsihedAt     DateTime
+  Status         String
+  RoutineName    String
 }
 
-model UserToWork {
-  id             Int    @id @default(autoincrement())
-  personId       String
-  WorkoutCelebId Int
-  WorkoutName    String
+model UserDetails {
+  id         Int    @id @default(autoincrement())
+  weight     String
+  height     String
+  gender     String
+  experience String
+  personId   String
+}
 
-  @@index([personId])
+model PersonalExercise {
+  id              Int     @id @default(autoincrement())
+  name            String
+  routineId       Int
+  machineSettings String
+  order           Int
+  setType         String?
+  type            String
+  videoId         String
+  workoutCelebId  Int
+  personId        String
+  exerciseToSet   Int
 }

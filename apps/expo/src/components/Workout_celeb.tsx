@@ -9,17 +9,25 @@ import { trpc } from '../utils/trpc';
     workoutId : number;
     name : string;
     ratings:string;
+    planType:string
  }
-const Workout_celeb = ({workoutId,name,ratings}:props) => {
+const Workout_celeb = ({workoutId,name,ratings,planType}:props) => {
       const {mutate,isLoading:isPosting} = trpc.post.addWorkoutToUser.useMutation();
+      const {addPerosnalPlan}=trpc.post.addPersonalPlan.useMutation();
       trpc.post.getWorkoutData.useQuery({workoutId:workoutId});
       const [ref,setRef]=useState(false)
       const refresh = trpc.post.getWorkoutToUser.useQuery({workerI:"fill"},{enabled:false});
       const [status,setStatus]=useState<any>(false);
       const handlePress =async()=>
       {
+
         // refresh.refetch()
-        const answer=mutate({WorkoutCelebId:workoutId,workoutName:name},{onSuccess:()=>
+        console.log(planType)
+        const answer=mutate({
+          WorkoutCelebId:workoutId
+          ,workoutName:name,
+          planType:planType
+        },{onSuccess:()=>
         {
           refresh.refetch()
           setStatus(true)
@@ -31,7 +39,7 @@ const Workout_celeb = ({workoutId,name,ratings}:props) => {
      
   return (
   
-<TouchableOpacity onPress={() => navigation.navigate("MyModal", { name: name, workoutId: workoutId, ratings: ratings })}>
+<TouchableOpacity onPress={() => navigation.navigate("MyModal", { name: name, workoutId: workoutId, ratings: ratings,planType:planType })}>
     <View className="h-24 m-3 bg-white  shadow flex-row justify-between items-center p-4">
     <Text className="text-black text-[20px]  font-light tracking-tight">
     {name}

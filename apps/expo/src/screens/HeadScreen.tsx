@@ -42,10 +42,10 @@ const HeadScreen = () => {
     <Button   title="Search"  titleStyle={{ color: 'black' }}/>
       */}
     {
-      getData["data"]?.map(({id,name,ratings})=>(
-         
-          <Workout_celeb key={id} workoutId={id} name={name} ratings={ratings}/>
-      ))
+      getData["data"]?.map(({id,name,ratings,planType})=>(
+       
+          <Workout_celeb key={id} workoutId={id} name={name} ratings={ratings} planType={planType!==null ?planType:""}/>
+           ))
     }
        
      
