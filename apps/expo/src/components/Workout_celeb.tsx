@@ -13,14 +13,21 @@ import { trpc } from '../utils/trpc';
  }
 const Workout_celeb = ({workoutId,name,ratings,planType}:props) => {
       const {mutate,isLoading:isPosting} = trpc.post.addWorkoutToUser.useMutation();
-      const {addPerosnalPlan}=trpc.post.addPersonalPlan.useMutation();
+      const addPerosnalPlan=trpc.post.addPersonalPlan.useMutation();
       trpc.post.getWorkoutData.useQuery({workoutId:workoutId});
       const [ref,setRef]=useState(false)
       const refresh = trpc.post.getWorkoutToUser.useQuery({workerI:"fill"},{enabled:false});
       const [status,setStatus]=useState<any>(false);
       const handlePress =async()=>
       {
-
+        if(planType!=="")
+        {
+          addPerosnalPlan.mutate({
+          personId:"fill",
+          currentStatus:0,
+          workoutId:workoutId,
+          currentWeek:1
+        })}
         // refresh.refetch()
         console.log(planType)
         const answer=mutate({

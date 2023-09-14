@@ -103,7 +103,7 @@ const InsidePage2 = () => {
   const startSessFunc = trpc.post.createSession.useMutation();
   const [ChangedValue,setChangeValue] = useState(false);
   const [lastPlayedTime, setLastPlayedTime] = useState(0);
-  const {params:{routineId,nameOfDay,workoutCelebId}} = useRoute<CustomScreenRouteProp>();
+  const {params:{routineId,nameOfDay,workoutCelebId,planLength,currentWeek,currentStatus,currentWeekLength,pPId}} = useRoute<CustomScreenRouteProp>();
   // const {data:response,isLoading:isPosting} = trpc.post.getWorkoutExercise.useQuery({routineId: routineId } 
   // ) 
   const addPersonalExercise = trpc.post.addPersonalExercise.useMutation();
@@ -775,7 +775,7 @@ setName = {currentExerciseTag?.sets.length}  newRepsSet={setNewReps} newWeight={
 size={exercises.length}/>
 </Modal>
 <Modal visible = {finishedWorkout} animationType='slide'>
-  <FinishedExerciseTab setClosed={setFinished} sessionId={sessionNumber}/>
+  <FinishedExerciseTab planLength={planLength} pPId={pPId} currentWeek={currentWeek} currentWeekLength={currentWeekLength} currentStatus={currentStatus} setClosed={setFinished} sessionId={sessionNumber}/>
 </Modal>
 
   {/* <SafeAreaView style={{ backgroundColor: 'transparent' }}> */}
@@ -788,6 +788,7 @@ size={exercises.length}/>
     {/* </SafeAreaView> */}
 
 <FlatList
+
       data={exercises}
       extraData={exercises}
       keyExtractor={(item) => `${item.routineId}-${item.id}`}

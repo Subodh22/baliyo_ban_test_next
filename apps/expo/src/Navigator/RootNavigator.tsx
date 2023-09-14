@@ -37,10 +37,10 @@ type jue={
 export type RootStackParamList={
     Main:undefined;
     MyModal:{workoutId:number; name:string,ratings:string,planType:string};
-    Specific:{WorkoutCelebId:number,name:string|undefined};
+    Specific:{WorkoutCelebId:number,orderP:number,id:number,name:string|undefined,planLength:number,planId:number|null,currentStatus:number,currentWeek:number};
     Custom:{exercises:exercises[]};
     PlanScreenT:{WorkoutCelebId:number,name:string|undefined};
-    Inside:{routineId:number,nameOfDay:string,workoutCelebId:number};
+    Inside:{routineId:number,pPId:number,nameOfDay:string,planLength:number,workoutCelebId:number,currentWeek:number,currentStatus:number,currentWeekLength:number};
 } 
 const RootStack = createNativeStackNavigator();
 

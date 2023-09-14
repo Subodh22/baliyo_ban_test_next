@@ -61,85 +61,85 @@ const MyCalendar = () => {
    
  
   return (
-    // <ScrollView 
-    // refreshControl={
-    //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
-    // }
-    // >
-    //    <Calendar
-    //     dayComponent={({ date, state, marking }) => (
-    //       <CustomDayComponent date={date} state={state} marking={marking} />
-    //     )}
-    //     markingType={'period'}
-    //    theme={{
-    //     backgroundColor: '#ffffff',
-    //     monthTextColor: 'black',
-    //     calendarBackground: '#ffffff',
-    //     arrowColor: 'black',
-    //     textSectionTitleColor: '#b6c1cd',
-    //     textSectionTitleDisabledColor: '#d9e1e8',
-    //     selectedDayBackgroundColor: '#fff178',
-    //     selectedDayTextColor: 'black',
-    //     todayTextColor: 'black',
-    //     dayTextColor: 'black',
-    //     dotColor: '#fff178',
-    //     selectedDotColor: '#ffffff',
+    <ScrollView 
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+    }
+    >
+       <Calendar
+        dayComponent={({ date, state, marking }) => (
+          <CustomDayComponent date={date} state={state} marking={marking} />
+        )}
+        markingType={'period'}
+       theme={{
+        backgroundColor: '#ffffff',
+        monthTextColor: 'black',
+        calendarBackground: '#ffffff',
+        arrowColor: 'black',
+        textSectionTitleColor: '#b6c1cd',
+        textSectionTitleDisabledColor: '#d9e1e8',
+        selectedDayBackgroundColor: '#fff178',
+        selectedDayTextColor: 'black',
+        todayTextColor: 'black',
+        dayTextColor: 'black',
+        dotColor: '#fff178',
+        selectedDotColor: '#ffffff',
          
        
        
-    //   }}
-    //   onDayPress={day => {
-    //     setSelected(day.dateString);
+      }}
+      onDayPress={day => {
+        setSelected(day.dateString);
 
-    //     console.log(marked)
-    //   }}
-    //   markedDates={marked}
-    // />
+        console.log(marked)
+      }}
+      markedDates={marked}
+    />
     
-    // </ScrollView>
-    <Agenda
-    items={{
-      '2023-09-01': [{ text: 'Today: Back' }],
-      '2023-09-02': [{ text: 'Today: Back' }],
-      '2023-09-03': [{ text: 'Today: Back' }],
-      '2023-09-04': [{ text: 'Today: Back' }],
-      '2023-09-05': [{ text: 'Today: Back' }],
-      '2023-09-06': [{ text: 'Today: Back' }],
-      '2023-09-07': [{ text: 'Today: Back' }],
-      '2023-09-08': [{ text: 'Today: Back' }],
-      '2023-09-09': [{ text: 'Today: Back' }],
-      '2023-09-10': [{ text: 'Today: Back' }],
-      '2023-09-11': [{ text: 'Today: Back' }],
-      '2023-09-12': [{ text: 'Today: Back' }],
+    </ScrollView>
+  //   <Agenda
+  //   items={{
+  //     '2023-09-01': [{ text: 'Today: Back' }],
+  //     '2023-09-02': [{ text: 'Today: Back' }],
+  //     '2023-09-03': [{ text: 'Today: Back' }],
+  //     '2023-09-04': [{ text: 'Today: Back' }],
+  //     '2023-09-05': [{ text: 'Today: Back' }],
+  //     '2023-09-06': [{ text: 'Today: Back' }],
+  //     '2023-09-07': [{ text: 'Today: Back' }],
+  //     '2023-09-08': [{ text: 'Today: Back' }],
+  //     '2023-09-09': [{ text: 'Today: Back' }],
+  //     '2023-09-10': [{ text: 'Today: Back' }],
+  //     '2023-09-11': [{ text: 'Today: Back' }],
+  //     '2023-09-12': [{ text: 'Today: Back' }],
      
-    }}
-    theme={{
-          backgroundColor: '#ffffff',
-          monthTextColor: 'black',
-          calendarBackground: '#ffffff',
-          arrowColor: 'black',
-          textSectionTitleColor: '#b6c1cd',
-          textSectionTitleDisabledColor: '#d9e1e8',
-          selectedDayBackgroundColor: '#fff178',
-          selectedDayTextColor: 'black',
-          todayTextColor: 'black',
-          dayTextColor: 'black',
-          dotColor: '#fff178',
-          selectedDotColor: '#ffffff',
+  //   }}
+  //   theme={{
+  //         backgroundColor: '#ffffff',
+  //         monthTextColor: 'black',
+  //         calendarBackground: '#ffffff',
+  //         arrowColor: 'black',
+  //         textSectionTitleColor: '#b6c1cd',
+  //         textSectionTitleDisabledColor: '#d9e1e8',
+  //         selectedDayBackgroundColor: '#fff178',
+  //         selectedDayTextColor: 'black',
+  //         todayTextColor: 'black',
+  //         dayTextColor: 'black',
+  //         dotColor: '#fff178',
+  //         selectedDotColor: '#ffffff',
            
          
          
-        }}
-    renderItem={(item) => {
-      return (
-        <View style={{ backgroundColor: 'white', padding: 10, marginRight: 10, marginTop: 17 }}>
-          <TouchableOpacity>
-            <Text>{item.text}</Text> 
-            </TouchableOpacity>
-        </View>
-      );
-    }}
-  />
+  //       }}
+  //   renderItem={(item) => {
+  //     return (
+  //       <View style={{ backgroundColor: 'white', padding: 10, marginRight: 10, marginTop: 17 }}>
+  //         <TouchableOpacity>
+  //           <Text>{item.text}</Text> 
+  //           </TouchableOpacity>
+  //       </View>
+  //     );
+  //   }}
+  // />
     )
 }
 

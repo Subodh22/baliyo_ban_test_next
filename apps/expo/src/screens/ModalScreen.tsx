@@ -51,12 +51,12 @@ const ModalScreen = () => {
       
       
       const {mutate,isLoading:isPosting} = trpc.post.addWorkoutToUser.useMutation();
-      const {params:{name,workoutId,ratings}} =useRoute<ModalScreenRouteProp>()
+      const {params:{name,workoutId,ratings,planType}} =useRoute<ModalScreenRouteProp>()
       const {data:getWorkouts,isLoading:isGetting} = trpc.post.getWorkoutData.useQuery({workoutId:workoutId});
       const handlePress =async()=>
       {
         try {
-          const answer=mutate({WorkoutCelebId:workoutId,workoutName:name})
+          const answer=mutate({WorkoutCelebId:workoutId,workoutName:name,planType:planType})
           if(!isPosting){
             if (typeof answer === 'string') {
              

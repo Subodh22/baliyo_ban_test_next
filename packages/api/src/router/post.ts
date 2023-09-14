@@ -9,11 +9,34 @@ export const postRouter = router({
     // const users = await clerkClient.users.getUser();  
     return workouts
   }),
+getPersonal:publicProcedure.input(z.object({
+  workoutId:z.number(),
+  
+})).query(async({ctx,input})=>
+{
+  const workerId = ctx.auth.userId!
+const getPeronalPlan = await ctx.prisma.personalPlan.findFirst({
+  where:{
+    personId:workerId,
+    workoutId:input.workoutId
+  }
+  
+})
+const plan  = await ctx.prisma.plan.findMany({
+  where:{
+    workoutId:input.workoutId
+  }
+})
+
+return { getPeronalPlan , plan };
+}),
+
+
   addPersonalPlan:protectedProcedure.input(z.object({
     personId:z.string(),
-    currentStatus:z.string(),
+    currentStatus:z.number(),
     workoutId:z.number(),
-    currentWeek:z.string()
+    currentWeek:z.number()
   })).mutation(async({ctx,input})=>
   {
     const workerId = ctx.auth.userId
@@ -64,7 +87,7 @@ return getSession
   }),
   addWorkoutToUser: protectedProcedure.input(z.object({WorkoutCelebId:z.number().min(1)
       ,workoutName:z.string().min(1),
-      planType:z.string().min(1)
+      planType:z.string()
     })).mutation(async({ctx,input})=>{
     const workerId = ctx.auth.userId;
 
@@ -116,7 +139,8 @@ return getSession
 
   })
   ,
-  getWorkoutData:protectedProcedure.input(z.object({workoutId:z.number().min(1)})).query(async({ctx,input})=>{
+  getWorkoutData:protectedProcedure.input(z.object({workoutId:z.number().min(1)
+  })).query(async({ctx,input})=>{
     const getWorkoutData = await ctx.prisma.workoutCeleb.findUnique({
       where: {id:input.workoutId},
       include:{
@@ -135,6 +159,18 @@ return getSession
       
     })
   
+   return(getWorkoutData)
+  }) ,getWorkoutRoutines:protectedProcedure.input(z.object({workoutId:z.number().min(1)
+  ,planId:z.union([z.number(), z.null()])})).query(async({ctx,input})=>{
+    const getWorkoutData = await ctx.prisma.routine.findMany({
+      where: {workoutCelebId:input.workoutId,
+          planId:input.planId
+      },
+     
+      
+      
+    })
+    
    return(getWorkoutData)
   }) ,
   getWorkoutExercise:protectedProcedure.input(z.object(
@@ -400,8 +436,30 @@ return getSession
     })
     return {id:createSes.id }
   }),
+  changeDayProgress:protectedProcedure.input(z.object({
+   pPId:z.number(),
+    currentStatus:z.number(),
+    
+    currentWeek:z.number(),
+  })).mutation(async({ctx,input})=>
+  {
+    const workerId = ctx.auth.userId
+    const changeDay = await ctx.prisma.personalPlan.update({
+      where:{
+          id:input.pPId
+      },data:
+      {
+        currentStatus:input.currentStatus,
+        currentWeek:input.currentWeek
+      }
+    })
+
+  })
+  ,
   finishSession:protectedProcedure.input(z.object({
-    sessiodId:z.number()
+    sessiodId:z.number(),
+   
+
 
   })).mutation(async({ctx,input})=>
   {
@@ -416,6 +474,7 @@ return getSession
 
       }
     })
+    
 
   })
   ,

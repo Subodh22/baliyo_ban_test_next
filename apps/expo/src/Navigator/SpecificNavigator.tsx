@@ -67,17 +67,14 @@ type SpecificScreenRouteProp = RouteProp<RootStackParamList, "Specific">;
  
 function SpecificNavigator() {
   const navigation = useNavigation<InsidenProp> ();
-  const { params: { WorkoutCelebId: workoutCelebId, name } } = useRoute<SpecificScreenRouteProp>();
-  const {data:response,isLoading:isPosting} = trpc.post.getWorkoutData.useQuery({ workoutId: workoutCelebId },
+  const { params: { WorkoutCelebId: workoutCelebId,orderP, name,planId,currentWeek,currentStatus,id,planLength } } = useRoute<SpecificScreenRouteProp>();
+  const {data:response,isLoading:isPosting} = trpc.post.getWorkoutRoutines.useQuery({ workoutId: workoutCelebId,
+    planId:planId },
     { keepPreviousData: true })
-  
-  
-  // useEffect(()=>{
-    
    
-    
-       
-  // },[response ])
+    let currentWeekLength:number  
+ 
+ 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: name,
@@ -86,16 +83,30 @@ function SpecificNavigator() {
  
   
     return (<View> 
-      {response?.routines.map((routine) => (
-       <View key={routine.id}> 
+      {response?.map((routine,index) => 
+       {
+         
+        return (
+        
+        <View key={routine.id}> 
 <TouchableOpacity
          className="px-5 py-4" 
-        onPress={()=>{navigation.push('Inside',{routineId:routine.id,nameOfDay:routine.weekRoutine,workoutCelebId:workoutCelebId})}}>
+        onPress={()=>{
+          const currentWeekLength=response!.length
+          if(currentStatus>=routine.order)
+          {navigation.push('Inside',{routineId:routine.id,planLength,nameOfDay:routine.weekRoutine,workoutCelebId:workoutCelebId,currentStatus,currentWeek,currentWeekLength,pPId:id})
+          }else{
+            console.log("wait")
+          }
+          }}>
            
        
           <View className="flex-row justify-between">
-            <View className="flex items-center justify-center">
+            <View className="flex-row items-between justify-between w-full">
             <Text className='text-black text-[18px]  font-light tracking-tight'>{routine.weekRoutine}</Text>
+          {currentStatus >routine.order&&id!=0 ||currentWeek>orderP&&orderP!=0  &&id!=0  ?  <Text className='text-black text-[16px]  font-light tracking-tight'>Done</Text>:
+          currentStatus ==routine.order&&id!=0?<Text className='text-black text-[16px]  font-light tracking-tight'> Today</Text>:
+          <></>}
             </View>
             </View>
             
@@ -103,7 +114,7 @@ function SpecificNavigator() {
    <Card.Divider />
    </View> 
 
-        ))} 
+        )} )}
         
         </View>
     )

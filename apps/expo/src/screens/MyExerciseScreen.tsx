@@ -94,8 +94,8 @@ const MyExerciseScreen = () => {
            
         <TouchableOpacity
           onPress={() => 
-             {item.planType==""? navigation.navigate('Specific', { name: item.WorkoutName,WorkoutCelebId:item.WorkoutCelebId }):
-             navigation.navigate('PlanScreenT',  { name: item.WorkoutName,WorkoutCelebId:item.WorkoutCelebId })
+             {item.planType==""? navigation.navigate('Specific', { name: item.WorkoutName,WorkoutCelebId:item.WorkoutCelebId,planLength:0 ,planId:null,id:0,currentStatus:0,currentWeek:0 ,orderP:0 }):
+             navigation.navigate('PlanScreenT',  { name: item.WorkoutName,WorkoutCelebId:item.WorkoutCelebId})
             }}
           className="px-5 py-4"
         >

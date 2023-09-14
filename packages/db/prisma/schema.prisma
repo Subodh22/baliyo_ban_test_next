@@ -21,18 +21,18 @@ model WorkoutCeleb {
 model Plan {
   id            Int    @id @default(autoincrement())
   planName      String
-  currentStatus String
+  currentStatus String @db.Text
   workoutId     Int
-  currentWeek   String
+  currentWeek  String
   order       Int
 }
 
 model personalPlan {
   id            Int    @id @default(autoincrement())
   personId      String
-  currentStatus String
+  currentStatus Int
   workoutId     Int
-  currentWeek   String
+  currentWeek   Int
 }
 
 model Routine {
@@ -120,6 +120,7 @@ model Sessions {
   FinsihedAt     DateTime
   Status         String
   RoutineName    String
+ 
 }
 
 model UserDetails {
