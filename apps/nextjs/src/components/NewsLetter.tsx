@@ -18,7 +18,7 @@ export default function NewsLetter() {
         }
     }
   return (
-    <div className="  p-6    w-1/2 mt-10">
+    <div className="  p-6    w-3/4 mt-10">
     <h2 className="text-black text-xl font-light tracking-tight">Become a select few to test the beta</h2>
     <div className="flex mt-2">
         <input 
