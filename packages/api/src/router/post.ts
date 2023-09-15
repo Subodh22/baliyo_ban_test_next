@@ -436,7 +436,7 @@ return getSession
     })
     return {id:createSes.id }
   }),
-  addBetaTester:protectedProcedure.input(z.object({
+  addBetaTester:publicProcedure.input(z.object({
     email:z.string(),
   })).mutation(async({ctx,input})=>
   {
