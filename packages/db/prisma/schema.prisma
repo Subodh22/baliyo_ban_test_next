@@ -17,7 +17,11 @@ model WorkoutCeleb {
   planType String?
   routines Routine[]
 }
-
+model Testers{
+  id    Int @id @default(autoincrement())
+  email   String
+  addedat DateTime @default(now())
+}
 model Plan {
   id            Int    @id @default(autoincrement())
   planName      String

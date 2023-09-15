@@ -93,12 +93,21 @@ function SpecificNavigator() {
          className="px-5 py-4" 
         onPress={()=>{
           const currentWeekLength=response!.length
-          if(currentStatus>=routine.order)
-          {navigation.push('Inside',{routineId:routine.id,planLength,nameOfDay:routine.weekRoutine,workoutCelebId:workoutCelebId,currentStatus,currentWeek,currentWeekLength,pPId:id})
-          }else{
-            console.log("wait")
+          if(id!==0)
+        if(currentStatus>=routine.order)
+        {navigation.push('Inside',{routineId:routine.id,planLength,nameOfDay:routine.weekRoutine,workoutCelebId:workoutCelebId,currentStatus,currentWeek,currentWeekLength,pPId:id})
+        }else{
+          console.log("wait")
+        }
+        
+        else{
+          console.log(id)
+          navigation.push('Inside',{routineId:routine.id,planLength,nameOfDay:routine.weekRoutine,workoutCelebId:workoutCelebId,currentStatus,currentWeek,currentWeekLength,pPId:id})
+        }
           }
-          }}>
+          
+          
+          }>
            
        
           <View className="flex-row justify-between">

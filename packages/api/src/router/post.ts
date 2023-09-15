@@ -436,6 +436,18 @@ return getSession
     })
     return {id:createSes.id }
   }),
+  addBetaTester:protectedProcedure.input(z.object({
+    email:z.string(),
+  })).mutation(async({ctx,input})=>
+  {
+    const addemail = await ctx.prisma.testers.create({
+      data:{
+        email:input.email
+      }
+    })
+    return addemail
+  })
+  ,
   changeDayProgress:protectedProcedure.input(z.object({
    pPId:z.number(),
     currentStatus:z.number(),
