@@ -2,10 +2,10 @@ import React from 'react'
 
 export default function MvpPage() {
   return (<div className=' w-full p-7 mt-15'> 
-    <div className="text-black text-[80px] font-light tracking-tight">
-        It’s not 
+    <div className='mb-[-4px]'  >
+        <div className="text-black text-[80px] font-light tracking-tight">It’s not </div> 
          <div className='text-black  flex flex-col md:flex-row gap-3  text-[80px] font-light tracking-tight'>
-          <p>fitness  it’s</p>  <p className='bg-yellow-300 w-fit  px-2 '> evolution</p>  </div>
+          <p>lifestyle  it’s</p>  <p className='bg-yellow-300 w-fit  px-2 '> evolution</p>  </div>
              </div>
     
     <div className='text-black mt-2 text-[30px] font-light tracking-tight w-3/4'>

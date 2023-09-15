@@ -7,13 +7,15 @@ export default function NewsLetter() {
     const addtest = trpc.post.addBetaTester.useMutation();
     const sendEmail=()=>
     {
-        console.log("wokring")
-        // addtest.mutate({
-        //     email:email
-        // },{onSuccess:()=>{
-        //     setCanSubmit(false)
-        //     alert("already added")
-        // }})
+         if(email!=="")
+      {  addtest.mutate({
+            email:email
+        },{onSuccess:()=>{
+            setCanSubmit(false)
+            alert("already added")
+        }})}else{
+            alert("Type your email address")
+        }
     }
   return (
     <div className="  p-6    w-1/2 mt-10">
@@ -26,9 +28,7 @@ export default function NewsLetter() {
             placeholder="Your email address" 
             className="flex-grow p-2   border-t border-b border-l border-gray-300 outline-none"
         />
-        <button onClick={()=>{console.log("button Clicked")
-                
-    }} className="bg-yellow-300 w-40 text-black  p-2 px-4   hover:bg-yellow-500 transition duration-300">
+        <button onClick={sendEmail} className="bg-yellow-300 w-40 text-black  p-2 px-4   hover:bg-yellow-500 transition duration-300">
            Join
         </button>
     </div>

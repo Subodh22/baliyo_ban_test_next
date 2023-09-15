@@ -10,8 +10,8 @@ import NewsLetter from "../components/NewsLetter";
 
  
 const Home: NextPage = () => {
-  const getData =  trpc.post.all.useQuery();
-  if(!getData) return <div>Loading..</div>
+  
+  
   return (
     <>
   
