@@ -17,12 +17,14 @@ const DeletePage: NextPage = () => {
     const deleteUser = async()=>
     {
         
-        
         if(deleteText=="DELETE MY ACCOUNT"){
             await postQuery.mutateAsync();
       
             await user?.delete()
             signOut()
+        }
+        if(deleteText==" "||deleteText!=="DELETE MY ACCOUNT"){
+          alert("type DELETE MY ACCOUNT")
         }
     }
   return (

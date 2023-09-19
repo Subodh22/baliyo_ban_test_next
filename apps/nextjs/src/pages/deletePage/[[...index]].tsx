@@ -16,15 +16,25 @@ const DeletePage: NextPage = () => {
   const { signOut } = useAuth();
   const [deleteText,setDeleteText]=useState("");
     const deleteUser = async()=>
-    {
-        
-        
-        if(deleteText=="DELETE MY ACCOUNT"){
-            await postQuery.mutateAsync();
+    {console.log(deleteText)
+  
+        if(user!==null)
+        {  console.log(deleteText)
+        //   if(deleteText=="DELETE MY ACCOUNT"){
+        //     await postQuery.mutateAsync();
       
-            await user?.delete()
-            signOut()
+        //     await user?.delete()
+        //     signOut()
+        // }
+        if(deleteText==""||deleteText!=="DELETE MY ACCOUNT"){
+          alert("bor")
         }
+      
+      }else if(user==null)
+        {
+          alert("Login in to your account")
+        }
+        
     }
   return (
     <>
@@ -97,7 +107,7 @@ const AuthShowcase: React.FC = () => {
       )}
       {!isSignedIn && (
         <p className="text-center text-2xl ">
-          <Link href="/sign-in">Sign In</Link>
+          <Link href="/sign-in">Log In</Link>
         </p>
       )}
     </div>
