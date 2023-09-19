@@ -8,6 +8,7 @@ import { trpc } from '../utils/trpc';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Card } from '@rneui/base';
+import { Icon } from '@rneui/themed';
 
 type Set = {
   exerciseId: number;
@@ -115,7 +116,7 @@ function SpecificNavigator() {
             <Text className='text-black text-[18px]  font-light tracking-tight'>{routine.weekRoutine}</Text>
           {currentStatus >routine.order&&id!=0 ||currentWeek>orderP&&orderP!=0  &&id!=0  ?  <Text className='text-black text-[16px]  font-light tracking-tight'>Done</Text>:
           currentStatus ==routine.order&&id!=0?<Text className='text-black text-[16px]  font-light tracking-tight'> Today</Text>:
-          <></>}
+          id!=0?<Icon name='lock' type='antdesign'/>:<></>}
             </View>
             </View>
             

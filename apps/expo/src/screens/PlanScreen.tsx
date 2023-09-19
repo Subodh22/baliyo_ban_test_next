@@ -7,6 +7,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../Navigator/RootNavigator';
 import { trpc } from '../utils/trpc';
 import { Card } from 'react-native-elements';
+import { Icon } from '@rneui/themed';
 export type MyExerciseNavigationProp=CompositeNavigationProp<BottomTabNavigationProp<TabParamList,"MyExercise">,
 NativeStackNavigationProp<RootStackParamList>>;
 
@@ -55,7 +56,8 @@ const PlanScreen = () => {
               {data!.getPeronalPlan!.currentWeek>item.order?
               <Text className='text-black text-[18px]  font-light tracking-tight'>Done </Text>
             :data!.getPeronalPlan!.currentWeek==item.order?  <Text className='text-black text-[18px]  font-light tracking-tight'>Current</Text>
-            :<></>
+            :
+           <Icon name='lock' type='antdesign'/>
             }
             </View>
           </View>

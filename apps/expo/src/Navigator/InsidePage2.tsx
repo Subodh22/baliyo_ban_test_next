@@ -640,6 +640,7 @@ useEffect(() => {
   (
     navigation.setOptions({
     headerTitle:nameOfDay,
+    headerTitleAlign:'center',
     headerLeft:()=> <BackHandlerbe sessionId={sessionId} />,
     gestureEnabled: false,
     })

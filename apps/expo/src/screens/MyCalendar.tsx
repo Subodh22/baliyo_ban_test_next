@@ -58,9 +58,9 @@ const MyCalendar = () => {
        setRefreshing(false);
      });
  }, [refetch]);
-   
+  
  
-  return (
+  return (<View className='flex'> 
     <ScrollView 
     refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
@@ -97,6 +97,10 @@ const MyCalendar = () => {
     />
     
     </ScrollView>
+    {session?.length==0 ?<Text className='text-black m-2 text-[15px]  font-light tracking-tight' >
+      All your finished sessions will be recorded here.
+    </Text>:<></>}
+    </View>
   //   <Agenda
   //   items={{
   //     '2023-09-01': [{ text: 'Today: Back' }],
