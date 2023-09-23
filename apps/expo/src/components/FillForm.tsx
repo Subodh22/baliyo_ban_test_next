@@ -109,6 +109,7 @@ const FillForm = () => {
             </View>
            
            <Picker
+           style={{width:'100%', height:200}}
            selectedValue={formData.gender}
            onValueChange={(itemValue)=>setFormData({...formData,gender:itemValue})}
            >
@@ -129,6 +130,7 @@ const FillForm = () => {
             </View>
             
             <Picker
+             style={{width:'100%', height:200}}
             selectedValue={formData.experience}
             onValueChange = {(itemValue)=>setFormData({...formData,experience:itemValue})}
             >

@@ -12,9 +12,7 @@ const YoutubeEm = (props:any) => {
        /> */}
       <YoutubePlayer
      webViewProps={{
-      onShouldStartLoadWithRequest: () => {
-            return true;  
-      },
+      
   }}
         height={250}
         play={false}

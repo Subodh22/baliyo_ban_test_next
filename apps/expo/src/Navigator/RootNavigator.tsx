@@ -7,6 +7,8 @@ import SpecificScreen from '../screens/SpecificScreen';
 import SpecificNavigator from './SpecificNavigator';
 import InsidePage2 from './InsidePage2';
 import PlanScreen from '../screens/PlanScreen';
+import Challenges from './Challenges';
+import Assingments from './Assingments';
 type set = {
   exerciseId:number,
   id:number,
@@ -40,6 +42,7 @@ export type RootStackParamList={
     Specific:{WorkoutCelebId:number,orderP:number,id:number,name:string|undefined,planLength:number,planId:number|null,currentStatus:number,currentWeek:number};
     Custom:{exercises:exercises[]};
     PlanScreenT:{WorkoutCelebId:number,name:string|undefined};
+    Assignments:{videoId:string};
     Inside:{routineId:number,pPId:number,nameOfDay:string,planLength:number,workoutCelebId:number,currentWeek:number,currentStatus:number,currentWeekLength:number};
 } 
 const RootStack = createNativeStackNavigator();
@@ -67,6 +70,12 @@ const RootNavigator = () => {
        </RootStack.Group>
        <RootStack.Group>
         <RootStack.Screen name='Inside' component={InsidePage2}/>
+       </RootStack.Group>
+       <RootStack.Group>
+        <RootStack.Screen name='Assignments' component={Assingments}/>
+       </RootStack.Group>
+       <RootStack.Group>
+        <RootStack.Screen name='Challenges' component={Challenges}/>
        </RootStack.Group>
     </RootStack.Navigator>
   )

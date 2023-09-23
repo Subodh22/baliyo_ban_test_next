@@ -41,7 +41,7 @@ const DeletePage: NextPage = () => {
           </h1>
           <AuthShowcase />
           <div className="flex-col mt-2">
-            
+            <p>All the data regarding this account will be deleted.</p> 
         <input 
             type="email" 
             

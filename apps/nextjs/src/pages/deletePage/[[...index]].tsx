@@ -16,17 +16,17 @@ const DeletePage: NextPage = () => {
   const { signOut } = useAuth();
   const [deleteText,setDeleteText]=useState("");
     const deleteUser = async()=>
-    {console.log(deleteText)
-  
+    {
+        console.log(user)
         if(user!==null)
-        {  console.log(deleteText)
-        //   if(deleteText=="DELETE MY ACCOUNT"){
-        //     await postQuery.mutateAsync();
+        {  
+          if(deleteText=="DELETE MY ACCOUNT"){
+            await postQuery.mutateAsync();
       
-        //     await user?.delete()
-        //     signOut()
-        // }
-        if(deleteText==""||deleteText!=="DELETE MY ACCOUNT"){
+            await user?.delete()
+            signOut()
+        }
+        if(deleteText==" "||deleteText!=="DELETE MY ACCOUNT"){
           alert("bor")
         }
       
@@ -50,6 +50,7 @@ const DeletePage: NextPage = () => {
           </h1>
           <AuthShowcase />
           <div className="flex mt-2">
+            
         <input 
             type="email" 
             

@@ -50,7 +50,7 @@ const AddSetsComp = (props:any) => {
             <Text className='text-black text-[15px] font-light tracking-tight'>Reps : </Text>
         <Picker className='w-20'
         selectedValue={selectedValue}
-        
+        style={{width:'100%', height:200}}
         onValueChange={(itemValue, itemIndex) =>{
              setSelectedValue(itemValue)
              props.newRepsSet(itemValue)
@@ -69,7 +69,7 @@ const AddSetsComp = (props:any) => {
        </View>
       <Picker className='w-100'
         selectedValue={selectedWeight}
-  
+        style={{width:'100%', height:200}}
         onValueChange={(itemValue) => {
             setSelectedWeight(itemValue.toString())
             props.newWeight(itemValue.toString())

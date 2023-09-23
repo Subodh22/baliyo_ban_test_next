@@ -28,6 +28,7 @@ import  {Audio  } from 'expo-av';
  
 import { Sound } from 'expo-av/build/Audio/Sound';
 import { Image } from 'react-native-elements';
+import TimePickers from '../components/TimePickers';
 type Set = {
   exerciseId: number;
   id: number;
@@ -151,7 +152,11 @@ const [sessionNumber,setSessionNumber] = useState<number>();
 const [Msettings,setMsettings]=useState<string>("");
 const [IdVideo,setIdVideo]=useState<string>("");
 const [sound, setSound] = useState<Sound>();
-const MemoizedYoutubeEm = React.memo(YoutubeEm);
+const MemoizedYoutubeEm = React.memo(YoutubeEm,(prevProps,NextProps)=>
+{
+  console.log("ran wagain")
+  return prevProps.videoId ===NextProps.videoId
+});
  
 async function initializeAudio() {
   try {
@@ -304,11 +309,18 @@ const ExpoCountdown=()=>{
   }
   return(< View className='pt-20 m-2'> 
          <Text className='text-black text-[20px]  font-light tracking-tight'>Rest Time :</Text>
-        <TimePicker
+        {/* <TimePicker 
         textColor='black'
+        dropdownIconColor='blue'
+        style={{width:'100%', height:200}}
         zeroPadding
+       
+        selectedValue={5}
+          
         value={value} onChange={handleChange}
-        />
+        /> */}
+        <TimePickers value setValue={setValue}/>
+        
         <TouchableOpacity className='h-[50px] mt-2 bg-yellow-300  justify-center items-center flex'  onPress={pressed }>
   <Text className='text-black text-[15px]  font-light tracking-tight'>Ok</Text>
 </TouchableOpacity>

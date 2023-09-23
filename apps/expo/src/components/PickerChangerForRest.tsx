@@ -20,9 +20,10 @@ const PickerChangerForRest = (props:any) => {
       <Text className='text-black text-[20px]  font-light tracking-tight'>Edit the set </Text>
       </View>
             <Text className='text-black text-[15px]  font-light tracking-tight'>Reps : </Text>
-       <Picker className='w-20'
-        selectedValue={props.selectedValue}
-        
+            
+      <View> 
+         <Picker  style={{width:'100%', height:200}}
+        selectedValue={props.selectedValue} 
         onValueChange={(itemValue, itemIndex) =>{
              props.setSelectedValue(itemValue)
              props.newRepsSet(itemValue)
@@ -35,12 +36,12 @@ const PickerChangerForRest = (props:any) => {
           <Picker.Item key={i} label={`${i + 1}`} value={`${i + 1}`} />
         ))}
           
-      </Picker>
+      </Picker></View>
       <Text  className='text-black text-[15px]  font-light tracking-tight'>Weight : (kg)</Text>
-      <Picker className='w-100'
+      <View>
+        <Picker style={{width:'100%', height:200}}
         selectedValue={props.selectedWeight}
-  
-        onValueChange={(itemValue) => {
+         onValueChange={(itemValue) => {
             props.setSelectedWeight(itemValue.toString())
             props.newWeight(itemValue.toString())
             props.ChangedValue(true)
@@ -48,7 +49,7 @@ const PickerChangerForRest = (props:any) => {
       >
          <Picker.Item label="Bodyweight" value="BodyWeight" />
         {generateOptions()}
-      </Picker>
+      </Picker></View>
       </View>
       <TouchableOpacity  className='h-[40px]  my-4 bg-yellow-300  justify-center items-center flex' onPress={()=>{props.changedEdit(false)
         props.setAwakeEdit(false)
