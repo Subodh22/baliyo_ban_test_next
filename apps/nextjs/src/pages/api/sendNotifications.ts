@@ -1,9 +1,30 @@
+ 
+import type { NextApiRequest, NextApiResponse } from "next";
+ 
+import { verifySignature } from "@upstash/qstash/nextjs";
+import { trpc } from "../../utils/trpc";
+ 
+
+const sendNotifications =  async(req:NextApiRequest,res:NextApiResponse)=>
+{
+    const sendNotice =(trpc.post as any).sendNotice.useQuery({token:"dd"});
+
+    return res.status(200).json({ message: 'Notifications sent!' });
+};
+
+export default verifySignature(sendNotifications);
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 // import { useState, useEffect } from 'react';
 // import { trpc } from '../../utils/trpc';
 //   // Adjust the import path
 
-import { NextApiRequest, NextApiResponse } from "next";
-import { trpc } from "../../utils/trpc";
+ 
 
 // export default function SendNotifications() {
 //   const [hasQueried, setHasQueried] = useState(false);
@@ -30,18 +51,3 @@ import { trpc } from "../../utils/trpc";
 //     <div>sendNotifications</div>
 //   );
 // }
-
-
-const sendNotifications = async(req:NextApiRequest,res:NextApiResponse)=>
-{
-    const sendNotice = await trpc.post.sendNotice.useQuery({token:"dd"})
-    
-
-    return res.status(200)
-};
-export default sendNotifications;
-export const config = {
-    api: {
-      bodyParser: false,
-    },
-  };
