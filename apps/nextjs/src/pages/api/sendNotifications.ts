@@ -1,7 +1,7 @@
  
 import type { NextApiRequest, NextApiResponse } from "next";
  
-import { verifySignature } from "@upstash/qstash/nextjs";
+// import { verifySignature } from "@upstash/qstash/nextjs";
 import { trpc } from "../../utils/trpc";
  
 
@@ -12,7 +12,7 @@ const sendNotifications =  async(req:NextApiRequest,res:NextApiResponse)=>
     return res.status(200).json({ message: 'Notifications sent!' });
 };
 
-export default verifySignature(sendNotifications);
+// export default verifySignature(sendNotifications);
 
 export const config = {
   api: {
