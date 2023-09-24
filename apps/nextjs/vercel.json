@@ -1,8 +1,0 @@
-{
-    "crons":[
-        {
-            "path":"/sendNotifications",
-            "schedule":"1 * * * *"
-        }
-    ]
-}
