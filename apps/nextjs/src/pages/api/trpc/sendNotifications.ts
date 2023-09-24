@@ -22,7 +22,7 @@ import { trpc } from '../../../utils/trpc';
 // }
 export default async function handler(req:any, res:any) {
   if (req.method === 'POST') {
-    
+    console.log("bg man thing")
 
      
     try {
