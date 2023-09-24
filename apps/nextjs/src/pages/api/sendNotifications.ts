@@ -1,7 +1,7 @@
  
 import type { NextApiRequest, NextApiResponse } from "next";
  
-import { verifySignature } from "@upstash/qstash/nextjs";
+import { verifySignature } from "@upstash/qstash/dist/nextjs";
 import { trpc } from "../../utils/trpc";
  
 
