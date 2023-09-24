@@ -38,7 +38,8 @@ const sendNotifications = async(req:NextApiRequest,res:NextApiResponse)=>
     
 
     return res.status(200)
-}
+};
+export default sendNotifications;
 export const config = {
     api: {
       bodyParser: false,
