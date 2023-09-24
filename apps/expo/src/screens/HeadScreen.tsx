@@ -9,6 +9,9 @@ import {Input,Button} from 'react-native-elements';
 import Workout_celeb from '../components/Workout_celeb'
 import { trpc } from '../utils/trpc'
 import YoutubeEm from '../components/YoutubeEm'
+import { usePushNotifications } from '../utils/usePushNotifications'
+ 
+
  
 export type HeadScreenNavigationProp=CompositeNavigationProp<
 BottomTabNavigationProp<TabParamList,"Home">,
@@ -21,7 +24,12 @@ type prope ={
 }
  
 const HeadScreen = () => {
-   
+ 
+  const {expoPushToken} = usePushNotifications()
+
+  console.log(expoPushToken)
+ 
+ 
   const [input,setInput]=useState<string>('');
   const navigation =useNavigation<HeadScreenNavigationProp>()
    
