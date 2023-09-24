@@ -1,7 +1,7 @@
 import { ExpoConfig, ConfigContext } from "@expo/config";
 
-// const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsuYmFsaXlvYmFuLmNvbSQ";
-const CLERK_PUBLISHABLE_KEY = "pk_test_YWNlLWxpb24tMTIuY2xlcmsuYWNjb3VudHMuZGV2JA";
+const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsuYmFsaXlvYmFuLmNvbSQ";
+// const CLERK_PUBLISHABLE_KEY = "pk_test_YWNlLWxpb24tMTIuY2xlcmsuYWNjb3VudHMuZGV2JA";
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Baliyo",
   slug: "baliyo",
@@ -37,7 +37,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       backgroundColor: "#2e026d",
     },
     package:"com.notSubodh.workoutMaker",
-    googleServicesFile:"../../../keys/google-services.json"
+    googleServicesFile:"../../google-services.json"
   },
   extra: {
     eas: {
