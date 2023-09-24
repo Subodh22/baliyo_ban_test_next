@@ -37,7 +37,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       backgroundColor: "#2e026d",
     },
     package:"com.notSubodh.workoutMaker",
-    googleServicesFile:"../../../keys/google-services (5).json"
+    googleServicesFile:"../../../keys/google-services.json"
   },
   extra: {
     eas: {
