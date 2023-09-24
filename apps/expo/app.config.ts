@@ -1,7 +1,7 @@
 import { ExpoConfig, ConfigContext } from "@expo/config";
 
-// const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsuYmFsaXlvYmFuLmNvbSQ";
-const CLERK_PUBLISHABLE_KEY = "pk_test_YWNlLWxpb24tMTIuY2xlcmsuYWNjb3VudHMuZGV2JA";
+const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsuYmFsaXlvYmFuLmNvbSQ";
+// const CLERK_PUBLISHABLE_KEY = "pk_test_YWNlLWxpb24tMTIuY2xlcmsuYWNjb3VudHMuZGV2JA";
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Baliyo",
   slug: "baliyo",
@@ -31,7 +31,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     }
   },
   android: {
-    versionCode:13,
+    versionCode:14,
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#2e026d",
@@ -42,8 +42,8 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   extra: {
     eas: {
       projectId: "bf894dea-5f30-47b1-9d6a-c79aa5c94c11",
-    },
-    oneSignalAppId:"cde210a9-b579-46d3-9137-773ca643d343"
+    }
+   
     ,
     CLERK_PUBLISHABLE_KEY,
   },

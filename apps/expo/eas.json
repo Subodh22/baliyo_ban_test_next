@@ -10,6 +10,7 @@
     "preview": {
       "android": {
         "buildType": "apk"
+       
       }
     },
     "preview2": {
@@ -32,6 +33,7 @@
       "android":
       {
         "serviceAccountKeyPath":"../../../keys/pc-api-6189765339394946767-827-c879582274d2.json"
+        
      
       }
     }
