@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { trpc } from '../../utils/trpc';
+ 
+import type { NextApiRequest, NextApiResponse } from "next";
+import { verifySignature } from '@upstash/qstash/nextjs';
   // Adjust the import path
 
  
 
-export default function SendNotifications() {
+  function SendNotifications(req: NextApiRequest, res: NextApiResponse) {
   const [hasQueried, setHasQueried] = useState(false);
 
   // Trigger the sendNotice query
@@ -24,8 +27,14 @@ export default function SendNotifications() {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-
-  return (
-    <div>sendNotifications</div>
-  );
+  console.log(data);
+  return res.status(200).end();
+   
 }
+
+export default verifySignature(SendNotifications);
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
