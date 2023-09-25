@@ -10,7 +10,7 @@ const sendNotifications =  async(req:NextApiRequest,res:NextApiResponse)=>
     const sendNotice =await trpc.post.sendNotice.useQuery({token:"dd"});
      console.log("Lets see no its not my sonthe problem")
      
-    return res.status(200).json({ message: 'Notifications sent!' });
+     res.status(200).end();
 };
 
 export default verifySignature(sendNotifications);
