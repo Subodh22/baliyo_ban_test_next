@@ -7,7 +7,7 @@ import { trpc } from "../../utils/trpc";
 
 const sendNotifications =  async(req:NextApiRequest,res:NextApiResponse)=>
 {
-    const sendNotice =trpc.post.sendNotice.useQuery({token:"dd"});
+    const sendNotice =await trpc.post.sendNotice.useQuery({token:"dd"});
      console.log("Lets see no its not my sonthe problem")
      
     return res.status(200).json({ message: 'Notifications sent!' });
