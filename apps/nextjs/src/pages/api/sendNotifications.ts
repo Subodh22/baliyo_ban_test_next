@@ -4,10 +4,27 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { verifySignature } from "@upstash/qstash/dist/nextjs";
 import { trpc } from "../../utils/trpc";
  
+const sendNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { data, error, isLoading } = await trpc.post.sendNotice.useQuery({ token: "dd" });
 
-const sendNotifications =  async(req:NextApiRequest,res:NextApiResponse)=>
-{ const { data, error, isLoading } = trpc.post.sendNotice.useQuery({ token: "dd" });
-res.status(200).end();
+  if (error) {
+    console.error('Error sending notice:', error);
+    return res.status(500).end();
+  }
+
+  if (isLoading) {
+    // Handle the loading state if necessary. This might not be relevant in an API context.
+    return res.status(202).send("Notification is being processed");
+  }
+
+  if (data) {
+    // Assuming the data contains some relevant information you might want to log or process.
+    console.log(data);
+    return res.status(200).end();
+  }
+
+  // Fallback response in case none of the above conditions are met.
+  return res.status(400).send("Unknown response from trpc");
 };
 
 export default verifySignature(sendNotifications);
@@ -17,35 +34,3 @@ export const config = {
     bodyParser: false,
   },
 };
-
-// import { useState, useEffect } from 'react';
-// import { trpc } from '../../utils/trpc';
-//   // Adjust the import path
-
- 
-
-// export default function SendNotifications() {
-//   const [hasQueried, setHasQueried] = useState(false);
-
-//   // Trigger the sendNotice query
-//   const { data, error, isLoading } = trpc.post.sendNotice.useQuery({ token: "dd" }, {
-//     enabled: !hasQueried  // Only run the query if hasQueried is false
-//   });
-
-//   useEffect(() => {
-//     setHasQueried(true);  // Set to true when the component mounts
-//   }, []);
-
-//   // Handle the result (optional)
-//   if (isLoading) {
-//     return <div>Loading...</div>;
-//   }
-
-//   if (error) {
-//     return <div>Error: {error.message}</div>;
-//   }
-
-//   return (
-//     <div>sendNotifications</div>
-//   );
-// }
