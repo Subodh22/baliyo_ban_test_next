@@ -15,16 +15,7 @@ const testWithout =  async(req:NextApiRequest,res:NextApiResponse)=>
     console.error('Error sending notice:', error);
     res.status(500).end();
   }
-    //  const message = {
-    //   // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
-    //   // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
-    //   to:"ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h]",
-    //   title:"Login Reminder",
-    //   body:"u chubby gr",
-    //   data:{someData:"u fat fuck"}
-
-    // };
-    // await expo.sendPushNotificationsAsync([message]);
+   
    
 };
 

@@ -6,16 +6,8 @@ import { trpc } from "../../utils/trpc";
  
 
 const sendNotifications =  async(req:NextApiRequest,res:NextApiResponse)=>
-{
-  try {
-    const result =await trpc.post.sendNotice.useQuery({token:"dd"});
-    console.log(result);  // Logs: Notice Sent
-    res.status(200).end();
-  } catch (error) {
-    console.error('Error sending notice:', error);
-    res.status(500).end();
-  }
-     
+{ const { data, error, isLoading } = trpc.post.sendNotice.useQuery({ token: "dd" });
+res.status(200).end();
 };
 
 export default verifySignature(sendNotifications);
