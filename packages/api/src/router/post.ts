@@ -166,7 +166,9 @@ return getSession
         weight:input.weight,
         experience:input.experience,
         gender:input.gender,
-        personId:workerId
+        personId:workerId,
+        
+
 
       }
     })

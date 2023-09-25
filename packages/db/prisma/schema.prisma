@@ -134,6 +134,7 @@ model UserDetails {
   gender     String
   experience String
   personId   String
+
 }
 
 model PersonalExercise {
