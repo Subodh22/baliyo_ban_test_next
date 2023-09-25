@@ -7,10 +7,15 @@ import { trpc } from "../../utils/trpc";
 
 const sendNotifications =  async(req:NextApiRequest,res:NextApiResponse)=>
 {
-    const sendNotice =await trpc.post.sendNotice.useQuery({token:"dd"});
-     console.log("Lets see no its not my sonthe problem")
+  try {
+    const result =await trpc.post.sendNotice.useQuery({token:"dd"});
+    console.log(result);  // Logs: Notice Sent
+    res.status(200).end();
+  } catch (error) {
+    console.error('Error sending notice:', error);
+    res.status(500).end();
+  }
      
-     res.status(200).end();
 };
 
 export default verifySignature(sendNotifications);
