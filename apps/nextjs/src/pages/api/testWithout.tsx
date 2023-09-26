@@ -28,7 +28,7 @@ const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
 }
 }
 
-export default verifySignature(testWithout);
+export default testWithout;
 export const config = {
   api: {
     bodyParser: false,
