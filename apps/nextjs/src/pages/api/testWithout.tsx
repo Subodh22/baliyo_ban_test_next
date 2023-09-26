@@ -15,7 +15,7 @@ const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const result = await postRouter.sendNotice({
-      input: validationResult.data,
+      input: "dsdf",
       ctx: {}, // You can pass any context you need here
       rawInput: validationResult.data,
       path: 'sendNotice',
