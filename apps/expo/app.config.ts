@@ -1,12 +1,12 @@
 import { ExpoConfig, ConfigContext } from "@expo/config";
 
-// const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsuYmFsaXlvYmFuLmNvbSQ";
-const CLERK_PUBLISHABLE_KEY = "pk_test_YWNlLWxpb24tMTIuY2xlcmsuYWNjb3VudHMuZGV2JA";
+const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsuYmFsaXlvYmFuLmNvbSQ";
+// const CLERK_PUBLISHABLE_KEY = "pk_test_YWNlLWxpb24tMTIuY2xlcmsuYWNjb3VudHMuZGV2JA";
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Baliyo",
   slug: "baliyo",
   scheme: "myapp",
-  version: "1.3.5",
+  version: "1.3.7",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "light", 
@@ -31,7 +31,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     }
   },
   android: {
-    versionCode:15,
+    versionCode:17,
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#2e026d",
@@ -47,13 +47,15 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     ,
     CLERK_PUBLISHABLE_KEY,
   },
-  plugins: ["./expo-plugins/with-modify-gradle.js","expo-apple-authentication",
-  [
-    "onesignal-expo-plugin",
-    {
-      mode: "development",
-    }
-  ]
+  plugins: ["./expo-plugins/with-modify-gradle.js"
+  
+  ,"expo-apple-authentication",
+ [ "expo-media-library",
+  {"photosPermission":"Allow $(PRODUCT_NAME) to access your photo",
+    "savePhotosPermission":"Allow $(PRODUCT_NAME) to save photo",
+    "isAccessMediaLocationEnabled":"true"
+}]
+  
   ,
   ["expo-av",  {
     "microphonePermission": "Allow Baliyo to access your play sound."

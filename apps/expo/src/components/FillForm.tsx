@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { trpc } from '../utils/trpc';
+import { usePushNotifications } from '../utils/usePushNotifications';
+
+async function getExpoPushToken() {
+  // Logic to get the push token...
+  return await usePushNotifications();
+}
+
 const FillForm = () => {
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
@@ -9,12 +16,18 @@ const FillForm = () => {
       height: '',
       gender: 'male',
       experience: 'Beginner',
+      expoPushToken :''
     });
     const mutation=trpc.post.addUserData.useMutation();
    const userDataQuery = trpc.post.getUserData.useQuery();
- 
-   const sendUserData = () => {
+   const expoPushToken = usePushNotifications();
     
+    useEffect(() => {
+      if (expoPushToken && expoPushToken?.expoPushToken?.data && expoPushToken?.expoPushToken?.data !== formData.expoPushToken) {
+          setFormData(prevData => ({ ...prevData, expoPushToken: expoPushToken!.expoPushToken!.data }));
+      }
+  }, [expoPushToken]);
+   const sendUserData = async() => {
     
     mutation.mutate(formData, {
         onSuccess: () => {
@@ -58,6 +71,7 @@ const FillForm = () => {
   
     return (
       <View style={styles.container}>
+       {expoPushToken&& <Text>{expoPushToken.expoPushToken?.data}</Text>}
         {step === 1 && (
           <>
           <View className='flex-row mb-5'> 
@@ -145,6 +159,7 @@ const FillForm = () => {
            
           </>
         )}
+        
   
         <View >
           {step > 1 &&

@@ -14,7 +14,7 @@ export const postRouter = router({
         const message = {
           // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
           // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
-          to:"ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h]",
+          to:"ExponentPushToken[PlulZGD8mydMXRQgwG471a]",
           title:"Login Reminder",
           body:"u chubby gr",
           data:{someData:"u fat fuck"}
@@ -155,6 +155,7 @@ return getSession
     weight:z.string().min(2),
     experience : z.string().min(2),
     gender:z.string().min(2),
+    expoPushToken:z.string()
 
   })).mutation(async({ctx,input})=>{
     const workerId=ctx.auth.userId
@@ -165,6 +166,7 @@ return getSession
         experience:input.experience,
         gender:input.gender,
         personId:workerId,
+        expoPushToken:input.expoPushToken
         
 
 

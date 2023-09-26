@@ -57,7 +57,7 @@ export const usePushNotifications = (): PushNotificationState =>
                 lightColor:"#FF231f"
             })
         }
-        return token;
+        return token
 
     }
 

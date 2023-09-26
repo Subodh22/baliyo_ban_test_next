@@ -134,7 +134,8 @@ model UserDetails {
   gender     String
   experience String
   personId   String
-
+  expoPushToken String
+  
 }
 
 model PersonalExercise {

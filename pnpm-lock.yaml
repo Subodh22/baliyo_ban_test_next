@@ -143,12 +143,18 @@ importers:
       expo-av:
         specifier: ~13.2.1
         version: 13.2.1(expo@48.0.6)
+      expo-camera:
+        specifier: ~13.2.1
+        version: 13.2.1(expo@48.0.6)(react@18.2.0)
       expo-constants:
         specifier: ~14.2.1
         version: 14.2.1(expo@48.0.6)
       expo-device:
         specifier: ~5.2.1
         version: 5.2.1(expo@48.0.6)
+      expo-media-library:
+        specifier: ~15.2.3
+        version: 15.2.3(expo@48.0.6)
       expo-modules-core:
         specifier: ~1.2.7
         version: 1.2.7
@@ -161,6 +167,9 @@ importers:
       expo-secure-store:
         specifier: ^12.1.1
         version: 12.1.1(expo@48.0.6)
+      expo-sharing:
+        specifier: ~11.2.2
+        version: 11.2.2(expo@48.0.6)
       expo-splash-screen:
         specifier: ~0.18.2
         version: 0.18.2(expo-modules-autolinking@1.5.1)(expo@48.0.6)
@@ -4875,6 +4884,15 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
+  /@koale/useworker@4.0.2(react@18.2.0):
+    resolution: {integrity: sha512-xPIPADtom8/3/4FLNj7MvNcBM/Z2FleH85Fdx2O869eoKW8+PoEgtSVvoxWjCWMA46Sm9A5/R1TyzNGc+yM0wg==}
+    peerDependencies:
+      react: ^16.8.0
+    dependencies:
+      dequal: 1.0.1
+      react: 18.2.0
+    dev: false
+
   /@leichtgewicht/ip-codec@2.0.4:
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
     dev: true
@@ -9376,6 +9394,11 @@ packages:
       prop-types: 15.8.1
     dev: false
 
+  /dequal@1.0.1:
+    resolution: {integrity: sha512-Fx8jxibzkJX2aJgyfSdLhr9tlRoTnHKrRJuu2XHlAgKioN2j19/Bcbe0d4mFXYZ3+wpE2KVobUVTfDutcD17xQ==}
+    engines: {node: '>=6'}
+    dev: false
+
   /dequal@2.0.3:
     resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
     engines: {node: '>=6'}
@@ -10488,6 +10511,18 @@ packages:
       expo: 48.0.6(@babel/core@7.19.3)
     dev: false
 
+  /expo-camera@13.2.1(expo@48.0.6)(react@18.2.0):
+    resolution: {integrity: sha512-fZdRyF402jJGGmLVlumrLcr5Em9+Y2SO1MIlxLBtHXnybyHbTRMRAbzVapKX1Aryfujqadh+Kl+sdsWYkMuJjg==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      '@koale/useworker': 4.0.2(react@18.2.0)
+      expo: 48.0.6(@babel/core@7.19.3)
+      invariant: 2.2.4
+    transitivePeerDependencies:
+      - react
+    dev: false
+
   /expo-constants@14.2.1(expo@48.0.6):
     resolution: {integrity: sha512-DD5u4QmBds2U7uYo409apV7nX+XjudARcgqe7S9aRFJ/6kyftmuxvk1DpaU4X42Av8z/tfKwEpuxl+vl7HHx/Q==}
     peerDependencies:
@@ -10578,6 +10613,14 @@ packages:
       - supports-color
     dev: false
 
+  /expo-media-library@15.2.3(expo@48.0.6):
+    resolution: {integrity: sha512-Oz8b8Xsvfj7YcutUBtI84NUIqSnt7iCM5HZ5DyKoWKKiDK/+aUuj3RXNQELG8jUw6pQPgEwgbZ1+J8SdH/y9jw==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 48.0.6(@babel/core@7.19.3)
+    dev: false
+
   /expo-modules-autolinking@1.1.2:
     resolution: {integrity: sha512-oOlkAccVnHwwR5ccvF/F/x4Omj9HWzSimMUlIVz0SVGdNBEqTPyn0L/d4uIufhyQbEWvrarqL8o5Yz11wEI0SQ==}
     hasBin: true
@@ -10662,6 +10705,14 @@ packages:
       promise-retry: 2.0.1
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /expo-sharing@11.2.2(expo@48.0.6):
+    resolution: {integrity: sha512-4Lhm1eS/CFIzX+JPuxMUTWBt9rv/WdvJvpQ9y+71bL/9w9dhvsdt9tv0SsNZATz4hk0tbrYD8ZEUsgiHiT1KkQ==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 48.0.6(@babel/core@7.19.3)
     dev: false
 
   /expo-splash-screen@0.18.2(expo-modules-autolinking@1.5.1)(expo@48.0.6):
