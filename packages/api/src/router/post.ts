@@ -14,7 +14,7 @@ export const postRouter = router({
         const message = {
           // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
           // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
-          to:"ExponentPushToken[PlulZGD8mydMXRQgwG471a]",
+          to:"ExponentPushToken[PIuIZGD8mydMXRQgwG471a]",
           title:"Login Reminder",
           body:"u chubby gr",
           data:{someData:"u fat fuck"}
