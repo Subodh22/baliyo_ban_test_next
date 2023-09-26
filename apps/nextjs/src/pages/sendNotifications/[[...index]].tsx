@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { trpc } from '../../utils/trpc';
  
 import type { NextApiRequest, NextApiResponse } from "next";
-import { verifySignature } from '@upstash/qstash/nextjs';
+ 
+ 
   // Adjust the import path
 
  
@@ -32,7 +33,7 @@ import { verifySignature } from '@upstash/qstash/nextjs';
    
 }
 
-export default verifySignature(SendNotifications);
+export default SendNotifications;
 export const config = {
   api: {
     bodyParser: false,
