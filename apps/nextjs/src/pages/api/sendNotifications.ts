@@ -3,28 +3,32 @@ import type { NextApiRequest, NextApiResponse } from "next";
  
 import { verifySignature } from "@upstash/qstash/dist/nextjs";
 import { trpc } from "../../utils/trpc";
+import { postRouter } from "@acme/api/src/router/post";
  
 const sendNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { data, error, isLoading } = await trpc.post.sendNotice.useQuery({ token: "dd" });
+  try {
+    // const input = req.body;
+    // const validationResult = z.object({
+    //     token: z.string()
+    // }).safeParse(input);
 
-  if (error) {
-    console.error('Error sending notice:', error);
-    return res.status(500).end();
-  }
+    // if (!validationResult.success) {
+    //     return res.status(400).json({ error: 'Invalid input' });
+    // }
+   
+    const result = await postRouter.sendNotice({
+      input: {token:"dsdsd"},
+      ctx: {}, // You can pass any context you need here
+      rawInput:{token:"dsdsd"},
+      path: 'sendNotice',
+      type: 'query'
+  });
+  console.log(result)
+    return res.status(200).json(result);
 
-  if (isLoading) {
-    // Handle the loading state if necessary. This might not be relevant in an API context.
-    return res.status(202).send("Notification is being processed");
-  }
-
-  if (data) {
-    // Assuming the data contains some relevant information you might want to log or process.
-    console.log(data);
-    return res.status(200).end();
-  }
-
-  // Fallback response in case none of the above conditions are met.
-  return res.status(400).send("Unknown response from trpc");
+} catch (error:any) {
+    return res.status(500).json({ error: error.message });
+}
 };
 
 export default verifySignature(sendNotifications);

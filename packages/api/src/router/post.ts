@@ -4,9 +4,7 @@ import {Expo} from 'expo-server-sdk';
 const SECERT_TOKEN =process.env.SECRET_TOKEN 
 const expo = new Expo()
 export const postRouter = router({
-  sendNotice:publicProcedure.input(z.object({
-    token:z.string()
-  })).query(async({input,ctx})=>
+  sendNotice:publicProcedure.query(async()=>
   {
     // if(input.token !==SECERT_TOKEN)
     // {
