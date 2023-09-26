@@ -13,14 +13,15 @@ const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!validationResult.success) {
         return res.status(400).json({ error: 'Invalid input' });
     }
-
+   
     const result = await postRouter.sendNotice({
-      input: "dsdf",
+      input: {token:"dsdsd"},
       ctx: {}, // You can pass any context you need here
-      rawInput: validationResult.data,
+      rawInput:{token:"dsdsd"},
       path: 'sendNotice',
       type: 'query'
   });
+  console.log(result)
     return res.status(200).json(result);
 
 } catch (error:any) {
