@@ -5,14 +5,14 @@ import { verifySignature } from "@upstash/qstash/dist/nextjs";
 import { postRouter } from "@acme/api/src/router/post";
 const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const input = req.body;
-    const validationResult = z.object({
-        token: z.string()
-    }).safeParse(input);
+    // const input = req.body;
+    // const validationResult = z.object({
+    //     token: z.string()
+    // }).safeParse(input);
 
-    if (!validationResult.success) {
-        return res.status(400).json({ error: 'Invalid input' });
-    }
+    // if (!validationResult.success) {
+    //     return res.status(400).json({ error: 'Invalid input' });
+    // }
    
     const result = await postRouter.sendNotice({
       input: {token:"dsdsd"},
