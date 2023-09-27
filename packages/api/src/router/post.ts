@@ -1,9 +1,62 @@
 import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { date, number, z } from "zod";
 import {Expo} from 'expo-server-sdk';
+import AWS from 'aws-sdk';
 const SECERT_TOKEN =process.env.SECRET_TOKEN 
 const expo = new Expo()
+const s3 = new AWS.S3({
+  apiVersion:"2006-03-01",
+  accessKeyId:process.env.AWS_ACCESS_KEY,
+  secretAccessKey:process.env.AWS_SECERT_KEY,
+  region:process.env.REGION,
+  signatureVersion:"v4"
+})
+const BUCKET_NAME = process.env.BUCKET_NAME
+if (!BUCKET_NAME) {
+  throw new Error('S3 Bucket name is not defined');
+
+}
+
 export const postRouter = router({
+  getPresignedForUploadImage: publicProcedure.input(z.object({
+    filename: z.string()  // or generate a filename server-side if you prefer
+  })).mutation(async ({ input,ctx }) => {
+    const userId = ctx.auth.userId;
+    const params = {
+      Bucket: BUCKET_NAME,
+      Key: `uploads/${userId}/${input.filename}`,
+      Expires: 60 * 2,   
+      ContentType: 'image/jpeg'
+    };
+
+    try {
+      const presignedUrl = await s3.getSignedUrlPromise('putObject', params);
+      return { presignedUrl };
+    } catch (error) {
+      throw new Error('Failed to generate pre-signed URL');
+    }
+  }),
+  getPresignedForDownloadImage: publicProcedure.input(z.object({
+    filename: z.string()  // or generate a filename server-side if you prefer
+  })).mutation(async ({ input,ctx }) => {
+    const userId = ctx.auth.userId;
+    const params = {
+      Bucket: BUCKET_NAME,
+      Key: `uploads/${userId}/${input.filename}`,
+      Expires: 60 * 2,   
+      ContentType: 'image/jpeg'
+    };
+
+    try {
+      const presignedUrl = await s3.getSignedUrlPromise('putObject', params);
+      return { presignedUrl };
+    } catch (error) {
+      throw new Error('Failed to generate pre-signed URL');
+    }
+  }),
+
+
+  
   sendNotice:publicProcedure.query(async()=>
   {
     // if(input.token !==SECERT_TOKEN)
@@ -18,6 +71,7 @@ export const postRouter = router({
           title:"Login Reminder",
           body:"u chubby gr",
           data:{someData:"u fat fuck"}
+          
 
         };
         await expo.sendPushNotificationsAsync([message]);
