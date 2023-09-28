@@ -18,6 +18,74 @@ if (!BUCKET_NAME) {
 }
 
 export const postRouter = router({
+  
+  getChallenges:publicProcedure.query(async({ctx})=>
+  {
+    const getd = await ctx.prisma.challenges.findMany();
+    return getd
+  }),
+getUsersChallenge:publicProcedure.query(async({ctx})=>
+{
+  const workerId= ctx.auth.userId
+  if(workerId){
+  const getCha = await ctx.prisma.userToChallenges.findMany({
+    where:{
+      userId:workerId
+    }
+
+  })
+return getCha
+}
+
+})
+,
+getTopicData:publicProcedure.input(z.object({
+  daysId:z.number()
+})).query(async({ctx,input})=>
+{
+  const getTopics = await ctx.prisma.topic.findMany({
+    where:{
+      daysId:input.daysId
+    }
+  })
+  return getTopics
+})
+,
+getDayData:publicProcedure.input(z.object({
+  challengesId:z.number()
+})).query(async({ctx,input})=>
+{
+  const getdays= await ctx.prisma.day.findMany({
+    where:{
+      challengesId:input.challengesId
+    }
+  })
+  return getdays
+})
+,
+
+  addChallengesToUser:publicProcedure.input(z.object({
+    id:z.number(),
+    name:z.string()
+  })).mutation(async({ctx,input})=>
+  {
+    const workerId = ctx.auth.userId
+    if(workerId){
+      const addChallenges= await ctx.prisma.userToChallenges.create({
+        data:
+        {
+          challengesId:input.id,
+          userId:workerId,
+          challengeName:input.name
+        }
+      })
+    }
+     
+
+  }),
+
+
+
   getPresignedForUploadImage: publicProcedure.input(z.object({
     filename: z.string()  // or generate a filename server-side if you prefer
   })).mutation(async ({ input,ctx }) => {
@@ -90,7 +158,12 @@ export const postRouter = router({
 
   }),
   all: publicProcedure.query(async({ ctx }) => {
-   const workouts= await ctx.prisma.workoutCeleb.findMany();
+   const workouts= await ctx.prisma.workoutCeleb.findMany(
+   {where: {
+      planType: {
+        not: "challenge"
+      }}}
+   );
      
     // const users = await clerkClient.users.getUser();  
     return workouts

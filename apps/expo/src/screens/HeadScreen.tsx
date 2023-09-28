@@ -10,6 +10,8 @@ import Workout_celeb from '../components/Workout_celeb'
 import { trpc } from '../utils/trpc'
 import YoutubeEm from '../components/YoutubeEm'
 import { usePushNotifications } from '../utils/usePushNotifications'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import ChallengesHeadScreen from '../components/ChallengesHeadScreen'
  
 
  
@@ -34,7 +36,7 @@ const HeadScreen = () => {
   const navigation =useNavigation<HeadScreenNavigationProp>()
    
   const getData =  trpc.post.all.useQuery();
-  
+ 
   if(!getData) return <div>Loading..</div>
    
 
@@ -44,23 +46,21 @@ const HeadScreen = () => {
     })
   })
   return (
-    <ScrollView className='pt-20' >
+    <SafeAreaView>
+       <Text>Challenges</Text>
     
-
-
-
-    {/* <Input value={input} placeholder='Search for your workout' onChangeText={setInput} className='bg-white pt-5 pb-0 px 1 '/> 
-    <Button   title="Search"  titleStyle={{ color: 'black' }}/>
-      */}
+        <ScrollView      >
+ 
     {
       getData["data"]?.map(({id,name,ratings,planType})=>(
        
           <Workout_celeb key={id} workoutId={id} name={name} ratings={ratings} planType={planType!==null ?planType:""}/>
            ))
     }
-       
-     
+            
     </ScrollView>
+    </SafeAreaView>
+   
   )
 }
 

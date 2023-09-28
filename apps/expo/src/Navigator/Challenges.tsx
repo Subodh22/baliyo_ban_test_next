@@ -1,23 +1,52 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 import YoutubeEm from '../components/YoutubeEm'
-import { RouteProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from './RootNavigator';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useEffect,useRef,useState } from 'react';
-import {Camera,CameraCapturedPicture,CameraType } from 'expo-camera';
-import {shareAsync} from 'expo-sharing';
-import * as MediaLibrary from 'expo-media-library';
-import { Button, Image } from 'react-native-elements';
+import { CompositeNavigationProp,RouteProp,  useNavigation } from '@react-navigation/native'
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
+import { TabParamList } from '../Navigator/TabNavigator'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RootStackParamList } from '../Navigator/RootNavigator'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CameraComponent from '../components/CameraComponent';
-
-
+import ChallengesHeadScreen from '../components/ChallengesHeadScreen';
+import { trpc } from '../utils/trpc';
+export type ChallengeNavigationProp=CompositeNavigationProp<BottomTabNavigationProp<TabParamList,"Challenges">,
+NativeStackNavigationProp<RootStackParamList>>;
 
 const Challenges = () => {
- 
-return (
- <CameraComponent/>
+    const navigation = useNavigation<ChallengeNavigationProp>();
+    const getData = trpc.post.getChallenges.useQuery()
+    const getChallenge = trpc.post.getUsersChallenge.useQuery()
+return (<SafeAreaView>
+      <Text className="text-black text-[20px]  font-light tracking-tight">
+       Challenges
+    </Text>
+    <ScrollView horizontal={true}>
+   
+    {
+    getData["data"]?.map(({id,name})=>(
+     <ChallengesHeadScreen key={id} challengeid={id} name={name} />
+         ))
+  }
+
+    </ScrollView>
+    <ScrollView>
+    {
+    getChallenge["data"]?.map(({id,challengesId,challengeName})=>(
+     
+        <TouchableOpacity key={id} onPress={ ()=>{navigation.navigate('DayChallenge',{challengesId:challengesId})} } >
+        <View className="h-24 m-3 bg-white  shadow flex-row justify-between items-center p-4">
+        <Text className="text-black text-[20px]  font-light tracking-tight">
+        {challengeName}
+    </Text>
+            
+        </View>
+    </TouchableOpacity>
+         ))
+  }
+    </ScrollView>
+    
+    </SafeAreaView>
 );
 };
 

@@ -9,7 +9,7 @@ datasource db {
    relationMode = "prisma"
 }
 
-
+ 
 model WorkoutCeleb {
   id       Int       @id @default(autoincrement())
   name     String    @unique
@@ -17,26 +17,46 @@ model WorkoutCeleb {
   planType String?
   routines Routine[]
 }
-model Testers{
-  id    Int @id @default(autoincrement())
-  email   String
-  addedat DateTime @default(now())
+
+model UserToChallenges{
+  id    Int @id@default(autoincrement())
+  challengesId  Int
+  userId    String
+  challengeName String
 }
-model Plan {
-  id            Int    @id @default(autoincrement())
-  planName      String
-  currentStatus String @db.Text
-  workoutId     Int
-  currentWeek  String
-  order       Int
+model Challenges {
+  id          Int @id@default(autoincrement())
+  name        String
+  days        Day[]
 }
 
-model personalPlan {
-  id            Int    @id @default(autoincrement())
-  personId      String
-  currentStatus Int
-  workoutId     Int
-  currentWeek   Int
+model Day{
+  id      Int @id@default(autoincrement())
+  name    String
+  topic   Topic[]
+  challengesId Int
+  challenges  Challenges @relation(fields: [challengesId],references: [id])
+
+}
+
+model  Topic{
+  id      Int @id@default(autoincrement())
+  name    String
+  TopicType String
+  daysId     Int
+  proofType String
+  proofs    Proof[]
+  WorkoutId   Int?
+  day       Day @relation(fields: [daysId],references: [id])   
+
+}
+model Proof{
+  id    Int @id@default(autoincrement())
+  topicId Int
+  daysId  Int
+  challengesId  Int
+  userId    Int
+  topic   Topic @relation(fields: [topicId],references: [id])
 }
 
 model Routine {
@@ -92,11 +112,12 @@ model PersonalSets {
 }
 
 model UserToWork {
-  id             Int    @id @default(autoincrement())
+  id             Int     @id @default(autoincrement())
   personId       String
   WorkoutCelebId Int
   WorkoutName    String
-  planType String?
+  planType       String?
+
   @@index([personId])
 }
 
@@ -124,18 +145,16 @@ model Sessions {
   FinsihedAt     DateTime
   Status         String
   RoutineName    String
- 
 }
 
 model UserDetails {
-  id         Int    @id @default(autoincrement())
-  weight     String
-  height     String
-  gender     String
-  experience String
-  personId   String
+  id            Int    @id @default(autoincrement())
+  weight        String
+  height        String
+  gender        String
+  experience    String
+  personId      String
   expoPushToken String
-  
 }
 
 model PersonalExercise {
@@ -150,4 +169,27 @@ model PersonalExercise {
   workoutCelebId  Int
   personId        String
   exerciseToSet   Int
+}
+
+model Plan {
+  id            Int    @id @default(autoincrement())
+  planName      String
+  currentStatus String @db.Text
+  workoutId     Int
+  currentWeek   String
+  order         Int
+}
+
+model Testers {
+  id      Int      @id @default(autoincrement())
+  email   String
+  addedat DateTime @default(now())
+}
+
+model personalPlan {
+  id            Int    @id @default(autoincrement())
+  personId      String
+  currentStatus Int
+  workoutId     Int
+  currentWeek   Int
 }
