@@ -36,8 +36,19 @@ model Day{
   topic   Topic[]
   challengesId Int
   challenges  Challenges @relation(fields: [challengesId],references: [id])
-
+  order   Int
 }
+
+model ChallengeToDayStatus{
+  id    Int @id@default(autoincrement())
+  challengeId Int
+  userId    String
+  CurrentDayOrder Int
+  DayStartDate  DateTime @default(now())
+  ChallengeStartDate  DateTime
+  Status  String
+}
+
 
 model  Topic{
   id      Int @id@default(autoincrement())

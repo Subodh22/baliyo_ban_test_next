@@ -55,12 +55,23 @@ getDayData:publicProcedure.input(z.object({
   challengesId:z.number()
 })).query(async({ctx,input})=>
 {
+  const workerId = ctx.auth.userId
   const getdays= await ctx.prisma.day.findMany({
     where:{
       challengesId:input.challengesId
     }
+
   })
-  return getdays
+  const getChallengeToDayStatue= await ctx.prisma.challengeToDayStatus.findFirst({
+    where:{
+      userId:workerId!,
+      challengeId:input.challengesId
+
+    } 
+  })
+
+
+  return {getdays,getChallengeToDayStatue}
 })
 ,
 
@@ -70,16 +81,26 @@ getDayData:publicProcedure.input(z.object({
   })).mutation(async({ctx,input})=>
   {
     const workerId = ctx.auth.userId
-    if(workerId){
+   
       const addChallenges= await ctx.prisma.userToChallenges.create({
         data:
         {
           challengesId:input.id,
-          userId:workerId,
+          userId:workerId!,
           challengeName:input.name
         }
       })
-    }
+      const addChallengetoDayStatus= await ctx.prisma.challengeToDayStatus.create({
+        data:
+        {
+          challengeId:input.id,
+          userId:workerId!,
+          CurrentDayOrder:0,
+          Status:"NotStarted",
+          ChallengeStartDate:new Date()
+        }
+      })
+    
      
 
   }),

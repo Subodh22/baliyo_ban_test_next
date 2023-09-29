@@ -68,7 +68,9 @@ type SpecificScreenRouteProp = RouteProp<RootStackParamList, "Specific">;
  
 function SpecificNavigator() {
   const navigation = useNavigation<InsidenProp> ();
+  
   const { params: { WorkoutCelebId: workoutCelebId,orderP, name,planId,currentWeek,currentStatus,id,planLength } } = useRoute<SpecificScreenRouteProp>();
+  console.log(workoutCelebId)
   const {data:response,isLoading:isPosting} = trpc.post.getWorkoutRoutines.useQuery({ workoutId: workoutCelebId,
     planId:planId },
     { keepPreviousData: true })

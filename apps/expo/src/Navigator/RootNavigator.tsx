@@ -10,7 +10,9 @@ import PlanScreen from '../screens/PlanScreen';
 import Challenges from './Challenges';
 import Assingments from './Assingments';
 import DayChallenge from '../screens/DayChallenge';
-import TopicList from '../screens/TopicList';
+import TopicList from '../screens/ChallengeLists';
+import ChallengeLists from '../screens/ChallengeLists';
+import TopicWorkout from '../screens/TopicWorkout';
 type set = {
   exerciseId:number,
   id:number,
@@ -47,6 +49,8 @@ export type RootStackParamList={
     Assignments:{videoId:string};
     DayChallenge:{challengesId:number};
     TopicList:{daysId:number}
+    TopicWorkout:{workoutId:number|null}
+    ChallengeLists:{daysId:number}
     Inside:{routineId:number,pPId:number,nameOfDay:string,planLength:number,workoutCelebId:number,currentWeek:number,currentStatus:number,currentWeekLength:number};
 } 
 const RootStack = createNativeStackNavigator();
@@ -71,6 +75,12 @@ const RootNavigator = () => {
        </RootStack.Group>
        <RootStack.Group>
         <RootStack.Screen name='TopicList' component={TopicList}/>
+       </RootStack.Group>
+       <RootStack.Group>
+        <RootStack.Screen name='TopicWorkout' component={TopicWorkout}/>
+       </RootStack.Group>
+       <RootStack.Group>
+        <RootStack.Screen name='ChallengeLists' component={ChallengeLists}/>
        </RootStack.Group>
        <RootStack.Group>
         <RootStack.Screen name='DayChallenge' component={DayChallenge}/>
