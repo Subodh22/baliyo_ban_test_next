@@ -12,6 +12,7 @@ import YoutubeEm from '../components/YoutubeEm'
 import { usePushNotifications } from '../utils/usePushNotifications'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ChallengesHeadScreen from '../components/ChallengesHeadScreen'
+import CameraComponent from '../components/CameraComponent'
  
 
  

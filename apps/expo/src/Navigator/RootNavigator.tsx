@@ -13,6 +13,10 @@ import DayChallenge from '../screens/DayChallenge';
 import TopicList from '../screens/ChallengeLists';
 import ChallengeLists from '../screens/ChallengeLists';
 import TopicWorkout from '../screens/TopicWorkout';
+import { Json } from 'aws-sdk/clients/marketplacecatalog';
+import { Prisma } from '.prisma/client';
+ 
+import ProofScreen from '../screens/ProofScreen';
 type set = {
   exerciseId:number,
   id:number,
@@ -49,8 +53,9 @@ export type RootStackParamList={
     Assignments:{videoId:string};
     DayChallenge:{challengesId:number};
     TopicList:{daysId:number}
-    TopicWorkout:{workoutId:number|null}
-    ChallengeLists:{daysId:number}
+    TopicWorkout:{workoutId:number|null };
+    ProofScreen:{topicId:number,proofType:string,daysId:number,topicName:string,challengesId:number,input:number|null,topicType:string};
+    ChallengeLists:{daysId:number,statusId:number,topicList:Prisma.JsonValue,challengesId:number}
     Inside:{routineId:number,pPId:number,nameOfDay:string,planLength:number,workoutCelebId:number,currentWeek:number,currentStatus:number,currentWeekLength:number};
 } 
 const RootStack = createNativeStackNavigator();
@@ -75,6 +80,9 @@ const RootNavigator = () => {
        </RootStack.Group>
        <RootStack.Group>
         <RootStack.Screen name='TopicList' component={TopicList}/>
+       </RootStack.Group>
+       <RootStack.Group>
+        <RootStack.Screen name='ProofScreen' component={ProofScreen}/>
        </RootStack.Group>
        <RootStack.Group>
         <RootStack.Screen name='TopicWorkout' component={TopicWorkout}/>

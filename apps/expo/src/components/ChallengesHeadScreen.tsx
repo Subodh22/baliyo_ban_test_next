@@ -22,7 +22,8 @@ const ChallengesHeadScreen = ({name,challengeid}:props) => {
        
         const answer=mutate({
             id:challengeid,
-            name:name
+            name:name,
+           
             
         },{onSuccess:()=>
         {

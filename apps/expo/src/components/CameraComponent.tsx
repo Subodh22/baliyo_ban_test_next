@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { useEffect,useRef,useState } from 'react';
 import {Camera,CameraCapturedPicture,CameraType } from 'expo-camera';
@@ -10,15 +10,15 @@ import { trpc } from '../utils/trpc';
 
 
 
-const CameraComponent = () => {
- let cameraRef = useRef<Camera | null>(null);
+const CameraComponent = (props:any) => {
+ const cameraRef = useRef<Camera | null>(null);
  const [hasCameraPermission,setHasCameraPermission] = useState<boolean | undefined>(undefined);
  const [hasMediaLibraryPermission,setHasMediaLibraryPermission] = useState<boolean | undefined>(undefined);
  const [photo,setPhoto]=useState<CameraCapturedPicture|undefined>();
  const getPresignedUrlMutation = trpc.post.getPresignedForUploadImage.useMutation();
 // const uploadPicToAws = trpc.post.uploadPic.useMutation();
  const [cameraType, setCameraType] = useState(CameraType.back);
-
+  const [uploading,setUploading] = useState(false)
  const toggleCameraType = () => {
    setCameraType((prevType: any) => 
      prevType === CameraType.back ? CameraType.front : CameraType.back
@@ -40,13 +40,13 @@ const CameraComponent = () => {
  },[])
  const takePic = async () => {
   console.log("working");
-  let options = {
+  const options = {
     quality: 1,
     base64: true,
     exif: true,
   };
 
-  let newPhoto = await cameraRef!.current!.takePictureAsync(options);
+  const newPhoto = await cameraRef!.current!.takePictureAsync(options);
   setPhoto(newPhoto);
 };
 
@@ -81,6 +81,7 @@ const savePic = () => {
 //     }
 //   };
   const UploadPic = async () => {
+    setUploading(true)
     if (!photo) {
       console.error("No photo to upload");
       return;
@@ -91,7 +92,7 @@ const savePic = () => {
     const blob = await response.blob();
   
     // 2. Get the pre-signed URL from your tRPC procedure
-    const result = await getPresignedUrlMutation.mutateAsync({ filename: `${Date.now()}.jpg` });
+    const result = await getPresignedUrlMutation.mutateAsync({ filename: `${Date.now()}.jpg` ,topicId:props.topicId.toString()});
     const presignedUrl:any = result.presignedUrl;
   
     // 3. Use the pre-signed URL to upload the image data to S3
@@ -111,6 +112,13 @@ const savePic = () => {
       console.log('Successfully uploaded to S3');
     } catch (error) {
       console.error('Upload error:', error);
+    } finally{
+      setUploading(false)
+      props.setCameraShow(false)
+      props.setImageUrls((prev:any )=> [
+        ...prev,
+        `data:image/jpg;base64,${photo.base64}`
+      ])
     }
   };
 
@@ -122,24 +130,49 @@ if (hasCameraPermission === undefined) {
 
 if (photo) {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      
-      {hasMediaLibraryPermission ? <Button title="SavePic" onPress={savePic} /> : null}
-      <Button title="Upload" onPress={UploadPic} />
-      <Button title="Discard" onPress={() => setPhoto(undefined)} />
- 
-      <Image className='w-full h-full' source={{ uri: `data:image/jpg;base64,${photo.base64}` }} />
-         </SafeAreaView>
+    <SafeAreaView  className='w-full h-full'>
+    <View style={{ flex: 1,  }}>
+       
+        <Image 
+            className='h-full w-full'
+            source={{ uri: `data:image/jpg;base64,${photo.base64}` }} 
+        />
+          <View  
+           style={{ 
+            position: 'absolute', 
+            bottom: 20, 
+            left: 0, 
+            right: 0, 
+            flexDirection: 'row', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            padding: 10, }}>
+            {hasMediaLibraryPermission ? <Button title="SavePic" onPress={savePic} /> : null}
+            {/* <Button title="Upload" onPress={UploadPic} /> */}
+            
+              {uploading ? 
+           <View className='bg-blue-200 w-[100px] h-[40px]'>
+            <ActivityIndicator/> 
+            </View>  :
+            <Button title="Upload" onPress={UploadPic} />
+            }
+            
+            <Button title="Discard" onPress={() => setPhoto(undefined)} />
+        </View>
+    </View>
+</SafeAreaView>
   );
 }
 
 return (
-  <Camera type={cameraType} useCamera2Api={true}   ref={cameraRef}  style={{ flex: 1, width: '100%' }}>
-    <View>
+  <SafeAreaView className='h-full w-full'> 
+  <Camera type={cameraType} useCamera2Api={true}   ref={cameraRef}  style={{ flex: 1, width: '100%',  }}>
+    <View  style={{ flex: 1, justifyContent: 'flex-end', marginBottom: 10 }} >
       <Button title="take Pic" onPress={takePic} />
       <Button title="Toggle Camera" onPress={toggleCameraType} />
     </View>
   </Camera>
+  </SafeAreaView>
 );
 };
 

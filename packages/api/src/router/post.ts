@@ -18,7 +18,21 @@ if (!BUCKET_NAME) {
 }
 
 export const postRouter = router({
-  
+  getProofs:publicProcedure.input(z.object({
+    topicId:z.number()
+  })).query(async({ctx,input})=>
+  {
+    const workerId= ctx.auth.userId;
+    const getPP = await ctx.prisma.proof.findFirst({
+      where:{
+        userId:workerId!,
+        topicId:input.topicId
+      }
+    })
+
+    return getPP
+
+  }),
   getChallenges:publicProcedure.query(async({ctx})=>
   {
     const getd = await ctx.prisma.challenges.findMany();
@@ -74,6 +88,23 @@ getDayData:publicProcedure.input(z.object({
   return {getdays,getChallengeToDayStatue}
 })
 ,
+updateTopicsDoneList:publicProcedure.input(z.object({
+  challengeToDayStatusId:z.number(),
+ 
+  newTopicsList: z.array(z.string())
+})).mutation(async({ctx,input})=>
+{
+    const updateRecord = await ctx.prisma.challengeToDayStatus.update(
+      {
+      where:{
+        id:input.challengeToDayStatusId,
+        },
+      data:{
+        TopicsDoneList:input.newTopicsList
+      }
+    })
+})
+,
 
   addChallengesToUser:publicProcedure.input(z.object({
     id:z.number(),
@@ -97,7 +128,8 @@ getDayData:publicProcedure.input(z.object({
           userId:workerId!,
           CurrentDayOrder:0,
           Status:"NotStarted",
-          ChallengeStartDate:new Date()
+          ChallengeStartDate:new Date(),
+          TopicsDoneList:[]
         }
       })
     
@@ -108,12 +140,14 @@ getDayData:publicProcedure.input(z.object({
 
 
   getPresignedForUploadImage: publicProcedure.input(z.object({
-    filename: z.string()  // or generate a filename server-side if you prefer
+    filename: z.string(),
+    topicId:z.string()
+      // or generate a filename server-side if you prefer
   })).mutation(async ({ input,ctx }) => {
     const userId = ctx.auth.userId;
     const params = {
       Bucket: BUCKET_NAME,
-      Key: `uploads/${userId}/${input.filename}`,
+      Key: `uploads/${userId}/${input.topicId}/${input.filename}`,
       Expires: 60 * 2,   
       ContentType: 'image/jpeg'
     };
@@ -125,25 +159,36 @@ getDayData:publicProcedure.input(z.object({
       throw new Error('Failed to generate pre-signed URL');
     }
   }),
-  getPresignedForDownloadImage: publicProcedure.input(z.object({
-    filename: z.string()  // or generate a filename server-side if you prefer
-  })).mutation(async ({ input,ctx }) => {
+  getImagesFromFolder: publicProcedure.input(z.object({
+    folder: z.string() // Optionally specify a subfolder
+  })).mutation(async ({ input, ctx }) => {
     const userId = ctx.auth.userId;
+    const folder =  `uploads/${userId}/${input.folder}/` 
+  
     const params = {
       Bucket: BUCKET_NAME,
-      Key: `uploads/${userId}/${input.filename}`,
-      Expires: 60 * 2,   
-      ContentType: 'image/jpeg'
+      Prefix: folder
     };
-
-    try {
-      const presignedUrl = await s3.getSignedUrlPromise('putObject', params);
-      return { presignedUrl };
-    } catch (error) {
-      throw new Error('Failed to generate pre-signed URL');
+  
+    const data = await s3.listObjectsV2(params).promise();
+  
+    if (!data.Contents) {
+      return [];
     }
+  
+    const presignedUrls = await Promise.all(
+      data.Contents.map(async (item) => {
+        const urlParams = {
+          Bucket: BUCKET_NAME,
+          Key: item.Key,
+          Expires: 60 * 2
+        };
+        return await s3.getSignedUrlPromise('getObject', urlParams);
+      })
+    );
+  
+    return presignedUrls;
   }),
-
 
   
   sendNotice:publicProcedure.query(async()=>

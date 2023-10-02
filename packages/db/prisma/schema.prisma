@@ -44,9 +44,10 @@ model ChallengeToDayStatus{
   challengeId Int
   userId    String
   CurrentDayOrder Int
-  DayStartDate  DateTime @default(now())
-  ChallengeStartDate  DateTime
+  DayStartDate  DateTime ?
+  ChallengeStartDate  DateTime @default(now())
   Status  String
+  TopicsDoneList Json
 }
 
 
@@ -59,16 +60,22 @@ model  Topic{
   proofs    Proof[]
   WorkoutId   Int?
   day       Day @relation(fields: [daysId],references: [id])   
-
+  input     Int?
 }
 model Proof{
   id    Int @id@default(autoincrement())
   topicId Int
   daysId  Int
   challengesId  Int
-  userId    Int
+  userId    String
   topic   Topic @relation(fields: [topicId],references: [id])
+  picId   Json?
+  summary String?
+  FinsihedInput Int?
+
+
 }
+
 
 model Routine {
   id             Int          @id @default(autoincrement())

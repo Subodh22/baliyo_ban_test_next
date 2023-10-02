@@ -5,38 +5,73 @@ import { trpc } from '../utils/trpc';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../Navigator/RootNavigator';
 import { ChallengeNavigationProp } from '../Navigator/Challenges';
+import { Prisma } from '.prisma/client';
+import { Button } from 'react-native-elements';
  
 type CustomScreenRouteProp = RouteProp<RootStackParamList, "ChallengeLists">;
 const ChallengeLists = () => {
-    const {params:{daysId}}=useRoute<CustomScreenRouteProp>();
+    const {params:{daysId,topicList,statusId,challengesId }}=useRoute<CustomScreenRouteProp>();
     const navigation = useNavigation<ChallengeNavigationProp>();
     const getTopicData = trpc.post.getTopicData.useQuery({daysId:daysId})
- 
+    const changeChallengeSetting =  trpc.post.updateTopicsDoneList.useMutation()
+    let topo:Prisma.JsonArray
+    if (topicList && Array.isArray(topicList) ) {
+     
+    topo=topicList
+  
+    }
+    const addDoneList=()=>
+    {
+      topo.push("1223")
+      const stringTopicsList = topo.filter(item => typeof item === 'string') as string[];
+  
+      changeChallengeSetting.mutate({
+       challengeToDayStatusId:statusId,
+      newTopicsList:stringTopicsList
+      })  
+    }
   
     return ( 
     <View>
        
       <ScrollView> 
       {
-    getTopicData["data"]?.map(({id,name,TopicType,proofType,WorkoutId})=>(
-     
-        <TouchableOpacity key={id} onPress={()=>{
-          
-     {TopicType =="Workout" &&WorkoutId?navigation.navigate('Specific', { name: name,WorkoutCelebId:WorkoutId,planLength:0 ,planId:null,id:0,currentStatus:0,currentWeek:0 ,orderP:0 }) 
-        :""
+    getTopicData["data"]?.map(({id,name,TopicType,proofType,WorkoutId,input})=>{
+      const isIdInTopicsList = topo?.includes(id.toString());
+       
+        return(<TouchableOpacity key={id} onPress={()=>{
+          if(!isIdInTopicsList)
+     { 
+     if(TopicType =="Workout" &&WorkoutId)
+    { navigation.navigate('Specific', { name: name,WorkoutCelebId:WorkoutId,planLength:0 ,planId:null,id:0,currentStatus:0,currentWeek:0 ,orderP:0 }) }
+      else   {
+        navigation.navigate('ProofScreen',{proofType:proofType,topicId:id,daysId:daysId,challengesId:challengesId,topicName:name,input:input,topicType:TopicType})
+      }
+        
+      }
+        else{
+          alert("Already Done")
         }
-      }}
+      }
+    
+    }
         > 
         <View className="h-24 m-3 bg-white  shadow flex-row justify-between items-center p-4">
         <Text className="text-black text-[20px]  font-light tracking-tight">
         {name}
     </Text>
+   { isIdInTopicsList && <Text className="text-black text-[20px]  font-light tracking-tight">
+        Done
+    </Text>}
             
         </View>
-    </TouchableOpacity>
-         ))
+    </TouchableOpacity>)
+    }
+         )
   }
       </ScrollView>
+
+      
     </View>
   )
 }
