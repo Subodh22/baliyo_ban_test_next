@@ -67,10 +67,41 @@ export const postRouter = router({
 
     }),
    
+    finishTopicWorkout:publicProcedure.input(z.object({
+      ChallengeToDayStatusId:z.number(),
+      topicListStatus:z.string(),
+      newTopicsList: z.array(z.string()),
+      currentChallengeStatus:z.string()
+    }))
+      .mutation(async({ctx,input})=>{
+       
+     
 
+        const currentRecord = await ctx.prisma.challengeToDayStatus.findUnique({
+          where: {
+              id: input.ChallengeToDayStatusId
+          }
+      });
+      
+       
+        const CurrentDayOrder = currentRecord!.CurrentDayOrder;
+      
+          const changeDayStatus = await ctx.prisma.challengeToDayStatus.update({
+            where:{
+           id:input.ChallengeToDayStatusId
+            },
+            data:{
+             Status:input.currentChallengeStatus=="finished"?"finished":"Started",
+              TopicsDoneList:input.topicListStatus=="same"?[] :input.newTopicsList,
+              CurrentDayOrder:input.topicListStatus=="same"?CurrentDayOrder+1:CurrentDayOrder
+            }
+          })
+      }),
  
   finishedTopic:publicProcedure.input(z.object({
-    topicId:z.number(),
+    topicListStatus:z.string(),
+    topicId:z.number(), 
+    currentChallengeStatus:z.string(),
     daysId:z.number(),
     challengesId:z.number(),
     summary:z.string().nullable(),
@@ -115,13 +146,23 @@ export const postRouter = router({
           }
       });
   }
+  const currentRecord = await ctx.prisma.challengeToDayStatus.findUnique({
+    where: {
+        id: input.challengeToDayStatusId
+    }
+});
+
+ 
+  const CurrentDayOrder = currentRecord!.CurrentDayOrder;
 
     const changeDayStatus = await ctx.prisma.challengeToDayStatus.update({
       where:{
      id:input.challengeToDayStatusId
       },
       data:{
-        TopicsDoneList:input.newTopicsList
+        Status:input.currentChallengeStatus=="finished"?"finished":"Started",
+        TopicsDoneList:input.topicListStatus=="same"?[] :input.newTopicsList,
+        CurrentDayOrder:input.topicListStatus=="same"?CurrentDayOrder+1:CurrentDayOrder
       }
     })
   }),
@@ -271,7 +312,7 @@ updateTopicsDoneList:publicProcedure.input(z.object({
     folder: z.string() // Optionally specify a subfolder
   })).mutation(async ({ input, ctx }) => {
     const userId = ctx.auth.userId;
-    const folder =  `uploads/${userId}/${input.folder}/` 
+    const folder =  `uploads/${userId}/challenges/${input.folder}/` 
   
     const params = {
       Bucket: BUCKET_NAME,

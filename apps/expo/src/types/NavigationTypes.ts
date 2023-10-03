@@ -31,7 +31,7 @@ type set = {
 export type RootStackParamList={
     Main:undefined;
     MyModal:{workoutId:number; name:string,ratings:string,planType:string};
-    Specific:{WorkoutCelebId:number,orderP:number,id:number,name:string|undefined,planLength:number,planId:number|null,currentStatus:number,currentWeek:number};
+    Specific:{topicId:number|null,WorkoutCelebId:number,orderP:number,id:number,name:string|undefined,planLength:number,planId:number|null,currentStatus:number,currentWeek:number};
     Custom:{exercises:exercises[]};
     PlanScreenT:{WorkoutCelebId:number,name:string|undefined};
     Assignments:{videoId:string};
@@ -40,5 +40,5 @@ export type RootStackParamList={
     TopicWorkout:{workoutId:number|null };
     ProofScreen:{statusId:number,topicId:number,proofType:string,daysId:number,topicName:string,challengesId:number,input:number|null,topicType:string};
     ChallengeLists:{daysId:number,statusId:number,challengesId:number}
-    Inside:{routineId:number,pPId:number,nameOfDay:string,planLength:number,workoutCelebId:number,currentWeek:number,currentStatus:number,currentWeekLength:number};
+    Inside:{topicId:number|null,routineId:number,pPId:number,nameOfDay:string,planLength:number,workoutCelebId:number,currentWeek:number,currentStatus:number,currentWeekLength:number};
 } 

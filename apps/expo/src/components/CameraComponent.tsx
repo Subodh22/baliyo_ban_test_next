@@ -81,6 +81,7 @@ const savePic = () => {
 //     }
 //   };
   const UploadPic = async () => {
+    
     setUploading(true)
     if (!photo) {
       console.error("No photo to upload");

@@ -7,9 +7,9 @@ import { CompositeNavigationProp, RouteProp, useNavigation, useRoute } from '@re
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { TabParamList } from '../Navigator/TabNavigator'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../Navigator/RootNavigator'
-import { Icon } from 'react-native-elements'
+ import { Icon } from 'react-native-elements'
 import { trpc } from '../utils/trpc'
+import { RootStackParamList } from '../types/NavigationTypes'
 
 type set = {
   exerciseId:number,

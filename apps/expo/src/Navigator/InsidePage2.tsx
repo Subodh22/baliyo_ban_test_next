@@ -1,7 +1,7 @@
 import { View, Text, Touchable, TouchableOpacity, FlatList, Modal, Platform } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { RouteProp, useNavigation, useRoute  } from '@react-navigation/native'
-import { RootStackParamList } from './RootNavigator';
+ 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import SpecificDayComp from '../components/SpecificDayComp';
 import { trpc } from '../utils/trpc';
@@ -29,6 +29,8 @@ import  {Audio  } from 'expo-av';
 import { Sound } from 'expo-av/build/Audio/Sound';
 import { Image } from 'react-native-elements';
 import TimePickers from '../components/TimePickers';
+import DoneForInsidePage from '../components/DoneForInsidePage';
+import { RootStackParamList } from '../types/NavigationTypes';
 type Set = {
   exerciseId: number;
   id: number;
@@ -104,7 +106,7 @@ const InsidePage2 = () => {
   const startSessFunc = trpc.post.createSession.useMutation();
   const [ChangedValue,setChangeValue] = useState(false);
   const [lastPlayedTime, setLastPlayedTime] = useState(0);
-  const {params:{routineId,nameOfDay,workoutCelebId,planLength,currentWeek,currentStatus,currentWeekLength,pPId}} = useRoute<CustomScreenRouteProp>();
+  const {params:{topicId, routineId,nameOfDay,workoutCelebId,planLength,currentWeek,currentStatus,currentWeekLength,pPId}} = useRoute<CustomScreenRouteProp>();
   // const {data:response,isLoading:isPosting} = trpc.post.getWorkoutExercise.useQuery({routineId: routineId } 
   // ) 
   const addPersonalExercise = trpc.post.addPersonalExercise.useMutation();
@@ -788,7 +790,7 @@ setName = {currentExerciseTag?.sets.length}  newRepsSet={setNewReps} newWeight={
 size={exercises.length}/>
 </Modal>
 <Modal visible = {finishedWorkout} animationType='slide'>
-  <FinishedExerciseTab planLength={planLength} pPId={pPId} currentWeek={currentWeek} currentWeekLength={currentWeekLength} currentStatus={currentStatus} setClosed={setFinished} sessionId={sessionNumber}/>
+  <FinishedExerciseTab topicId={topicId? `challenges/${topicId.toString()}`: `workout/${routineId} `} planLength={planLength} pPId={pPId} currentWeek={currentWeek} currentWeekLength={currentWeekLength} currentStatus={currentStatus} setClosed={setFinished} sessionId={sessionNumber}/>
 </Modal>
 
   {/* <SafeAreaView style={{ backgroundColor: 'transparent' }}> */}
@@ -853,7 +855,7 @@ size={exercises.length}/>
       
       windowSize={5}
     />
- 
+  
  </View>
 )
 }

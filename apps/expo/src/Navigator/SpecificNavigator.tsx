@@ -3,12 +3,13 @@ import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import SpecificDayComp from '../components/SpecificDayComp';
-import { RootStackParamList } from './RootNavigator';
+ 
 import { trpc } from '../utils/trpc';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Card } from '@rneui/base';
 import { Icon } from '@rneui/themed';
+import { RootStackParamList } from '../types/NavigationTypes';
 
 type Set = {
   exerciseId: number;
@@ -69,7 +70,7 @@ type SpecificScreenRouteProp = RouteProp<RootStackParamList, "Specific">;
 function SpecificNavigator() {
   const navigation = useNavigation<InsidenProp> ();
   
-  const { params: { WorkoutCelebId: workoutCelebId,orderP, name,planId,currentWeek,currentStatus,id,planLength } } = useRoute<SpecificScreenRouteProp>();
+  const { params: { WorkoutCelebId: workoutCelebId,orderP,topicId, name,planId,currentWeek,currentStatus,id,planLength } } = useRoute<SpecificScreenRouteProp>();
   console.log(workoutCelebId)
   const {data:response,isLoading:isPosting} = trpc.post.getWorkoutRoutines.useQuery({ workoutId: workoutCelebId,
     planId:planId },
@@ -98,14 +99,14 @@ function SpecificNavigator() {
           const currentWeekLength=response!.length
           if(id!==0)
         if(currentStatus>=routine.order)
-        {navigation.push('Inside',{routineId:routine.id,planLength,nameOfDay:routine.weekRoutine,workoutCelebId:workoutCelebId,currentStatus,currentWeek,currentWeekLength,pPId:id})
+        {navigation.push('Inside',{routineId:routine.id,planLength,topicId:topicId,nameOfDay:routine.weekRoutine,workoutCelebId:workoutCelebId,currentStatus,currentWeek,currentWeekLength,pPId:id})
         }else{
           console.log("wait")
         }
         
         else{
           console.log(id)
-          navigation.push('Inside',{routineId:routine.id,planLength,nameOfDay:routine.weekRoutine,workoutCelebId:workoutCelebId,currentStatus,currentWeek,currentWeekLength,pPId:id})
+          navigation.push('Inside',{routineId:routine.id,topicId:topicId,planLength,nameOfDay:routine.weekRoutine,workoutCelebId:workoutCelebId,currentStatus,currentWeek,currentWeekLength,pPId:id})
         }
           }
           

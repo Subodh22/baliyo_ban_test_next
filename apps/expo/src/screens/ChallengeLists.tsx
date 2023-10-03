@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
  
 import { trpc } from '../utils/trpc';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -20,7 +20,15 @@ const ChallengeLists = () => {
     // const [topo, setTopiclist] = useState<Prisma.JsonArray>(Array.isArray(topicList) ? topicList : []);
     const context = useContext(MyContext);
     const topo = context.topicDonzo
+    
+    useEffect(()=>{
+      context.setchallengeStatus(statusId)
+      
+      if (getTopicData["data"] && getTopicData["data"].length > 0) {
   
+      
+      context.setTopiclength(getTopicData["data"]?.length)
+    }},[getTopicData["data"]])
   
     return ( 
     <View>
@@ -34,7 +42,7 @@ const ChallengeLists = () => {
           if(!isIdInTopicsList)
      { 
      if(TopicType =="Workout" &&WorkoutId)
-    { navigation.navigate('Specific', { name: name,WorkoutCelebId:WorkoutId,planLength:0 ,planId:null,id:0,currentStatus:0,currentWeek:0 ,orderP:0 }) }
+    { navigation.navigate('Specific', { topicId:id,name: name,WorkoutCelebId:WorkoutId,planLength:0 ,planId:null,id:0,currentStatus:0,currentWeek:0 ,orderP:0 }) }
       else   {
         navigation.navigate('ProofScreen',{statusId:statusId,proofType:proofType,topicId:id,daysId:daysId,challengesId:challengesId,topicName:name,input:input,topicType:TopicType})
       }

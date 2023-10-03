@@ -12,13 +12,16 @@ type CustomScreenRouteProp = RouteProp<RootStackParamList, "DayChallenge">;
 const DayChallenge = () => {
     const {params:{challengesId}}=useRoute<CustomScreenRouteProp>();
     const navigation = useNavigation<ChallengeNavigationProp>();
-    const getDayData = trpc.post.getDayData.useQuery({challengesId:challengesId})
+    const getDayData:any = trpc.post.getDayData.useQuery({challengesId:challengesId})
     const context = useContext(MyContext)
     
     useEffect(()=>{
       if(getDayData.data?.getChallengeToDayStatue!.TopicsDoneList)
       {
+        context.setcurrentDay(getDayData.data?.getChallengeToDayStatue!.CurrentDayOrder)
         context.setTopicDonzo(getDayData.data?.getChallengeToDayStatue!.TopicsDoneList)
+        console.log(getDayData.data?.getdays.length)
+        context.setDaylength(getDayData.data?.getdays.length)
       }
       console.log(context.topicDonzo)
     },[getDayData.data])
@@ -39,10 +42,10 @@ const checkDay=(day:string)=>
   }
     return (
     <View>
-    <Text>sdsdf</Text>
+   
       <ScrollView> 
       {
-    getDayData.data?.getdays?.map(({id,challengesId,name,order})=>
+    getDayData.data?.getdays?.map(({id,challengesId,name,order}:any)=>
      {
 
      

@@ -26,10 +26,9 @@ const [currentImage,setCurrentImageUrl]=useState("")
 const [showImage,setShowImage] = useState(false)
 const [val,setVal]=useState<number>(0)
 const[summaryVal,setSummaryVal]= useState<string>("")
-// let topo:Prisma.JsonArray
-// if (topicDoneList && Array.isArray(topicDoneList) ) {topo=topicDoneList}
 const context = useContext(MyContext);
 const topo = context.topicDonzo;
+const TopicLength = context.Topiclength;
 
 const GetProofs = trpc.post.getProofs.useQuery({topicId:topicId});
 const downloadImages = trpc.post.getImagesFromFolder.useMutation();
@@ -116,7 +115,11 @@ const TopicProgress = trpc.post.updateProgress.useMutation();
   }
  
          const stringTopicsList = topo.filter((item:any) => typeof item === 'string') as string[];
-      AddProof.mutateAsync({
+      console.log( console.log(context.currentDay,context.Daylength,(context.currentDay+1) ==context.DayLength? "finished":"bobo"))
+       
+         AddProof.mutateAsync({
+          currentChallengeStatus:(context.currentDay+1) ==context.DayLength? "finished":"bobo" ,
+          topicListStatus: topo.length ==TopicLength? "same":"notsame",
        challengeToDayStatusId:statusId,
       newTopicsList:stringTopicsList,
       topicId:topicId,

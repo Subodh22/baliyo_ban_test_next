@@ -4,7 +4,7 @@ import { CompositeNavigationProp, useNavigation } from '@react-navigation/native
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { TabParamList } from '../Navigator/TabNavigator'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../Navigator/RootNavigator'
+ 
 import {Input,Button} from 'react-native-elements';
 import Workout_celeb from '../components/Workout_celeb'
 import { trpc } from '../utils/trpc'
@@ -13,6 +13,7 @@ import { usePushNotifications } from '../utils/usePushNotifications'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ChallengesHeadScreen from '../components/ChallengesHeadScreen'
 import CameraComponent from '../components/CameraComponent'
+import { RootStackParamList } from '../types/NavigationTypes'
  
 
  
@@ -30,7 +31,7 @@ const HeadScreen = () => {
  
   const {expoPushToken} = usePushNotifications()
 
-  console.log(expoPushToken)
+ 
  
  
   const [input,setInput]=useState<string>('');
@@ -48,7 +49,7 @@ const HeadScreen = () => {
   })
   return (
     <SafeAreaView>
-       <Text>Challenges</Text>
+   
     
         <ScrollView      >
  

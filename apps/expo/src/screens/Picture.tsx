@@ -27,7 +27,7 @@ const Picture = (props:any) => {
            props.setCameraShow((prev:boolean)=>!prev)
         }}> 
       <Text className='bg-yellow-300 h-[50px] w-[100px] '>Gp back</Text></TouchableOpacity>
-  <CameraComponent topicId={props.topicId} setCameraShow={props.setCameraShow} setImageUrls={props.setImageUrls}/>
+  <CameraComponent topicId={`challenges/${props.topicId}`} setCameraShow={props.setCameraShow} setImageUrls={props.setImageUrls}/>
   </SafeAreaView> 
 </Modal>
  

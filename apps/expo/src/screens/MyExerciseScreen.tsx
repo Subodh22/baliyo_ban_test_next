@@ -5,9 +5,10 @@ import { CompositeNavigationProp, useNavigation } from '@react-navigation/native
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { TabParamList } from '../Navigator/TabNavigator'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../Navigator/RootNavigator'
+ 
 import { trpc } from '../utils/trpc'
 import LoadingHead from './LoadingHead'
+import { RootStackParamList } from '../types/NavigationTypes'
 
 type set = {
   exerciseId:number,
@@ -94,7 +95,7 @@ const MyExerciseScreen = () => {
            
         <TouchableOpacity
           onPress={() => 
-             {item.planType==""? navigation.navigate('Specific', { name: item.WorkoutName,WorkoutCelebId:item.WorkoutCelebId,planLength:0 ,planId:null,id:0,currentStatus:0,currentWeek:0 ,orderP:0 }):
+             {item.planType==""? navigation.navigate('Specific', {topicId:null, name: item.WorkoutName,WorkoutCelebId:item.WorkoutCelebId,planLength:0 ,planId:null,id:0,currentStatus:0,currentWeek:0 ,orderP:0 }):
              navigation.navigate('PlanScreenT',  { name: item.WorkoutName,WorkoutCelebId:item.WorkoutCelebId})
             }}
           className="px-5 py-4"

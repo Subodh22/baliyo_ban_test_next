@@ -4,10 +4,11 @@ import { CompositeNavigationProp, RouteProp, useNavigation, useRoute } from '@re
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { TabParamList } from '../Navigator/TabNavigator';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../Navigator/RootNavigator';
+ 
 import { trpc } from '../utils/trpc';
 import { Card } from 'react-native-elements';
 import { Icon } from '@rneui/themed';
+import { RootStackParamList } from '../types/NavigationTypes';
 export type MyExerciseNavigationProp=CompositeNavigationProp<BottomTabNavigationProp<TabParamList,"MyExercise">,
 NativeStackNavigationProp<RootStackParamList>>;
 

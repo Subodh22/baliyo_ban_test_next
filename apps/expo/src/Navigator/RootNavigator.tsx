@@ -24,10 +24,13 @@ const RootStack = createNativeStackNavigator();
 export const MyContext = createContext<any>([]);
 
 const RootNavigator = () => {
-   
+  const [challengeStatus, setchallengeStatus] = useState<any>(0);
+  const [Topiclength, setTopiclength] = useState<number>(0);
+  const [Daylength, setDaylength] = useState<number>(0);
+  const [currentDay, setcurrentDay] = useState<number>(0);
   const [topicDonzo,setTopicDonzo] = useState<any[]>([]);
   return (
-    <MyContext.Provider value={{topicDonzo,setTopicDonzo}}>
+    <MyContext.Provider value={{currentDay, setcurrentDay,Daylength, setDaylength,topicDonzo,setTopicDonzo,challengeStatus, Topiclength, setTopiclength,setchallengeStatus}}>
     <RootStack.Navigator>
        <RootStack.Group>
         <RootStack.Screen name="Main" component={TabNavigator}/>
