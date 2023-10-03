@@ -1,21 +1,29 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import React from 'react'
-import { RootStackParamList } from '../Navigator/RootNavigator';
+import React, { useContext, useEffect } from 'react'
+import { MyContext  } from '../Navigator/RootNavigator';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { trpc } from '../utils/trpc';
 import { ChallengeNavigationProp } from '../Navigator/Challenges';
 import { Icon } from '@rneui/base';
 import { Prisma } from '.prisma/client';
+import { RootStackParamList } from '../types/NavigationTypes';
  
 type CustomScreenRouteProp = RouteProp<RootStackParamList, "DayChallenge">;
 const DayChallenge = () => {
     const {params:{challengesId}}=useRoute<CustomScreenRouteProp>();
     const navigation = useNavigation<ChallengeNavigationProp>();
     const getDayData = trpc.post.getDayData.useQuery({challengesId:challengesId})
+    const context = useContext(MyContext)
+    
+    useEffect(()=>{
+      if(getDayData.data?.getChallengeToDayStatue!.TopicsDoneList)
+      {
+        context.setTopicDonzo(getDayData.data?.getChallengeToDayStatue!.TopicsDoneList)
+      }
+      console.log(context.topicDonzo)
+    },[getDayData.data])
+  
    
-    console.log(getDayData.data?.getChallengeToDayStatue!.TopicsDoneList  )
-    
-    
 const checkDay=(day:string)=>
 {
   if(day=="done"){
@@ -43,7 +51,7 @@ const checkDay=(day:string)=>
          {getDayData.data?.getChallengeToDayStatue!.CurrentDayOrder>order? 
           checkDay("done")
           : getDayData.data?.getChallengeToDayStatue!.CurrentDayOrder==order? 
-          navigation.navigate('ChallengeLists',{daysId:id,challengesId:challengesId,statusId:getDayData.data?.getChallengeToDayStatue!.id,topicList:getDayData.data?.getChallengeToDayStatue!.TopicsDoneList  }):
+          navigation.navigate('ChallengeLists',{daysId:id,challengesId:challengesId,statusId:getDayData.data?.getChallengeToDayStatue!.id  }):
           checkDay("locked")
         
         }}}

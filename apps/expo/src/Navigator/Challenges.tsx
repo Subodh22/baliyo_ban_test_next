@@ -5,11 +5,12 @@ import { CompositeNavigationProp,RouteProp,  useNavigation } from '@react-naviga
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { TabParamList } from '../Navigator/TabNavigator'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../Navigator/RootNavigator'
+// import { RootStackParamList } from '../Navigator/RootNavigator'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CameraComponent from '../components/CameraComponent';
 import ChallengesHeadScreen from '../components/ChallengesHeadScreen';
 import { trpc } from '../utils/trpc';
+import { RootStackParamList } from '../types/NavigationTypes'
 export type ChallengeNavigationProp=CompositeNavigationProp<BottomTabNavigationProp<TabParamList,"Challenges">,
 NativeStackNavigationProp<RootStackParamList>>;
 

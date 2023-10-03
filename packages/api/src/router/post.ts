@@ -18,6 +18,114 @@ if (!BUCKET_NAME) {
 }
 
 export const postRouter = router({
+  updateProgress:publicProcedure.input(z.object({
+  
+    topicId:z.number(),
+    daysId:z.number(),
+    challengesId:z.number(),
+    summary:z.string().nullable(),
+    finishedInput:z.number().nullable(),
+  })).mutation(async({ctx,input})=>{
+    const workerId = ctx.auth.userId
+   
+    const existingProof = await ctx.prisma.proof.findFirst({
+      where: {
+          userId: workerId!,
+          topicId: input.topicId
+      }
+  });
+
+  let progress;
+
+  if (existingProof) {
+      // If it exists, update it
+      progress = await ctx.prisma.proof.update({
+          where: {
+              id: existingProof.id
+          },
+          data: {
+              daysId: input.daysId,
+              challengesId: input.challengesId,
+              summary: input.summary,
+              FinsihedInput: input.finishedInput,
+          }
+      });
+  } else {
+      // If it doesn't exist, create a new one
+      progress = await ctx.prisma.proof.create({
+          data: {
+              topicId: input.topicId,
+              userId: workerId!,
+              daysId: input.daysId,
+              challengesId: input.challengesId,
+              summary: input.summary,
+              FinsihedInput: input.finishedInput,
+          }
+      });
+  }
+
+
+    }),
+   
+
+ 
+  finishedTopic:publicProcedure.input(z.object({
+    topicId:z.number(),
+    daysId:z.number(),
+    challengesId:z.number(),
+    summary:z.string().nullable(),
+    finishedInput:z.number().nullable(),
+    challengeToDayStatusId:z.number(),
+    newTopicsList: z.array(z.string())
+  })).mutation(async({ctx,input})=>
+  {
+    const workerId = ctx.auth.userId
+    const existingProof = await ctx.prisma.proof.findFirst({
+      where: {
+          userId: workerId!,
+          topicId: input.topicId
+      }
+  });
+
+  let progress;
+
+  if (existingProof) {
+      // If it exists, update it
+      progress = await ctx.prisma.proof.update({
+          where: {
+              id: existingProof.id
+          },
+          data: {
+              daysId: input.daysId,
+              challengesId: input.challengesId,
+              summary: input.summary,
+              FinsihedInput: input.finishedInput,
+          }
+      });
+  } else {
+      // If it doesn't exist, create a new one
+      progress = await ctx.prisma.proof.create({
+          data: {
+              topicId: input.topicId,
+              userId: workerId!,
+              daysId: input.daysId,
+              challengesId: input.challengesId,
+              summary: input.summary,
+              FinsihedInput: input.finishedInput,
+          }
+      });
+  }
+
+    const changeDayStatus = await ctx.prisma.challengeToDayStatus.update({
+      where:{
+     id:input.challengeToDayStatusId
+      },
+      data:{
+        TopicsDoneList:input.newTopicsList
+      }
+    })
+  }),
+
   getProofs:publicProcedure.input(z.object({
     topicId:z.number()
   })).query(async({ctx,input})=>

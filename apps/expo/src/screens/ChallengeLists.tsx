@@ -1,35 +1,26 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useContext, useState } from 'react'
  
 import { trpc } from '../utils/trpc';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { RootStackParamList } from '../Navigator/RootNavigator';
+import { MyContext } from '../Navigator/RootNavigator';
 import { ChallengeNavigationProp } from '../Navigator/Challenges';
 import { Prisma } from '.prisma/client';
 import { Button } from 'react-native-elements';
+import { RootStackParamList } from '../types/NavigationTypes';
  
 type CustomScreenRouteProp = RouteProp<RootStackParamList, "ChallengeLists">;
 const ChallengeLists = () => {
-    const {params:{daysId,topicList,statusId,challengesId }}=useRoute<CustomScreenRouteProp>();
+    const {params:{daysId,statusId,challengesId }}=useRoute<CustomScreenRouteProp>();
     const navigation = useNavigation<ChallengeNavigationProp>();
     const getTopicData = trpc.post.getTopicData.useQuery({daysId:daysId})
     const changeChallengeSetting =  trpc.post.updateTopicsDoneList.useMutation()
-    let topo:Prisma.JsonArray
-    if (topicList && Array.isArray(topicList) ) {
      
-    topo=topicList
+    // let topo:Prisma.JsonArray
+    // const [topo, setTopiclist] = useState<Prisma.JsonArray>(Array.isArray(topicList) ? topicList : []);
+    const context = useContext(MyContext);
+    const topo = context.topicDonzo
   
-    }
-    const addDoneList=()=>
-    {
-      topo.push("1223")
-      const stringTopicsList = topo.filter(item => typeof item === 'string') as string[];
-  
-      changeChallengeSetting.mutate({
-       challengeToDayStatusId:statusId,
-      newTopicsList:stringTopicsList
-      })  
-    }
   
     return ( 
     <View>
@@ -45,7 +36,7 @@ const ChallengeLists = () => {
      if(TopicType =="Workout" &&WorkoutId)
     { navigation.navigate('Specific', { name: name,WorkoutCelebId:WorkoutId,planLength:0 ,planId:null,id:0,currentStatus:0,currentWeek:0 ,orderP:0 }) }
       else   {
-        navigation.navigate('ProofScreen',{proofType:proofType,topicId:id,daysId:daysId,challengesId:challengesId,topicName:name,input:input,topicType:TopicType})
+        navigation.navigate('ProofScreen',{statusId:statusId,proofType:proofType,topicId:id,daysId:daysId,challengesId:challengesId,topicName:name,input:input,topicType:TopicType})
       }
         
       }
