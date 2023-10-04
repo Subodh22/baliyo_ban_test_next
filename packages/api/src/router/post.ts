@@ -665,13 +665,25 @@ return getSession
     videoId:z.string(),
     workoutCelebId:z.number(),
     order:z.number(),
-    exerciseToSet:z.number()
-  
+    exerciseToSet:z.number(),
+    idTofill:z.string().nullable()
 
   })).mutation(async({ctx,input})=>
   {
     const workerId = ctx.auth.userId
-    const add =await ctx.prisma.personalExercise.create({
+
+    // const checkIfExercise  =await ctx.prisma.personalExercise.findFirst({
+    //   where:{
+    //     personId:workerId,
+    //     routineId:input.routineId,
+        
+    //     workoutCelebId:input.workoutCelebId
+    //   }
+    // })
+    // console.log(!checkIfExercise,checkIfExercise,"fofofoof")
+    // if(!checkIfExercise)
+    // { 
+      const add =await ctx.prisma.personalExercise.create({
       data:{
         name:input.exerciseName,
       machineSettings:input.machineSettings,
@@ -685,8 +697,17 @@ return getSession
     exerciseToSet:input.exerciseToSet
   }
     })
-
+    if(input.idTofill=="fill")
+   { await ctx.prisma.personalExercise.update({
+      where: { id: add.id },
+      data: { exerciseToSet: add.id }
+  })}
     return add.id
+  // }
+  //   else{
+  //     return checkIfExercise.id 
+  //   }
+    
   })
   
   ,

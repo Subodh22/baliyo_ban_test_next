@@ -95,7 +95,8 @@ const AddExerciseTab = (props:any) => {
       routineId:props.routineId,
       videoId:(actualex && actualex.name!=="")? actualex!.videoId : "#",
       workoutCelebId:props.workoutcelebId,
-      order:props.size
+      order:props.size,
+      idTofill:"fill"
      },{onSuccess:(data)=>
      {  
       sets.forEach((set,index)=>

@@ -44,6 +44,7 @@ type Set = {
 };
 
 type Exercise = {
+  exerciseToSet: number;
   id: number;
   name: string;
   type: string;
@@ -124,6 +125,7 @@ const checkingSession = trpc.post.searchSession.useQuery({
   RoutineId:routineId,
  
 })
+const [PersonalExerciseId,setPersonalExerciseId] = useState<number|null>()
 const [addExo,setAddExo] = useState(false) 
 const [addsetTab,setAddsetTab] =useState(false);
 const [newReps,setNewReps]=useState("");
@@ -192,6 +194,7 @@ const updateExe=()=>
        {
         console.log(newReps+"mental")
          return {
+          
            ...set,
            volume:newReps,
            weight:newWeight,
@@ -202,7 +205,9 @@ const updateExe=()=>
        }
        return set;
      });
-     return {...exercise,sets:updatedSets};
+     return {...exercise,
+      
+      sets:updatedSets};
     }
    return exercise;
    });
@@ -410,6 +415,7 @@ const passTheValue=(isOpene:boolean,duration:number,IdVideo:string,settingMachin
   setMsettings(settingMachine);
 
 
+
 }
 const currentExerciseTag = exercises[currentExerciseIndex]
 const addPerExercise = ()=>{
@@ -422,7 +428,8 @@ const addPerExercise = ()=>{
     routineId:currentExerciseTag!.routineId,
     videoId:currentExerciseTag!.videoId,
     workoutCelebId:workoutCelebId,
-    order:currentExerciseIndex
+    order:currentExerciseIndex,
+    idTofill:""
 
   })
 }
@@ -440,10 +447,14 @@ const handleNextSet = ()=> {
       if (currentExerciseIndex < exercises.length - 1) {
 
         setCurrentExerciseIndex(prevExerciseIndex => prevExerciseIndex + 1);
-        addPerExercise()
+        if( checkingSession.data?.data=="new user")
+       { addPerExercise()}
+       
         setcurrentSetIndex(0);
       } else {
-        addPerExercise()
+        if( checkingSession.data?.data=="new user")
+        { addPerExercise()}
+      
         setFinished(true)
         closeSessTab()
       }
@@ -466,7 +477,8 @@ const addNewSetsFunction=(name:string)=>{
     const newSet:Set = {
       id : setId,
       name:name,
-      exerciseId:currentExerciseTag!.id,
+      exerciseId:currentExerciseTag!.exerciseToSet ?currentExerciseTag!.exerciseToSet:
+      currentExerciseTag!.id,
       order:orders,
       restTime: currentExerciseTag!.sets[currentSetIndex]!.restTime,
       type:currentExerciseTag!.sets[currentSetIndex]!.type,
@@ -524,7 +536,9 @@ const addNewSetsFunction=(name:string)=>{
     RestTime:(currentExerciseTag!.sets[currentSetIndex]!.restTime).toString(),
     RestType:"s",
     order:orders,
-    exerciseId:currentExerciseTag!.id,
+    exerciseId:currentExerciseTag!.exerciseToSet ?currentExerciseTag!.exerciseToSet:
+      currentExerciseTag!.id
+    ,
     workoutCelebId:workoutCelebId,
     routineId:routineId
   }) 
@@ -638,12 +652,14 @@ const removeSet = (id: number,exerciseId:number) => {
 useEffect(() => {
   if (!checkingSession.isLoading && checkingSession.data) {
     const updatedExercises = checkingSession.data.exercises.map((exercise: any) => ({
+      
       ...exercise,
       sets: exercise.sets.map((set: any) => ({
         ...set,
         done: false
       }))
     }));
+    
     setExercise(updatedExercises);
   }
 }, [checkingSession.isLoading, checkingSession.data]);
@@ -809,14 +825,14 @@ size={exercises.length}/>
       keyExtractor={(item) => `${item.routineId}-${item.id}`}
       renderItem={({ item }) => (
         <View key={item.id} className='px-[10px] py-[15px] bg-gray-200  flex-col justify-start  gap-2.5 inline-flex"'>
-          <Text className="text-black text-[15px] font-light tracking-tight">{item.name}</Text>   
+          <Text className="text-black text-[15px] font-light tracking-tight">{item.name}{item.exerciseToSet?item.exerciseToSet:item.id}</Text>   
             
           <FlatList
           data={item.sets}
           keyExtractor={(set) => `${item.routineId}-${item.id}-${set.volume}-${set.name}-${set.weight}-s`}
           renderItem={({ item: set,index }) => (
             <SpecificDayComp
-              exerciseId={item.id}
+              exerciseId={item.exerciseToSet?item.exerciseToSet:item.id}
               startSess={startSess}
               videoId={item.videoId}
               machineSettings={item.machineSettings}

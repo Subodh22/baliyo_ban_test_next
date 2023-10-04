@@ -187,6 +187,7 @@ model PersonalExercise {
   workoutCelebId  Int
   personId        String
   exerciseToSet   Int
+  
 }
 
 model Plan {
