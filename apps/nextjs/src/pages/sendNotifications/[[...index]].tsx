@@ -27,7 +27,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
     return <div>Error: {error.message}</div>;
   }
   console.log(data);
-  return res.status(200).end();
+  return <div>{data}</div>;
    
 }
 
