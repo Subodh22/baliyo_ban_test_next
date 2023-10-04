@@ -358,17 +358,17 @@ updateTopicsDoneList:publicProcedure.input(z.object({
 
         // };
         // await expo.sendPushNotificationsAsync([message]);
-        const messages = {
-          // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
-          // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
-          to:"ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] ",
-          title:"Login Reminder",
-          body:"u chubby gr",
-          data:{someData:"u fat fuck"}
+    //     const messages = {
+    //       // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
+    //       // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
+    //       to:"ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] ",
+    //       title:"Login Reminder",
+    //       body:"u chubby gr",
+    //       data:{someData:"u fat fuck"}
 
-        };
-        await expo.sendPushNotificationsAsync([messages]);
-    // }
+    //     };
+    //     await expo.sendPushNotificationsAsync([messages]);
+    // // }
     return "done"
 
   }),

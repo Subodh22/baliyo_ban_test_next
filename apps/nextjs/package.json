@@ -21,13 +21,13 @@
     "@trpc/next": "^10.1.0",
     "@trpc/react-query": "^10.1.0",
     "@trpc/server": "^10.1.0",
-  
     "next": "^13.1.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "zod": "^3.18.0"
   },
   "devDependencies": {
+
     "@types/node": "^18.0.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
