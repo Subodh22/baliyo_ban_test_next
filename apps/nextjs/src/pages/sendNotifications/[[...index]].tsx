@@ -2,15 +2,35 @@ import { useState, useEffect } from 'react';
 import { trpc } from '../../utils/trpc';
  
 import type { NextApiRequest, NextApiResponse } from "next";
- 
+import Cors from 'cors';
+
+const cors = Cors({
+  methods: ['GET', 'POST'],
+  // Add your allowed origins here
+  origin: '*',
+});
+const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: any) => {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result:any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+};
+
+
  
   // Adjust the import path
 
  
 
-  function SendNotifications(req: NextApiRequest, res: NextApiResponse) {
-  const [hasQueried, setHasQueried] = useState(false);
-
+  const SendNotifications=async(req: NextApiRequest, res: NextApiResponse)=> {
+    await runMiddleware(req, res, cors);
+    const [hasQueried, setHasQueried] = useState(false);
+  
+ 
   // Trigger the sendNotice query
   const { data, error, isLoading } = trpc.post.sendNotice.useQuery({ token: "dd" }, {
     enabled: !hasQueried  // Only run the query if hasQueried is false

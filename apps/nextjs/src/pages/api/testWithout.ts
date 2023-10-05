@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { verifySignature } from "@upstash/qstash/dist/nextjs";
 import { postRouter } from "@acme/api/src/router/post";
 import Cors from 'cors';
+import { Expo } from 'expo-server-sdk';
 
 const cors = Cors({
   methods: ['GET', 'POST'],
@@ -21,31 +22,37 @@ const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: any) => {
   });
 };
 
+const sendNotice = async () => {
+  const expo = new Expo();
+  const messages = [
+      {
+          to: "ExponentPushToken[PIuIZGD8mydMXRQgwG471a]",
+          title: "Login Reminder",
+          body: "brother in christ",
+          data: { someData: "u fat f***" }
+      },
+      {
+          to: "ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y]",
+          title: "Login Reminder",
+          body: "u chubby gr",
+          data: { someData: "u fat f***" }
+      }
+  ];
+
+  try {
+      const receipts = await expo.sendPushNotificationsAsync(messages);
+      return "bush"; // Consider returning the receipts or a more meaningful response
+  } catch (error:any) {
+      throw new Error("Failed to send push notifications: " + error.message);
+  }
+};
 
 
 
 
 const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
   await runMiddleware(req, res, cors);
-  try {
-    // Log the request body
-
-    const result = await postRouter.sendNotice({
-      input: {token:"dsfd"},
-      rawInput:"df",
-      ctx: {},
-      path: 'alle',
-      type: 'query'
-  });
-
-    console.log("Result from postRouter.sendNotice:", result); // Log the result
-
-   
-  } catch (error:any) {
-    console.error("Error occurred:", error); // Log the error
-    res.status(500).json({ error: error});
-  }
-  res.status(200).end();
+   await sendNotice()
 }
 
 export default testWithout;

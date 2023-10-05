@@ -1,34 +1,39 @@
  
 import type { NextApiRequest, NextApiResponse } from "next";
- 
+import { Expo } from 'expo-server-sdk';
+
 import { verifySignature } from "@upstash/qstash/dist/nextjs";
 import { trpc } from "../../utils/trpc";
 import { postRouter } from "@acme/api/src/router/post";
  
-const sendNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
+const sendNotice = async () => {
+  const expo = new Expo();
+  const messages = [
+      {
+          to: "ExponentPushToken[PIuIZGD8mydMXRQgwG471a]",
+          title: "Login Reminder",
+          body: "brother in christ",
+          data: { someData: "u fat f***" }
+      },
+      {
+          to: "ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y]",
+          title: "Login Reminder",
+          body: "u chubby gr",
+          data: { someData: "u fat f***" }
+      }
+  ];
+
   try {
-    // const input = req.body;
-    // const validationResult = z.object({
-    //     token: z.string()
-    // }).safeParse(input);
+      const receipts = await expo.sendPushNotificationsAsync(messages);
+      return "bush"; // Consider returning the receipts or a more meaningful response
+  } catch (error:any) {
+      throw new Error("Failed to send push notifications: " + error.message);
+  }
+};
 
-    // if (!validationResult.success) {
-    //     return res.status(400).json({ error: 'Invalid input' });
-    // }
-   
-    const result = await postRouter.sendNotice({
-      input: {token:"dsdsd"},
-      ctx: {}, // You can pass any context you need here
-      rawInput:{token:"dsdsd"},
-      path: 'sendNotice',
-      type: 'query'
-  });
-  console.log(result)
-    return res.status(200).json(result);
+const sendNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
+ await sendNotice()
 
-} catch (error:any) {
-    return res.status(500).json({ error: error.message });
-}
 };
 
 export default verifySignature(sendNotifications);
