@@ -54,10 +54,8 @@ const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
   await runMiddleware(req, res, cors);
    
    try {
-    // You can add any logic you want here, if necessary
-
-    // Respond with a simple message
-    await sendNotice()
+    
+   await sendNotice()
     return res.status(200).json({ message: "ok, it's working" });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });

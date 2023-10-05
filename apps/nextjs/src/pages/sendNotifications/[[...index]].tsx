@@ -26,30 +26,33 @@ const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: any) => {
 
  
 
-  const SendNotifications=async(req: NextApiRequest, res: NextApiResponse)=> {
-    await runMiddleware(req, res, cors);
-    const [hasQueried, setHasQueried] = useState(false);
+  const SendNotifications= ()=> {
+  //  runMiddleware(req, res, cors);
+  //   const [hasQueried, setHasQueried] = useState(false);
   
  
-  // Trigger the sendNotice query
-  // const { data, error, isLoading } = trpc.post.sendNotice.useQuery({ token: "dd" }, {
+  // // Trigger the sendNotice query
+  const { data, error, isLoading } = trpc.post.sendNotice.useQuery({ token: "dd" })
   //   enabled: !hasQueried  // Only run the query if hasQueried is false
   // });
   // useEffect(() => {
   //   setHasQueried(true);  // Set to true when the component mounts
   // }, []);
 
-  // Handle the result (optional)
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  // // Handle the result (optional)
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   // if (error) {
   //   return <div>Error: {error.message}</div>;
   // }
   // console.log(data);
-  return <div>sins</div>;
-   
+  return (
+    <div className="flex flex-col items-center justify-center gap-4">
+      <p>{data}</p>
+    </div>
+  );
 }
 
 export default SendNotifications;
