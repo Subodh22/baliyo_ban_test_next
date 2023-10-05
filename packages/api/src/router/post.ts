@@ -340,35 +340,33 @@ updateTopicsDoneList:publicProcedure.input(z.object({
   }),
 
   
-  sendNotice:publicProcedure.query(async()=>
-  {
-    // if(input.token !==SECERT_TOKEN)
-    // {
-    //   throw new Error('Unauthorized');
-    // }
-    // else{
-        // const message = {
-        //   // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
-        //   // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
-        //   to:"ExponentPushToken[PIuIZGD8mydMXRQgwG471a]",
-        //   title:"Login Reminder",
-        //   body:"u chubby gr",
-        //   data:{someData:"u fat fuck"}
+  sendNotice:publicProcedure.input(z.object({
+    token: z.string()
+  })).query(async ({ input }) => {
+    
+    
+        const message = {
+          // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
+          // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
+          to:"ExponentPushToken[PIuIZGD8mydMXRQgwG471a]",
+          title:"Login Reminder",
+          body:"u chubby gr",
+          data:{someData:"u fat fuck"}
           
 
-        // };
-        // await expo.sendPushNotificationsAsync([message]);
-    //     const messages = {
-    //       // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
-    //       // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
-    //       to:"ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] ",
-    //       title:"Login Reminder",
-    //       body:"u chubby gr",
-    //       data:{someData:"u fat fuck"}
+        };
+        await expo.sendPushNotificationsAsync([message]);
+        const messages = {
+          // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
+          // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
+          to:"ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] ",
+          title:"Login Reminder",
+          body:"u chubby gr",
+          data:{someData:"u fat fuck"}
 
-    //     };
-    //     await expo.sendPushNotificationsAsync([messages]);
-    // // }
+        };
+        await expo.sendPushNotificationsAsync([messages]);
+ 
     return "done"
 
   }),

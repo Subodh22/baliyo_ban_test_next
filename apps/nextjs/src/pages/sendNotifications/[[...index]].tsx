@@ -12,7 +12,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
   const [hasQueried, setHasQueried] = useState(false);
 
   // Trigger the sendNotice query
-  const { data, error, isLoading } = trpc.post.sendNotice.useQuery();
+  const { data, error, isLoading } = trpc.post.sendNotice.useQuery({token:"df"});
 
   useEffect(() => {
     setHasQueried(true);  // Set to true when the component mounts
