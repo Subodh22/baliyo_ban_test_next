@@ -340,9 +340,7 @@ updateTopicsDoneList:publicProcedure.input(z.object({
   }),
 
   
-  sendNotice:publicProcedure.input(z.object({
-    token: z.string()
-  })).query(async ({ input }) => {
+  sendNotice:publicProcedure.query(async ({ input }) => {
     
     
         const message = {

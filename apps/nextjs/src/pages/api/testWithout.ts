@@ -5,27 +5,17 @@ import { verifySignature } from "@upstash/qstash/dist/nextjs";
 import { postRouter } from "@acme/api/src/router/post";
 const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const input = req.body;
-    const validationResult = z.object({
-        token: z.string()
-    }).safeParse(input);
-
-    if (!validationResult.success) {
-        return res.status(400).json({ error: 'Invalid input' });
-    }
-   
+    const input = req.body; // Get input from the request body
     const result = await postRouter.sendNotice({
-      input: {token:"dsdsd"},
-      ctx: {}, // You can pass any context you need here
-      rawInput:{token:"dsdsd"},
-      path: 'sendNotice',
-      type: 'query'
-  });
-  console.log(result)
-    return res.status(200).json(result);
-
+        input: input,
+        rawInput:"df",
+        ctx: {}, // You can pass any context you need here
+        path: 'sendNotice',
+        type: 'query'
+    });
+    res.json({ message: result });
 } catch (error:any) {
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
 }
 }
 
