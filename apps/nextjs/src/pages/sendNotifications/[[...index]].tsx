@@ -32,7 +32,7 @@ const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: any) => {
   
  
   // // Trigger the sendNotice query
-  const { data, error, isLoading } = trpc.post.sendNotice.useQuery({ token: "dd" })
+  // const { data, error, isLoading } = trpc.post.sendNotice.useQuery({ token: "dd" })
   //   enabled: !hasQueried  // Only run the query if hasQueried is false
   // });
   // useEffect(() => {
@@ -40,9 +40,9 @@ const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: any) => {
   // }, []);
 
   // // Handle the result (optional)
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   // if (error) {
   //   return <div>Error: {error.message}</div>;
@@ -50,7 +50,7 @@ const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: any) => {
   // console.log(data);
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      <p>{data}</p>
+      <p>errfgt</p>
     </div>
   );
 }

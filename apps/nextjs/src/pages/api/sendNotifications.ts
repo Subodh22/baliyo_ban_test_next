@@ -8,13 +8,11 @@ import { postRouter } from "@acme/api/src/router/post";
 const sendNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
    
-  //   const result = await postRouter.sendNotice({
-  //     input: {token:"dsdsd"},
-  //     ctx: {}, // You can pass any context you need here
-  //     rawInput:{token:"dsdsd"},
-  //     path: 'sendNotice',
-  //     type: 'query'
-  // });
+    const result = await postRouter.sendNotice(
+      { ctx: {}, 
+    rawInput:"d",
+    path: 'sendNotice',
+    type: 'query'});
 
   return res.status(200).json({ message: "ok, it's working" });
 
