@@ -825,7 +825,7 @@ size={exercises.length}/>
       keyExtractor={(item) => `${item.routineId}-${item.id}`}
       renderItem={({ item }) => (
         <View key={item.id} className='px-[10px] py-[15px] bg-gray-200  flex-col justify-start  gap-2.5 inline-flex"'>
-          <Text className="text-black text-[15px] font-light tracking-tight">{item.name}{item.exerciseToSet?item.exerciseToSet:item.id}</Text>   
+          <Text className="text-black text-[15px] font-light tracking-tight">{item.name}</Text>   
             
           <FlatList
           data={item.sets}

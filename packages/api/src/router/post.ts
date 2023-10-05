@@ -18,7 +18,31 @@ if (!BUCKET_NAME) {
 }
 
 export const postRouter = router({
+updateActiveChallengeStatus:publicProcedure.input(z.object({
+  challengesStatusId:z.number(),
+  challengeId:z.number()
+})).mutation(async({ctx,input})=>
+{
+  const workerId= ctx.auth.userId
+   await ctx.prisma.challengeToDayStatus.updateMany({
+    where:{
+      userId:workerId!
+    },
+    data:{
+      active:"notactive"
+    }
+  })
+  await ctx.prisma.challengeToDayStatus.update({
+    where:{
+      id:input.challengesStatusId,
+      challengeId:input.challengeId
+    },
+    data:{
+      active:"active"
+    }
+  })
 
+}),
  
   updateProgress:publicProcedure.input(z.object({
   
@@ -186,21 +210,52 @@ export const postRouter = router({
   }),
   getChallenges:publicProcedure.query(async({ctx})=>
   {
+    const workerId = ctx.auth.userId
     const getd = await ctx.prisma.challenges.findMany();
-    return getd
+    const getUserDetails = await ctx.prisma.userDetails.findFirst({
+      where:{
+        personId:workerId!
+      }
+    })
+    return {getd,getUserDetails}
   }),
 getUsersChallenge:publicProcedure.query(async({ctx})=>
 {
+  type Challenge = {
+    id: number;
+    challengesId: number;
+    challengeName: string;
+    active: string;
+    userId: string;
+  };
+  
   const workerId= ctx.auth.userId
-  if(workerId){
+ 
   const getCha = await ctx.prisma.userToChallenges.findMany({
     where:{
-      userId:workerId
+      userId:workerId!
     }
 
   })
-return getCha
-}
+  const challengeDayStatus = await ctx.prisma.challengeToDayStatus.findMany({
+    where:{
+      userId:workerId!
+    }
+  })
+
+  const mergedData: Challenge[] = getCha
+  .map(challenge => {
+    const matchingStatus = challengeDayStatus.find(status => status.challengeId === challenge.challengesId);
+    
+    return {
+      ...challenge,
+      active: matchingStatus ? matchingStatus.active : ''
+    };
+  })
+  .filter((challenge): challenge is Challenge => challenge !== undefined);
+
+return mergedData
+
 
 })
 ,
@@ -259,7 +314,9 @@ updateTopicsDoneList:publicProcedure.input(z.object({
 
   addChallengesToUser:publicProcedure.input(z.object({
     id:z.number(),
-    name:z.string()
+    name:z.string(),
+    expoPushToken:z.string(),
+    active:z.string()
   })).mutation(async({ctx,input})=>
   {
     const workerId = ctx.auth.userId
@@ -280,11 +337,13 @@ updateTopicsDoneList:publicProcedure.input(z.object({
           CurrentDayOrder:0,
           Status:"NotStarted",
           ChallengeStartDate:new Date(),
-          TopicsDoneList:[]
+          TopicsDoneList:[],
+          expoPushToken:input.expoPushToken,
+          active:input.active
         }
       })
     
-     
+     return addChallengetoDayStatus
 
   }),
 

@@ -25,7 +25,7 @@ const Tab = createBottomTabNavigator<TabParamList>();
 const TabNavigator = () => {
 const navigation = useNavigation();
 const {data:getUserData,isLoading:isPosting}  = trpc.post.getUserData.useQuery();
- 
+
 useLayoutEffect(()=>
 {
     navigation.setOptions({

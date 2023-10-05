@@ -29,8 +29,10 @@ const RootNavigator = () => {
   const [Daylength, setDaylength] = useState<number>(0);
   const [currentDay, setcurrentDay] = useState<number>(0);
   const [topicDonzo,setTopicDonzo] = useState<any[]>([]);
+  const [expoPushToken,setExpoPushToken] = useState<any>("");
+  const [activeStatusChallenge,setActiveStatusChallenge] = useState<any>("");
   return (
-    <MyContext.Provider value={{currentDay, setcurrentDay,Daylength, setDaylength,topicDonzo,setTopicDonzo,challengeStatus, Topiclength, setTopiclength,setchallengeStatus}}>
+    <MyContext.Provider value={{activeStatusChallenge,setActiveStatusChallenge,expoPushToken,setExpoPushToken,currentDay, setcurrentDay,Daylength, setDaylength,topicDonzo,setTopicDonzo,challengeStatus, Topiclength, setTopiclength,setchallengeStatus}}>
     <RootStack.Navigator>
        <RootStack.Group>
         <RootStack.Screen name="Main" component={TabNavigator}/>

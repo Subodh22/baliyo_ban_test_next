@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
  
 import { trpc } from '../utils/trpc';
@@ -15,7 +15,7 @@ const ChallengeLists = () => {
     const navigation = useNavigation<ChallengeNavigationProp>();
     const getTopicData = trpc.post.getTopicData.useQuery({daysId:daysId})
     const changeChallengeSetting =  trpc.post.updateTopicsDoneList.useMutation()
-     
+    const changeChallengeStatus  = trpc.post.updateActiveChallengeStatus.useMutation()
     // let topo:Prisma.JsonArray
     // const [topo, setTopiclist] = useState<Prisma.JsonArray>(Array.isArray(topicList) ? topicList : []);
     const context = useContext(MyContext);
@@ -30,6 +30,37 @@ const ChallengeLists = () => {
       context.setTopiclength(getTopicData["data"]?.length)
     }},[getTopicData["data"]])
   
+    const changeFunction = ()=>
+    {
+      changeChallengeStatus.mutate({
+        challengesStatusId:statusId,
+        challengeId:challengesId,
+      })
+        
+          console.log("nodnsodsn")
+          navigation.pop(2)
+          
+        
+    }
+    const confirmChangeActive= ()=>
+    {
+      { Alert.alert(
+        'Confirm',
+        'All the previous challenge progress will be lost',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+            onPress: () => navigation.pop(2)
+          },
+          {
+            text: 'Yes',
+            onPress: () => changeFunction()
+          }
+        ]
+      );}
+    }
+
     return ( 
     <View>
        
@@ -39,17 +70,35 @@ const ChallengeLists = () => {
       const isIdInTopicsList = topo?.includes(id.toString());
        
         return(<TouchableOpacity key={id} onPress={()=>{
-          if(!isIdInTopicsList)
+         if(context.activeStatusChallenge =="active"){ if(!isIdInTopicsList    )
      { 
      if(TopicType =="Workout" &&WorkoutId)
     { navigation.navigate('Specific', { topicId:id,name: name,WorkoutCelebId:WorkoutId,planLength:0 ,planId:null,id:0,currentStatus:0,currentWeek:0 ,orderP:0 }) }
       else   {
+        
         navigation.navigate('ProofScreen',{statusId:statusId,proofType:proofType,topicId:id,daysId:daysId,challengesId:challengesId,topicName:name,input:input,topicType:TopicType})
+      
       }
         
       }
         else{
           alert("Already Done")
+        }}
+        else{
+         { Alert.alert(
+            'Confirm',
+            'There can only be one active challenge',
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel'
+              },
+              {
+                text: 'Set this to active challenge',
+                onPress: () => confirmChangeActive()
+              }
+            ]
+          );}
         }
       }
     

@@ -48,6 +48,8 @@ model ChallengeToDayStatus{
   ChallengeStartDate  DateTime @default(now())
   Status  String
   TopicsDoneList Json
+  expoPushToken String
+  active  String
 }
 
 
