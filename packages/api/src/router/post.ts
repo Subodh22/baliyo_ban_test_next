@@ -352,7 +352,7 @@ updateTopicsDoneList:publicProcedure.input(z.object({
           // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
           to:"ExponentPushToken[PIuIZGD8mydMXRQgwG471a]",
           title:"Login Reminder",
-          body:"u chubby gr",
+          body:"brother in christ",
           data:{someData:"u fat fuck"}
           
 

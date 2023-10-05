@@ -28,7 +28,7 @@ const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: any) => {
 const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
   await runMiddleware(req, res, cors);
   try {
-    console.log("Received request with body:", req.body); // Log the request body
+    // Log the request body
 
     const result = await postRouter.sendNotice({
       input: {token:"dsfd"},
