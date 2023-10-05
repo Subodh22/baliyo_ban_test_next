@@ -19,7 +19,7 @@ if (!BUCKET_NAME) {
 
 export const postRouter = router({
 
-  all:publicProcedure.query(async()=>{
+  alle:publicProcedure.query(async()=>{
     return "bomm"
   }),
   updateProgress:publicProcedure.input(z.object({
