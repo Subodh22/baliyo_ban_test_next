@@ -369,7 +369,7 @@ updateTopicsDoneList:publicProcedure.input(z.object({
         };
         const answer =await expo.sendPushNotificationsAsync([messages]);
  
-    return  answer
+    return "bush"
 
   }),
   all: publicProcedure.query(async({ ctx }) => {
