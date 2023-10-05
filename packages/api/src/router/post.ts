@@ -19,9 +19,7 @@ if (!BUCKET_NAME) {
 
 export const postRouter = router({
 
-  alle:publicProcedure.query(async()=>{
-    return "bomm"
-  }),
+ 
   updateProgress:publicProcedure.input(z.object({
   
     topicId:z.number(),
@@ -344,9 +342,10 @@ updateTopicsDoneList:publicProcedure.input(z.object({
   }),
 
   
-  sendNotice:publicProcedure.query(async ({ input }) => {
-    
-    
+  sendNotice:publicProcedure.input(z.object({
+    token:z.string()
+  })).query(async({input,ctx})=>
+  {
         const message = {
           // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
           // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
