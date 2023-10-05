@@ -8,7 +8,7 @@ import { PrismaClient } from "@acme/db";
 const prisma = new PrismaClient()
 const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
     // const users = await prisma.workoutCeleb.findMany();
-
+//finally working this pieces of trash
   try {
     const users = await prisma.workoutCeleb.findMany();
 
