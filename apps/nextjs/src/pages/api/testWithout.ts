@@ -30,16 +30,8 @@ const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     console.log("Received request with body:", req.body); // Log the request body
 
-    const input = req.body; 
-    // const result = await postRouter.sendNotice({
-    //     input: input,
-    //     rawInput:"df",
-    //     ctx: {},
-    //     path: 'sendNotice',
-    //     type: 'query'
-    // });
     const result = await postRouter.sendNotice({
-      input: input,
+      input: {token:"dsfd"},
       rawInput:"df",
       ctx: {},
       path: 'alle',
@@ -48,11 +40,12 @@ const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
 
     console.log("Result from postRouter.sendNotice:", result); // Log the result
 
-    res.json({ message: "Result from postRouter.sendNotice:", result});
+   
   } catch (error:any) {
     console.error("Error occurred:", error); // Log the error
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error});
   }
+  res.status(200).end();
 }
 
 export default testWithout;
