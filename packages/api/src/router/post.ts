@@ -361,15 +361,15 @@ updateTopicsDoneList:publicProcedure.input(z.object({
         const messages = {
           // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
           // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
-          to:"ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] ",
+          to:"ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y]",
           title:"Login Reminder",
           body:"u chubby gr",
           data:{someData:"u fat fuck"}
 
         };
-        await expo.sendPushNotificationsAsync([messages]);
+        const answer =await expo.sendPushNotificationsAsync([messages]);
  
-    return "done"
+    return  answer
 
   }),
   all: publicProcedure.query(async({ ctx }) => {
