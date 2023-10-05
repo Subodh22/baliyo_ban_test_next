@@ -3,20 +3,27 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from 'zod';
 import { verifySignature } from "@upstash/qstash/dist/nextjs";
 import { postRouter } from "@acme/api/src/router/post";
+
 const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const input = req.body; // Get input from the request body
+    console.log("Received request with body:", req.body); // Log the request body
+
+    const input = req.body; 
     const result = await postRouter.sendNotice({
         input: input,
         rawInput:"df",
-        ctx: {}, // You can pass any context you need here
+        ctx: {},
         path: 'sendNotice',
         type: 'query'
     });
+
+    console.log("Result from postRouter.sendNotice:", result); // Log the result
+
     res.json({ message: result });
-} catch (error:any) {
+  } catch (error:any) {
+    console.error("Error occurred:", error); // Log the error
     res.status(500).json({ error: error.message });
-}
+  }
 }
 
 export default testWithout;
