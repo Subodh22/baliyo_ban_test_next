@@ -32,23 +32,23 @@ const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: any) => {
   
  
   // Trigger the sendNotice query
-  const { data, error, isLoading } = trpc.post.sendNotice.useQuery({ token: "dd" }, {
-    enabled: !hasQueried  // Only run the query if hasQueried is false
-  });
-  useEffect(() => {
-    setHasQueried(true);  // Set to true when the component mounts
-  }, []);
+  // const { data, error, isLoading } = trpc.post.sendNotice.useQuery({ token: "dd" }, {
+  //   enabled: !hasQueried  // Only run the query if hasQueried is false
+  // });
+  // useEffect(() => {
+  //   setHasQueried(true);  // Set to true when the component mounts
+  // }, []);
 
   // Handle the result (optional)
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-  console.log(data);
-  return <div>{data}</div>;
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
+  // console.log(data);
+  return <div>sins</div>;
    
 }
 
