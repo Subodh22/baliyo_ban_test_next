@@ -9,13 +9,20 @@ const testWithout = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("Received request with body:", req.body); // Log the request body
 
     const input = req.body; 
-    const result = await postRouter.sendNotice({
-        input: input,
-        rawInput:"df",
-        ctx: {},
-        path: 'sendNotice',
-        type: 'query'
-    });
+    // const result = await postRouter.sendNotice({
+    //     input: input,
+    //     rawInput:"df",
+    //     ctx: {},
+    //     path: 'sendNotice',
+    //     type: 'query'
+    // });
+    const result = await postRouter.alle({
+      input: input,
+      rawInput:"df",
+      ctx: {},
+      path: 'alle',
+      type: 'query'
+  });
 
     console.log("Result from postRouter.sendNotice:", result); // Log the result
 
