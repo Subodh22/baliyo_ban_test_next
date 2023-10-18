@@ -4,29 +4,36 @@ import { z } from 'zod';
 import { verifySignature } from "@upstash/qstash/dist/nextjs";
 import { postRouter } from "@acme/api/src/router/post";
 import { PrismaClient } from "@acme/db";
+import Expo from "expo-server-sdk";
 
 const prisma = new PrismaClient()
+const expo = new Expo
 const bobo = async (req: NextApiRequest, res: NextApiResponse) => {
     // const users = await prisma.workoutCeleb.findMany();
 
   try {
     const users = await prisma.workoutCeleb.findMany();
-//     const input = req.body;
-//     const validationResult = z.object({
-//         token: z.string()
-//     }).safeParse(input);
+    const message = {
+      // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
+      // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
+      to:"ExponentPushToken[PIuIZGD8mydMXRQgwG471a]",
+      title:"Login Reminder",
+      body:"brother in christ",
+      data:{someData:"u fat fuck"}
+      
 
-//     if (!validationResult.success) {
-//         return res.status(400).json({ error: 'Invalid input' });
-//     }
+    };
+    await expo.sendPushNotificationsAsync([message]);
+    const messages = {
+      // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
+      // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i
+      to:"ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y]",
+      title:"Login Reminder",
+      body:"u chubby gr",
+      data:{someData:"u fat fuck"}
 
-//     const result = await postRouter.sendNotice({
-//       input: validationResult.data,
-//       ctx: {}, // You can pass any context you need here
-//       rawInput: validationResult.data,
-//       path: 'sendNotice',
-//       type: 'query'
-//   });
+    };
+    const answer =await expo.sendPushNotificationsAsync([messages]);
     return res.status(200).json(users);
 
 } catch (error:any) {

@@ -37,6 +37,7 @@ export type RootStackParamList={
     Assignments:{videoId:string};
     DayChallenge:{challengesId:number};
     TopicList:{daysId:number}
+    
     TopicWorkout:{workoutId:number|null };
     ProofScreen:{statusId:number,topicId:number,proofType:string,daysId:number,topicName:string,challengesId:number,input:number|null,topicType:string};
     ChallengeLists:{daysId:number,statusId:number,challengesId:number}

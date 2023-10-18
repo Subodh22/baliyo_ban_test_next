@@ -26,6 +26,7 @@ const DayChallenge = () => {
       console.log(context.topicDonzo)
     },[getDayData.data])
   
+ 
    
 const checkDay=(day:string)=>
 {
@@ -54,7 +55,7 @@ const checkDay=(day:string)=>
          {getDayData.data?.getChallengeToDayStatue!.CurrentDayOrder>order? 
           checkDay("done")
           : getDayData.data?.getChallengeToDayStatue!.CurrentDayOrder==order? 
-          navigation.navigate('ChallengeLists',{daysId:id,challengesId:challengesId,statusId:getDayData.data?.getChallengeToDayStatue!.id  }):
+          navigation.navigate('ChallengeLists',{daysId:id,challengesId:challengesId,statusId:getDayData.data?.getChallengeToDayStatue!.id }):
           checkDay("locked")
         
         }}}

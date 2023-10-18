@@ -3,10 +3,10 @@ import AWS from 'aws-sdk';
 import { z } from "zod";
  
 const s3 = new AWS.S3({
-    accessKeyId:process.env.AWS_ACCESS_KEY,
+    accessKeyId:process.env.AWS_ACCESS_KEY_HOLE,
     secretAccessKey:process.env.AWS_SECERT_KEY
 })
-const BUCKET_NAME = process.env.AWS_ACCESS_KEY;
+const BUCKET_NAME = process.env.AWS_ACCESS_KEY_HOLE;
 if (!BUCKET_NAME) {
     throw new Error('S3 Bucket name is not defined');
 }

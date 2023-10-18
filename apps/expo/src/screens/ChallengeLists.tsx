@@ -8,12 +8,14 @@ import { ChallengeNavigationProp } from '../Navigator/Challenges';
 import { Prisma } from '.prisma/client';
 import { Button } from 'react-native-elements';
 import { RootStackParamList } from '../types/NavigationTypes';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
  
 type CustomScreenRouteProp = RouteProp<RootStackParamList, "ChallengeLists">;
 const ChallengeLists = () => {
     const {params:{daysId,statusId,challengesId }}=useRoute<CustomScreenRouteProp>();
-    const navigation = useNavigation<ChallengeNavigationProp>();
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'ChallengeLists'>>();
     const getTopicData = trpc.post.getTopicData.useQuery({daysId:daysId})
+    const GetuserChallenge= trpc.post.getUsersChallenge.useQuery()
     const changeChallengeSetting =  trpc.post.updateTopicsDoneList.useMutation()
     const changeChallengeStatus  = trpc.post.updateActiveChallengeStatus.useMutation()
     // let topo:Prisma.JsonArray
@@ -35,10 +37,15 @@ const ChallengeLists = () => {
       changeChallengeStatus.mutate({
         challengesStatusId:statusId,
         challengeId:challengesId,
-      })
-        
+      },{onSuccess:()=>{
+        GetuserChallenge.refetch()
+        navigation.pop(2)
+      }})
+      
           console.log("nodnsodsn")
-          navigation.pop(2)
+          
+          
+          
           
         
     }

@@ -24,15 +24,17 @@ const Tab = createBottomTabNavigator<TabParamList>();
 
 const TabNavigator = () => {
 const navigation = useNavigation();
+// const {data:getall,isLoading:isPostings} = trpc.post.all.useQuery()
 const {data:getUserData,isLoading:isPosting}  = trpc.post.getUserData.useQuery();
-
+ 
+console.log(getUserData)
 useLayoutEffect(()=>
 {
     navigation.setOptions({
         headerShown:false
     })
 },[])
- 
+
 if(isPosting){
     return <LoadingHead/>
 }
@@ -94,7 +96,7 @@ if (getUserData && getUserData.length > 0) {
       </Tab.Navigator>
   );
 } else {
-  return  <FillForm />;
+  return  <FillForm/>;
 }
 }
 

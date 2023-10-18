@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useContext, useEffect } from 'react'
 import YoutubeEm from '../components/YoutubeEm'
-import { CompositeNavigationProp,RouteProp,  useNavigation } from '@react-navigation/native'
+import { CompositeNavigationProp,RouteProp,  useNavigation, useRoute } from '@react-navigation/native'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { TabParamList } from '../Navigator/TabNavigator'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -11,6 +11,7 @@ import CameraComponent from '../components/CameraComponent';
 import ChallengesHeadScreen from '../components/ChallengesHeadScreen';
 import { trpc } from '../utils/trpc';
 import { RootStackParamList } from '../types/NavigationTypes'
+import { useIsFocused } from '@react-navigation/native';
 import { MyContext } from './RootNavigator'
 export type ChallengeNavigationProp=CompositeNavigationProp<BottomTabNavigationProp<TabParamList,"Challenges">,
 NativeStackNavigationProp<RootStackParamList>>;
@@ -24,14 +25,13 @@ type Challenge = {
   
 const Challenges = () => {
     const navigation = useNavigation<ChallengeNavigationProp>();
+   
     const getData = trpc.post.getChallenges.useQuery()
     const context = useContext(MyContext)
     const {data:getChallenge,isLoading,refetch} = trpc.post.getUsersChallenge.useQuery()
     const challengeStatus = trpc.post.addChallengesToUser.useMutation();
-    trpc.post.getUsersChallenge.useQuery()
-    // const {data,isLoading,refetch} = trpc.post.getUsersChallenge.useQuery();
-
-
+    
+   
     useEffect(()=>{
         if(getData.data?.getUserDetails)
         {
@@ -39,6 +39,12 @@ const Challenges = () => {
             console.log(getData.data?.getUserDetails,context.expoPushToken)
         }
     },[getData.data?.getUserDetails])
+    useEffect(()=>{
+        console.log(context.refreshChallenge)
+        refetch()
+    },[])
+
+
 return (<SafeAreaView>
       <Text className="text-black text-[20px]  font-light tracking-tight">
        Challenges
@@ -50,7 +56,7 @@ return (<SafeAreaView>
          
         const alreadyAdded = getChallenge?.some(x => x!.challengesId === id) || false;
         return( 
-        <ChallengesHeadScreen key={id} refetch={refetch} mutate={challengeStatus} userChallenge={getChallenge?.length} challengeid={id} name={name} alreadyAdded={alreadyAdded} />)
+        <ChallengesHeadScreen key={id} refetch={refetch} challengeStatus={challengeStatus} userChallenge={getChallenge?.length} challengeid={id} name={name} alreadyAdded={alreadyAdded} />)
          })
   }
 

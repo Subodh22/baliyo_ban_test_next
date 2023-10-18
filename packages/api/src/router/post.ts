@@ -6,7 +6,7 @@ const SECERT_TOKEN =process.env.SECRET_TOKEN
 const expo = new Expo()
 const s3 = new AWS.S3({
   apiVersion:"2006-03-01",
-  accessKeyId:process.env.AWS_ACCESS_KEY,
+  accessKeyId:process.env.AWS_ACCESS_KEY_HOLE,
   secretAccessKey:process.env.AWS_SECERT_KEY,
   region:process.env.REGION,
   signatureVersion:"v4"
@@ -655,6 +655,7 @@ return getSession
       personId:workerId
     },
     })
+   
     return userData
   })
   
