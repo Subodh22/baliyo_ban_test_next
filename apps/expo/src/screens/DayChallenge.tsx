@@ -20,7 +20,7 @@ const DayChallenge = () => {
       {
         context.setcurrentDay(getDayData.data?.getChallengeToDayStatue!.CurrentDayOrder)
         context.setTopicDonzo(getDayData.data?.getChallengeToDayStatue!.TopicsDoneList)
-        console.log(getDayData.data?.getdays.length)
+        console.log(getDayData.data?.getdays)
         context.setDaylength(getDayData.data?.getdays.length)
       }
       console.log(context.topicDonzo)

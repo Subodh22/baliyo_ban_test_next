@@ -13,6 +13,7 @@ const bobo = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const users = await prisma.workoutCeleb.findMany();
+    
     const message = {
       // ExponentPushToken[7-rIfhDlp-HNM5vVK95T6h] -A
       // ExponentPushToken[LeceGhM18Tt9ilEXjhiA2Y] - i

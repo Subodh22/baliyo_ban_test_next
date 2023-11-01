@@ -6,7 +6,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Baliyo",
   slug: "baliyo",
   scheme: "myapp",
-  version: "1.3.9",
+  version: "1.4.0",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "light", 
@@ -23,7 +23,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.notSubodh.workoutMaker",
-    buildNumber:"25",
+    buildNumber:"26",
     infoPlist:{
       "UIBackgroundModes": [
         "audio"
@@ -31,7 +31,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     }
   },
   android: {
-    versionCode:19,
+    versionCode:20,
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#2e026d",

@@ -16,8 +16,60 @@ if (!BUCKET_NAME) {
   throw new Error('S3 Bucket name is not defined');
 
 }
+ 
+// Function to delete an entire "folder" in S3
+const deleteFolder = async (folderPrefix: string) => {
+  // Safety check
+  if (folderPrefix === 'uploads/' || !folderPrefix) {
+      console.error("Attempting to delete top-level directory. Aborting!");
+      return;
+  }
+
+  const listParams = {
+      Bucket: BUCKET_NAME,
+      Prefix: folderPrefix
+  };
+
+  const listedObjects = await s3.listObjectsV2(listParams).promise();
+
+  if (listedObjects.Contents && listedObjects.Contents.length === 0) return;
+
+  const deleteParams = {
+      Bucket: BUCKET_NAME,
+      Delete: { Objects: [] }
+  };
+
+  listedObjects!.Contents!.forEach(({ Key }) => {
+      if (Key) {
+          console.log(`Preparing to delete object: ${Key}`);
+          (deleteParams.Delete.Objects as Array<{ Key: string }>).push({ Key });
+      }
+  });
+
+  await s3.deleteObjects(deleteParams).promise();
+
+  // If there are more objects to delete (pagination), call the function recursively
+  if (listedObjects.IsTruncated) await deleteFolder(folderPrefix);
+};
 
 export const postRouter = router({
+cancelChallenge:publicProcedure.input(z.object({
+  ido:z.string()
+})).mutation(async({ctx,input})=>
+{
+  const workerId = ctx.auth.userId
+  await ctx.prisma.challengeToDayStatus.updateMany({
+    where:{
+      userId:workerId!
+    },
+    data:{
+      TopicsDoneList:[],
+      active:"notactive"
+    }
+  })
+  
+}),
+
 updateActiveChallengeStatus:publicProcedure.input(z.object({
   challengesStatusId:z.number(),
   challengeId:z.number()
@@ -29,7 +81,8 @@ updateActiveChallengeStatus:publicProcedure.input(z.object({
       userId:workerId!
     },
     data:{
-      active:"notactive"
+      active:"notactive",
+      TopicsDoneList:[]
     }
   })
   await ctx.prisma.challengeToDayStatus.update({
@@ -38,9 +91,17 @@ updateActiveChallengeStatus:publicProcedure.input(z.object({
       challengeId:input.challengeId
     },
     data:{
+
       active:"active"
     }
+
   })
+  const folderToDelete = `uploads/${workerId}/challenges/`;  // replace with your folder name
+  deleteFolder(folderToDelete).then(() => {
+    console.log(`Deleted folder: ${folderToDelete}`);
+  }).catch(error => {
+    console.error(`Error deleting folder: ${error.message}`);
+  });
 
 }),
  

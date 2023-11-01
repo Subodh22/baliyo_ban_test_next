@@ -70,7 +70,8 @@ if(props.pPId!==0)
         console.log( console.log(context.currentDay,context.Daylength,(context.currentDay+1) ==context.DayLength? "finished":"bobo"))
         if(imageUrls.length>0){ 
       finishedTopic.mutateAsync({
-        currentChallengeStatus:(context.currentDay+1) ==context.Daylength? "finished":"bobo" ,
+        // currentChallengeStatus:(context.currentDay+1) ==context.Daylength? "finished":"bobo" ,
+        currentChallengeStatus:topo.length >=topicLength? "finished":"bobo" ,
         ChallengeToDayStatusId:context.challengeStatus,
         newTopicsList:stringTopicsList,
         topicListStatus: topo.length >=topicLength? "same":"notsame",

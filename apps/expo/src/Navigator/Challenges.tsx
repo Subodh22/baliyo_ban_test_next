@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useContext, useEffect } from 'react'
+import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
 import YoutubeEm from '../components/YoutubeEm'
 import { CompositeNavigationProp,RouteProp,  useNavigation, useRoute } from '@react-navigation/native'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
@@ -13,6 +13,7 @@ import { trpc } from '../utils/trpc';
 import { RootStackParamList } from '../types/NavigationTypes'
 import { useIsFocused } from '@react-navigation/native';
 import { MyContext } from './RootNavigator'
+import { isEnabled } from 'react-native/Libraries/Performance/Systrace'
 export type ChallengeNavigationProp=CompositeNavigationProp<BottomTabNavigationProp<TabParamList,"Challenges">,
 NativeStackNavigationProp<RootStackParamList>>;
 
@@ -25,25 +26,55 @@ type Challenge = {
   
 const Challenges = () => {
     const navigation = useNavigation<ChallengeNavigationProp>();
+    const cancelChal = trpc.post.cancelChallenge.useMutation();
    
     const getData = trpc.post.getChallenges.useQuery()
     const context = useContext(MyContext)
     const {data:getChallenge,isLoading,refetch} = trpc.post.getUsersChallenge.useQuery()
     const challengeStatus = trpc.post.addChallengesToUser.useMutation();
     
-   
+    const handleButtonClick = async () => {
+        cancelChal.mutate(
+            {ido:"dd"}
+            
+        ),{onSuccess:()=>
+            {
+                refetch()
+                if(!isLoading)
+               { console.log(getChallenge)}
+            }}
+ 
+        console.log("done")
+        };
     useEffect(()=>{
         if(getData.data?.getUserDetails)
         {
             context.setExpoPushToken(getData.data?.getUserDetails.expoPushToken)
-            console.log(getData.data?.getUserDetails,context.expoPushToken)
+            
         }
     },[getData.data?.getUserDetails])
     useEffect(()=>{
-        console.log(context.refreshChallenge)
+       
         refetch()
     },[])
 
+    const cancelChallenge=()=>
+    {
+        Alert.alert(
+            'Confirm',
+            'All your progress will be lost if you go back?',
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel'
+              },
+              {
+                text: 'Yes, I am loser',
+                onPress: () =>handleButtonClick()
+              }
+            ]
+          );
+    }
 
 return (<SafeAreaView>
       <Text className="text-black text-[20px]  font-light tracking-tight">
@@ -61,6 +92,13 @@ return (<SafeAreaView>
   }
 
     </ScrollView>
+    <View className='flex-row h-12 justify-between items-center m-2 p-2 bg-white  shadow  '>
+        <Text className="text-black text-[20px]  font-light tracking-tight">Be a loser</Text>
+        <TouchableOpacity onPress={cancelChallenge} className="bg-yellow-300 h-8 items-center flex-row p-1" >
+           <Text className="text-black text-[15px]  font-light tracking-tight"> Cancel my challenge</Text>
+        </TouchableOpacity>
+    </View>
+    <Text className="text-black text-[20px] pl-3 font-light tracking-tight">My Challenges</Text>
     <ScrollView>
     {
     getChallenge?.map(({id,challengesId,challengeName,active}:Challenge)=>(
