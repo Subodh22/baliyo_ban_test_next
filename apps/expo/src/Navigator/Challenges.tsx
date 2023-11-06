@@ -26,26 +26,14 @@ type Challenge = {
   
 const Challenges = () => {
     const navigation = useNavigation<ChallengeNavigationProp>();
-    const cancelChal = trpc.post.cancelChallenge.useMutation();
+   
    
     const getData = trpc.post.getChallenges.useQuery()
     const context = useContext(MyContext)
     const {data:getChallenge,isLoading,refetch} = trpc.post.getUsersChallenge.useQuery()
     const challengeStatus = trpc.post.addChallengesToUser.useMutation();
     
-    const handleButtonClick = async () => {
-        cancelChal.mutate(
-            {ido:"dd"}
-            
-        ),{onSuccess:()=>
-            {
-                refetch()
-                if(!isLoading)
-               { console.log(getChallenge)}
-            }}
- 
-        console.log("done")
-        };
+   
     useEffect(()=>{
         if(getData.data?.getUserDetails)
         {
@@ -58,24 +46,7 @@ const Challenges = () => {
         refetch()
     },[])
 
-    const cancelChallenge=()=>
-    {
-        Alert.alert(
-            'Confirm',
-            'All your progress will be lost if you go back?',
-            [
-              {
-                text: 'Cancel',
-                style: 'cancel'
-              },
-              {
-                text: 'Yes, I am loser',
-                onPress: () =>handleButtonClick()
-              }
-            ]
-          );
-    }
-
+    
 return (<SafeAreaView>
       <Text className="text-black text-[20px]  font-light tracking-tight">
        Challenges
@@ -92,12 +63,7 @@ return (<SafeAreaView>
   }
 
     </ScrollView>
-    <View className='flex-row h-12 justify-between items-center m-2 p-2 bg-white  shadow  '>
-        <Text className="text-black text-[20px]  font-light tracking-tight">Be a loser</Text>
-        <TouchableOpacity onPress={cancelChallenge} className="bg-yellow-300 h-8 items-center flex-row p-1" >
-           <Text className="text-black text-[15px]  font-light tracking-tight"> Cancel my challenge</Text>
-        </TouchableOpacity>
-    </View>
+  
     <Text className="text-black text-[20px] pl-3 font-light tracking-tight">My Challenges</Text>
     <ScrollView>
     {

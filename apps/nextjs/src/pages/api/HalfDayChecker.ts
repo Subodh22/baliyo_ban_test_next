@@ -198,7 +198,8 @@ const HalfDayChecker = async (req: NextApiRequest, res: NextApiResponse) => {
             Status: "NotStarted",
             CurrentDayOrder:0,
             TopicsDoneList:[],
-            ChallengeStartDate:currentDate
+            ChallengeStartDate:currentDate,
+            active:"notactive"
         }
     });
     }
